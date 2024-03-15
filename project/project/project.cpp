@@ -14,7 +14,37 @@ const int SIZE = 60;
 
 int main()
 {
+    //1
+    //2
+    Vector v1 = Vector(1, 2, 3);
+    Vector v2 = Vector(10, 11, 12);
+    Vector result1 = v1 + v2;
+    Vector result2 = v2 + v1;
 
+    std::cout
+        << "Dodawanie 1: " << result1 << "\nDodawanie 2: " << result2;
+
+    //3
+    Vector v3 = Vector(0, 3, 0);
+    Vector v4 = Vector(5, 5, 0);
+    float angle = acosf((v3.dotProduct(v4))/(v3.length() * v4.length()));
+    angle = angle * 180 / M_PI;
+    std::cout
+        << "\nKat (w stopniach): " << angle;
+
+    //4
+    Vector v5 = Vector(4, 5, 1);
+    Vector v6 = Vector(4, 1, 3);
+    Vector result3 = v5.cross(v6);
+    std::cout
+        << "\nWektor: " << result3;
+
+    //5
+    Vector norm1 = result3.normalize();
+    std::cout
+        << "\nWektor znormalizowany: " << norm1;
+
+    /*
     //bryla2x2x2
     float cubeSize = 2;
     Plane p_front = Plane(Vector(-cubeSize / 2, -cubeSize / 2, cubeSize / 2), Vector(0, 0, 1));
@@ -40,7 +70,8 @@ int main()
     float angleZ = 0;
     float zoom = 3;
 
-    int input = ' ';
+    int input = ' ';*/
+    /*
     do {
         cam = Camera(zoom);
         cam.rotateX1(angleX);
@@ -160,6 +191,7 @@ int main()
         }
         system("CLS");
     } while (input != 'p');
+    */
     return 0;
 }
 

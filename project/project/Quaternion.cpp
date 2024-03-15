@@ -42,6 +42,10 @@ Quaternion Quaternion::operator*(Quaternion& q) {
         (((q.v) * this->a) + ((this->v) * q.a) + (this->v).cross(q.v)));
 }
 
+Quaternion Quaternion::operator*(float& k) {
+    return Quaternion((this->a * k), (this->v) * k);
+}
+
 Quaternion Quaternion::operator/(Quaternion& q) {
     float scalarPart = q.a * q.a + (q.v).dotProduct(q.v);
     if (scalarPart == 0)
@@ -49,4 +53,26 @@ Quaternion Quaternion::operator/(Quaternion& q) {
 
     return Quaternion((((this->a * q.a) + (this->v).dotProduct(q.v)) / scalarPart),
         (((q.v) * this->a) * (-1) + ((this->v) * q.a) - (this->v).cross(q.v)) / scalarPart);
+}
+
+float Quaternion::norm() {
+    float scalar = (this->a) * (this->a);
+    float imaginary = (this->v).dotProduct(this->v);
+    return (float)sqrt(scalar + imaginary);
+}
+
+Quaternion Quaternion::normalize() {
+    float n = this->norm();
+    if (n == 0)
+        throw std::invalid_argument("Dzielenie przez 0");
+    
+    float normValue = 1 / n;
+
+    return Quaternion(this->a * normValue, this->v * normValue);
+}
+
+Quaternion Quaternion::getUnitNormQuaternion() {
+    float angle = this->a * (M_PI / 180);
+
+    return Quaternion(cosf(angle * 0.5), this->v.normalize() * sinf(angle * 0.5));
 }

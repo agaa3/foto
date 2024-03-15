@@ -25,7 +25,15 @@ public:
 
     Quaternion operator*(Quaternion& q);
 
+    Quaternion operator*(float& k);
+
     Quaternion operator/(Quaternion& q);
+
+    float norm();
+
+    Quaternion normalize();
+
+    Quaternion getUnitNormQuaternion();
 };
 
 
