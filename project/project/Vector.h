@@ -48,6 +48,10 @@ public:
 	Vector crossingOfTwoLines(Vector p1, Vector v1, Vector p2, Vector v2);
 
 	Vector crossingOfTwoSegments(Vector a1, Vector a2, Vector b1, Vector b2);
+
+	//to samo co rotateByQuaternion tylko sposobem z kwaternionami
+	//angle jako radian (chyba)
+	Vector rotateVectorAboutAngleAndAxis(float angle, const Vector& axis);
 };
 
 #endif // VECTOR_H

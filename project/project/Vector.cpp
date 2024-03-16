@@ -110,6 +110,17 @@ Vector Vector::rotateByQuaternion(float angle, const Vector& axis) {
 	return Vector(result.v.x, result.v.y, result.v.z);
 }
 
+Vector Vector::rotateVectorAboutAngleAndAxis(float angle, const Vector& axis) {
+	Quaternion p(0, (*this));
+	axis.normalize();
+	Quaternion q(angle, axis);
+	q.setUnitNormQuaternion();
+	Quaternion qInverse = q.inverse();
+	Quaternion rotatedVector = q * p * qInverse;
+	return rotatedVector.v;
+}
+
+
 Vector Vector::crossingOfTwoSegments(Vector a1, Vector a2, Vector b1, Vector b2) {
 	Vector v1 = a2 - a1;
 	Vector v2 = b2 - b1;

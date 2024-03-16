@@ -33,7 +33,14 @@ public:
 
     Quaternion normalize();
 
+    void setUnitNormQuaternion();
+
     Quaternion getUnitNormQuaternion();
+
+    Quaternion conjugate(); //zmiana znaku
+
+    Quaternion inverse();
+
 };
 
 

@@ -71,8 +71,35 @@ Quaternion Quaternion::normalize() {
     return Quaternion(this->a * normValue, this->v * normValue);
 }
 
+void Quaternion::setUnitNormQuaternion() {
+    float angle = this->a * (M_PI / 180);
+    this->a = cosf(angle * 0.5);
+    this->v = this->v.normalize() * sinf(angle * 0.5);
+}
+
 Quaternion Quaternion::getUnitNormQuaternion() {
     float angle = this->a * (M_PI / 180);
 
     return Quaternion(cosf(angle * 0.5), this->v.normalize() * sinf(angle * 0.5));
 }
+
+Quaternion Quaternion::conjugate() {
+    float scalar = this->a;
+    Vector imaginary = this->v * (-1);
+    return Quaternion(scalar, imaginary);
+}
+
+Quaternion Quaternion::inverse() {
+    float absoluteValue = this->norm();
+    absoluteValue *= absoluteValue;
+    absoluteValue = 1 / absoluteValue;
+
+    Quaternion conjugateValue = this->conjugate();
+
+    float scalar = conjugateValue.a * absoluteValue;
+    Vector imaginary = conjugateValue.v * absoluteValue;
+
+    return Quaternion(scalar, imaginary);
+}
+
+

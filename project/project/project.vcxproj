@@ -129,7 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="project.cpp" />
@@ -138,7 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Line.h" />
+    <ClInclude Include="Ray.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />

@@ -3,7 +3,7 @@
 #define MATMA_CAMERA_H
 
 
-#include "Line.h"
+#include "Ray.h"
 
 class Camera {
 public:
@@ -14,7 +14,7 @@ public:
 
     Camera(float radius);
 
-    Line ray = Line(position, direction);
+    Ray ray = Ray(position, direction);
     Camera(const Vector& position, const Vector& direction, const Vector& up);
     Camera();
 

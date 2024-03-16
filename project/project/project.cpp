@@ -6,7 +6,7 @@
 
 #include "Vector.h"
 #include "Quaternion.h"
-#include "Line.h"
+#include "Ray.h"
 #include "Plane.h"
 #include "Camera.h"
 

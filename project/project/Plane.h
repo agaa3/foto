@@ -3,7 +3,7 @@
 
 
 #include "Vector.h"
-#include "Line.h"
+#include "Ray.h"
 
 class Plane {
 public:
@@ -12,9 +12,15 @@ public:
     Plane();
 
     Plane(const Vector& point, const Vector& normal);
-    static Vector crossingOfLineAndPlane(Line l, Plane p);
-    static bool isLineAndPlaneCrossing(Line l, Plane p);
-    static float angleOfLineAndPlane(Line l, Plane p);
+    static Vector crossingOfLineAndPlane(Ray l, Plane p);
+    static bool isLineAndPlaneCrossing(Ray l, Plane p);
+    static float angleOfLineAndPlane(Ray l, Plane p);
+
+
+    //tu skoñczy³am plane (str 99)
+    /* 
+    bool are3PlanesIntersecting(const Plane& p2, const
+        Plane& p3, Vector& result);*/
 
 };
 
