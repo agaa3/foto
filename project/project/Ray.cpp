@@ -1,6 +1,16 @@
 #include "Ray.h"
 
-Ray::Ray(const Vector& point, const Vector& direction) : origin(point), direction(direction) {}
+Ray::Ray(const Vector& origin, const Vector& direction) : origin(origin) {
+    this->direction = direction.normalize();
+}
+
+Ray::Ray(const Vector& origin, const Vector& destination, const bool& DirDes) : origin(origin) { // true - direction false - destination
+    if (DirDes == 0) { //mamy podane destination
+        Vector dir = Vector(destination.x - origin.x, destination.y - origin.y, destination.z - origin.z);
+        this->direction = dir.normalize();
+        this->destination = destination;
+    }
+}
 
 Ray::Ray() {
 

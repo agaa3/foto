@@ -19,7 +19,7 @@ public:
     
    // bool are3PlanesIntersecting(const Plane& p2, const Plane& p3, Vector& result);
 
-    bool intersects(const Ray& ray, float range) const;
+    bool intersects(const Ray& ray, float range, Vector& intPoint);
     Vector intersectionPoint(const Ray& ray, float range) const;
 };
 

@@ -13,9 +13,11 @@ public:
     float distance;
 
     Ray();
-    Ray(const Vector& point, const Vector& direction);
-    Ray(const Vector& point, const float& dis);
-    Ray(const Vector& point, const Vector& direction, const float& dis);
+    Ray(const Vector& origin, const Vector& direction);
+    Ray(const Vector& origin, const Vector& destination, const bool& DirDes);
+
+    Ray(const Vector& origin, const float& dis);
+    Ray(const Vector& origin, const Vector& direction, const float& dis);
 
     ~Ray();
     /* w razie jakby daæ pola do private!!

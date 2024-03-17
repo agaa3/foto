@@ -14,7 +14,7 @@ public:
 	Sphere(Vector v);
 	Sphere(Vector v, float r);
 
-	bool hit(Ray ray, float t_min, float t_max) const;
+	bool hit(Ray ray, float t_min, float t_max, Vector& intPoint) const; //t_min
 
 	~Sphere();
 

@@ -1,4 +1,5 @@
-#include "Sphere.h"
+﻿#include "Sphere.h"
+#include "Vector.h"
 
 Sphere::Sphere(const Vector center, const float radius) : center(center), radius(radius) {}
 
@@ -16,26 +17,33 @@ std::ostream& operator<<(std::ostream& os, const Sphere& sph)
 	return os;
 }
 
-bool Sphere::hit(Ray ray, float t_min, float t_max) const
+bool Sphere::hit(Ray ray, float t_min, float t_max, Vector& intPoint) const
 {
-	Vector oc = ray.origin - this->center;
+	Vector oc = ray.origin- this->center; // oc - vector od początku promienia do środka sfery czyli w zasadzie direction
 
 	float a = ray.direction.dotProduct(ray.direction);
-	float b = oc.dotProduct(ray.direction);
+	float b = oc.dotProduct(ray.direction * 2);
 	float c = oc.dotProduct(oc) - this->radius * this->radius;
 
-	float discriminant = b * b - a * c;
+	float discriminant = b * b - 4 * a * c;
 
-	if (discriminant > 0) {
-		float temp = (-b - std::sqrtf(discriminant)) / a;
+	//p = o + td // origin point + vector direction(znormalizowany) * t(czyli tyle ile potzebujemy żeby osiągnąć ten punk ktory chcemy)
 
-		if (temp < t_max && temp > t_min) {
+	if (discriminant >= 0) { // dopytać czy tu powinno być >= 0 bo nie wiadomo czy styczność to trafienie
+		float temp = (-b - std::sqrtf(discriminant)) / (2 * a);
+
+		if (temp < t_max && temp > t_min) { // traktujemy t_max i t_min jako stricte współczynniki odpowiedzialne za punk ta promieniu (sama odleglość)
+			// nie patrzymy w jakim miejscu w przestrzeni jest to przecięcie tylko w którym miejscu na Ray'u dochodzi do przecięcia
+			intPoint = ray.direction * temp + ray.origin;
 			return true;
 		}
 
-		temp = (-b + std::sqrtf(discriminant)) / a;
+		//(┬┬﹏┬┬)
+
+		temp = (-b + std::sqrtf(discriminant)) / (2 * a);
 
 		if (temp < t_max && temp > t_min) {
+			intPoint = ray.direction * temp + ray.origin;
 			return true;
 		}
 	}

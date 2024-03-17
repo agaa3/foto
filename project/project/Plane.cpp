@@ -27,11 +27,14 @@ bool Plane::are3PlanesIntersecting(const Plane& p2, const Plane& p3, Vector& res
     return true;
 }*/
 
-bool Plane::intersects(const Ray& ray, float range) const {  //po co jest range??
+bool Plane::intersects(const Ray& ray, float range, Vector& intPoint) {  //po co jest range??
+    //intPoint - do dodania punkt przeciecia
+
     bool result = false;
     float ndotD = (this->normal).dotProduct(ray.direction);
     if (ndotD == 0) {
-        return result; //promien prostopadly do normal, wiec rownolegly do plane
+        return false; //promien prostopadly do normal, wiec rownolegly do plane
+        //nie zmieniamy intPoint
     }
 
     float t;
@@ -40,14 +43,15 @@ bool Plane::intersects(const Ray& ray, float range) const {  //po co jest range?
     if (t > 0) {
         if (range == 0.0f || t < range) {
             if (ndotD < 0) {
-                return true; //HIT
+                return false; //HIT //promien w kierunku przeciwnym do p³aszczyzny (od p³aszczyzny)
             }
-            //else {
-            //    return true; //INSIDE_PRIMITIVE
-            //    //result.LPOINT = ray.origin + t * ray.direction;
-            //    //result.distance = t;
-            //    //result.intersectionLPOINTNormal = normal;
-            //}
+            else {
+                intPoint = ray.direction * t + ray.origin;
+                return true; //INSIDE_PRIMITIVE
+                //result.LPOINT = ray.origin + t * ray.direction;
+                //result.distance = t;
+                //result.intersectionLPOINTNormal = normal;
+            }
         }
     }
 

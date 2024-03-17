@@ -9,6 +9,8 @@
 #include "Ray.h"
 #include "Plane.h"
 #include "Camera.h"
+#include "Sphere.h"
+#include "Triangle.h"
 
 const int SIZE = 60;
 
@@ -21,8 +23,9 @@ int main()
     Vector result1 = v1 + v2;
     Vector result2 = v2 + v1;
 
+
     std::cout
-        << "Dodawanie 1: " << result1 << "\nDodawanie 2: " << result2;
+        << "2. Dodawanie 1: " << result1 << "\nDodawanie 2: " << result2;
 
     //3
     Vector v3 = Vector(0, 3, 0);
@@ -30,33 +33,145 @@ int main()
     float angle = acosf((v3.dotProduct(v4))/(v3.length() * v4.length()));
     angle = angle * 180 / M_PI;
     std::cout
-        << "\nKat (w stopniach): " << angle;
+        << "\n\n3. Kat (w stopniach): " << angle;
 
     //4
     Vector v5 = Vector(4, 5, 1);
     Vector v6 = Vector(4, 1, 3);
     Vector result3 = v5.cross(v6);
     std::cout
-        << "\nWektor: " << result3;
+        << "\n\n4. Wektor: " << result3;
 
     //5
     Vector norm1 = result3.normalize();
     std::cout
-        << "\nWektor znormalizowany: " << norm1;
+        << "\n\n5. Wektor znormalizowany: " << norm1;
 
+    //6
+    //7
+    Sphere s = Sphere(Vector(0, 0, 0), 10);
 
-    //na razie
-    Ray r2 = Ray(Vector(0, 0, -20), Vector(0, 1, 0));
+    //8
+    Ray r1 = Ray(Vector(0, 0, -20), s.center, false);
+
+    //9
+    Ray r2 = Ray(r1.origin, Vector(0, 1, 0));
+
+    //10
+    Vector intPoint1 = Vector();
+    Vector intPoint2 = Vector();
+
+    bool intersectionSphereR1 = s.hit(r1, 0, 1000, intPoint1); // ten sie pownienie przciaæ
+    bool intersectionSphereR2 = s.hit(r2, 0, 1000, intPoint2);
+
+    std::cout
+        << "\n\n10. Czy istnieje przeciecie sfery i r1: " << intersectionSphereR1;
+    if (intersectionSphereR1) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint1;
+    }
+
+    std::cout
+        << "\nCzy istnieje przeciecie sfery i r2: " << intersectionSphereR2;
+    if (intersectionSphereR2) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint2;
+    }
+
+    //12
+    Ray r3 = Ray(Vector(0, -1, 10), Vector(0, 1, 0));
+    Vector intPoint3 = Vector();
+    bool intersectionSphereR3 = s.hit(r3, 0, 1000, intPoint3); // ten sie pownienie przciaæ
+    std::cout
+        << "\n\n12. Czy istnieje przeciecie sfery i r3: " << intersectionSphereR3;
+    if (intersectionSphereR3) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint3;
+    }
 
     //13 14
     Plane p1 = Plane(Vector(0, 0, 0), Vector(0, 1, 1));
-    Vector intP1R2 = p1.intersectionPoint(r2, 0);
+    Vector intPoint4 = Vector();
+
+    bool intersectionPlaneR2 = p1.intersects(r2, 1000, intPoint4);
     std::cout
-        << "\nPunkt przeciecia: " << intP1R2;
-    Ray r3 = Ray(Vector(0, 0, -20), Vector(0, 1, -1));
-    Vector intP1R3 = p1.intersectionPoint(r3, 0);
+        << "\n\n14. Punkt przeciecia: " << intPoint4;
+
+    //15
+    Triangle t1 = Triangle(Vector(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0));
+
+    Vector point1 = Vector(-1, 0.5, 0);
+    Vector point2 = Vector(1, 0.5, 0);
+    Vector intPoint5 = Vector();
+    Vector intPoint6 = Vector();
+
+
+    Ray r4 = Ray(point1, point2, false);
+    Ray r5 = Ray(point2, point1, false);
+
+    bool intersectionTriangleR4 = t1.hit(r4, intPoint5); //linia przechodzi przez trojk¹t na planie 2D (linia jest prostopad³a do wektora normalnego trójk¹ta)
     std::cout
-        << "\nPunkt przeciecia: " << intP1R3;
+        << "\n\n15.1. Czy istnieje przeciecie trojkata i r4: " << intersectionTriangleR4;
+    if (intersectionTriangleR4) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint5;
+    }
+    bool intersectionTriangleR5 = t1.hit(r5, intPoint5);
+    std::cout
+        << "\nCzy istnieje przeciecie trojkata i r5: " << intersectionTriangleR5;
+    if (intersectionTriangleR5) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint5;
+    }
+
+    //16
+    Vector point3 = Vector(2, -1, 0);
+    Vector point4 = Vector(2, 2, 0);
+
+    Ray r6 = Ray(point3, point4, false);
+    Ray r7 = Ray(point4, point3, false);
+
+    bool intersectionTriangleR6 = t1.hit(r6, intPoint5); //linia przechodzi przez trojk¹t na planie 2D (linia jest prostopad³a do wektora normalnego trójk¹ta)
+    std::cout
+        << "\n\n15.2. Czy istnieje przeciecie trojkata i r6: " << intersectionTriangleR6;
+    if (intersectionTriangleR6) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint5;
+    }
+    bool intersectionTriangleR7 = t1.hit(r7, intPoint5);
+    std::cout
+        << "\nCzy istnieje przeciecie trojkata i r7: " << intersectionTriangleR7;
+    if (intersectionTriangleR7) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint5;
+    }
+
+    //15.3
+    Vector point5 = Vector(0, 0, -1);
+    Vector point6 = Vector(0, 0, 1);
+
+    Ray r8 = Ray(point5, point6, false);
+    Ray r9 = Ray(point6, point5, false);
+
+    bool intersectionTriangleR8 = t1.hit(r8, intPoint5); //linia przechodzi przez trojk¹t na planie 2D (linia jest prostopad³a do wektora normalnego trójk¹ta)
+    std::cout
+        << "\n\n15.3. Czy istnieje przeciecie trojkata i r8: " << intersectionTriangleR8;
+    if (intersectionTriangleR8) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint5;
+    }
+    bool intersectionTriangleR9 = t1.hit(r9, intPoint5);
+    std::cout
+        << "\nCzy istnieje przeciecie trojkata i r9: " << intersectionTriangleR9;
+    if (intersectionTriangleR9) {
+        std::cout
+            << "\nPunkt przeciecia: " << intPoint5;
+    }
+
+    /*Ray r4 = Ray(Vector(0, 0, -20), Vector(0, 1, -1));
+    bool intersectionPlaneR4 = p1.intersects(r4, 1000, intPoint4);
+    std::cout
+        << "\nCzy przecina: " << intersectionPlaneR4;*/
 
     /*
     //bryla2x2x2

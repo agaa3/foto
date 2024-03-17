@@ -12,7 +12,7 @@ public:
 	Triangle(const Vector& vertex1, const Vector& vertex2, const Vector& vertex3);
 	Triangle(const Vector& vertex1, const Vector& vertex2, const Vector& vertex3, const Vector& normal1, const Vector& normal2, const Vector& normal3);
 
-	bool hit(const Ray ray, const Vector A, const Vector B, const Vector C);
+	bool hit(const Ray ray, Vector& intPoint);
 
 	~Triangle();
 
