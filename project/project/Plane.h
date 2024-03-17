@@ -16,12 +16,11 @@ public:
     static bool isLineAndPlaneCrossing(Ray l, Plane p);
     static float angleOfLineAndPlane(Ray l, Plane p);
 
+    
+   // bool are3PlanesIntersecting(const Plane& p2, const Plane& p3, Vector& result);
 
-    //tu skoñczy³am plane (str 99)
-    /* 
-    bool are3PlanesIntersecting(const Plane& p2, const
-        Plane& p3, Vector& result);*/
-
+    bool intersects(const Ray& ray, float range) const;
+    Vector intersectionPoint(const Ray& ray, float range) const;
 };
 
 

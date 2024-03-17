@@ -82,15 +82,15 @@ Vector Vector::dot(const Vector v) const {
 	return result;
 }
 
-float Vector::dotProduct(const Vector v) {
+float Vector::dotProduct(const Vector v) const{
 	Vector result;
 	result.x = this->x * v.x;
 	result.y = this->y * v.y;
 	result.z = this->z * v.z;
-	return result.x + result.y + result.z;
+	return (result.x + result.y + result.z);
 }
 
-Vector Vector::cross(const Vector v) {
+Vector Vector::cross(const Vector v) const{
 	return Vector(this->y * v.z - this->z * v.y,
 		this->z * v.x - this->x * v.z,
 		this->x * v.y - this->y * v.x);

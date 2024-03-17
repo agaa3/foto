@@ -39,9 +39,9 @@ public:
 	Vector dot(const Vector v) const;
 
 	// mno¿enie skalarne
-	float dotProduct(const Vector v);
+	float dotProduct(const Vector v) const;
 
-	Vector cross(const Vector v);
+	Vector cross(const Vector v) const;
 
 	Vector rotateByQuaternion(float angle, const Vector& axis);
 

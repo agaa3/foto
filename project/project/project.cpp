@@ -44,6 +44,20 @@ int main()
     std::cout
         << "\nWektor znormalizowany: " << norm1;
 
+
+    //na razie
+    Ray r2 = Ray(Vector(0, 0, -20), Vector(0, 1, 0));
+
+    //13 14
+    Plane p1 = Plane(Vector(0, 0, 0), Vector(0, 1, 1));
+    Vector intP1R2 = p1.intersectionPoint(r2, 0);
+    std::cout
+        << "\nPunkt przeciecia: " << intP1R2;
+    Ray r3 = Ray(Vector(0, 0, -20), Vector(0, 1, -1));
+    Vector intP1R3 = p1.intersectionPoint(r3, 0);
+    std::cout
+        << "\nPunkt przeciecia: " << intP1R3;
+
     /*
     //bryla2x2x2
     float cubeSize = 2;
