@@ -134,6 +134,7 @@
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="project.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +143,7 @@
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
