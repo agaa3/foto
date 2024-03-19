@@ -1,20 +1,20 @@
 #pragma once
-#include "Vector.h"
+#include "Vector3.h"
 #include "Ray.h"
 
 
 class Sphere
 {
 public:
-	Vector center;
+	Vector3 center;
 	float radius;
 
 	Sphere();
 	Sphere(float r);
-	Sphere(Vector v);
-	Sphere(Vector v, float r);
+	Sphere(Vector3 v);
+	Sphere(Vector3 v, float r);
 
-	bool hit(Ray ray, float t_min, float t_max, Vector& intPoint) const; //t_min
+	bool hit(const Ray& ray, float t_min, float t_max, Vector3& intPoint) const; //t_min
 
 	~Sphere();
 

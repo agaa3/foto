@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Plane::Plane(const Vector& point, const Vector& normal) : point(point), normal(normal) {}
+Plane::Plane(const Vector3& point, const Vector3& normal) : point(point), normal(normal) {}
 
 Plane::Plane() {
 
@@ -27,7 +27,7 @@ bool Plane::are3PlanesIntersecting(const Plane& p2, const Plane& p3, Vector& res
     return true;
 }*/
 
-bool Plane::intersects(const Ray& ray, float range, Vector& intPoint) {  //po co jest range??
+bool Plane::intersects(const Ray& ray, float range, Vector3& intPoint) {  //po co jest range??
     //intPoint - do dodania punkt przeciecia
 
     bool result = false;
@@ -58,27 +58,27 @@ bool Plane::intersects(const Ray& ray, float range, Vector& intPoint) {  //po co
     return result;
 }
 
-Vector Plane::intersectionPoint(const Ray& ray, float range) const {  //po co jest range?? range promienia?
+Vector3 Plane::intersectionPoint(const Ray& ray, float range) const {  //po co jest range?? range promienia?
     
     float ndotD = (this->normal).dotProduct(ray.direction);
     if (ndotD == 0.0f) {
         //throw std::invalid_argument("Rownolegle");
-        return Vector(33,33, 33); //tu trzeba to zmieniæ
+        return Vector3(33,33, 33); //tu trzeba to zmieniæ
     }
     
     float t = ((this->point.dotProduct(this->normal)) - (this->normal).dotProduct(ray.origin)) / ndotD;
     
     //if (ndotD < 0) return Vector(333, 333, 333);
 
-    Vector result = (ray.direction * t) + ray.origin;  //p=o+td
+    Vector3 result = (ray.direction * t) + ray.origin;  //p=o+td
     return result;
 }
 
 
-Vector Plane::crossingOfLineAndPlane(Ray l, Plane p) {
+Vector3 Plane::crossingOfLineAndPlane(Ray l, Plane p) {
     float t = ((p.normal) * (-1)).dotProduct((l.origin - p.point));
     t = t / ((p.normal).dotProduct(l.direction));
-    return Vector((l.origin).x + (l.direction).x * t, (l.origin).y + (l.direction).y * t, (l.origin).z + (l.direction).z * t);
+    return Vector3((l.origin).x + (l.direction).x * t, (l.origin).y + (l.direction).y * t, (l.origin).z + (l.direction).z * t);
 }
 
 bool Plane::isLineAndPlaneCrossing(Ray l, Plane p) {

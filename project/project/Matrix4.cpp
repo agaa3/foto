@@ -330,13 +330,13 @@ Matrix4 Matrix4::getTransposeOfMatrix() const {
     return result;
 }
 
-void Matrix4::setTranslationPart(const Vector& translation) {
+void Matrix4::setTranslationPart(const Vector3& translation) {
     elements[12] = translation.x;
     elements[13] = translation.y;
     elements[14] = translation.z;
 }
 
-void Matrix4::setScalePart(const Vector& scale) {
+void Matrix4::setScalePart(const Vector3& scale) {
     LoadIdentity();
     elements[0] = scale.x;
     elements[5] = scale.y;
@@ -351,8 +351,8 @@ void Matrix4::setScalePartUniform(const float scaleFactor) {
     elements[15] = 1;
 }
 
-void Matrix4::setRotationAxis(const double angle, const Vector& axis) {
-    Vector u = axis.normalize();
+void Matrix4::setRotationAxis(const double angle, const Vector3& axis) {
+    Vector3 u = axis.normalize();
     float sinAngle = round(sin(M_PI * angle / 180.0f));
     float cosAngle = round(cos(M_PI * angle / 180.f));
     float oneMinusCosAngle = 1.0 - cosAngle;

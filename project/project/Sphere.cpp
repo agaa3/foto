@@ -1,7 +1,7 @@
 ﻿#include "Sphere.h"
-#include "Vector.h"
+#include "Vector3.h"
 
-Sphere::Sphere(const Vector center, const float radius) : center(center), radius(radius) {}
+Sphere::Sphere(const Vector3 center, const float radius) : center(center), radius(radius) {}
 
 Sphere::Sphere()
 {
@@ -17,9 +17,9 @@ std::ostream& operator<<(std::ostream& os, const Sphere& sph)
 	return os;
 }
 
-bool Sphere::hit(Ray ray, float t_min, float t_max, Vector& intPoint) const
+bool Sphere::hit(const Ray& ray, float t_min, float t_max, Vector3& intPoint) const
 {
-	Vector oc = ray.origin- this->center; // oc - vector od początku promienia do środka sfery czyli w zasadzie direction
+	Vector3 oc = ray.origin- this->center; // oc - vector od początku promienia do środka sfery czyli w zasadzie direction
 
 	float a = ray.direction.dotProduct(ray.direction);
 	float b = oc.dotProduct(ray.direction * 2);

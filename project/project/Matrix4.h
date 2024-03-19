@@ -2,7 +2,7 @@
 #define MATMA_MATRIX4_H
 
 
-#include "Vector.h"
+#include "Vector3.h"
 //#include "Vector4.h"
 
 class Matrix4 {
@@ -46,11 +46,11 @@ public:
     float det(const Matrix4 m);
 
     //operacje na macierzach
-    void setTranslationPart(const Vector& translation);
-    void setScalePart(const Vector& scale);
+    void setTranslationPart(const Vector3& translation);
+    void setScalePart(const Vector3& scale);
     void setScalePartUniform(const float scaleFactor);
 
-    void setRotationAxis(const double angle, const Vector& axis);
+    void setRotationAxis(const double angle, const Vector3& axis);
     void setRotationX(const double angle);
     void setRotationY(const double angle);
     void setRotationZ(const double angle);

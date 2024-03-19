@@ -4,7 +4,7 @@
 #include <iostream>
 #include <conio.h>
 
-#include "Vector.h"
+#include "Vector3.h"
 #include "Quaternion.h"
 #include "Ray.h"
 #include "Plane.h"
@@ -18,48 +18,48 @@ int main()
 {
     //1
     //2
-    Vector v1 = Vector(1, 2, 3);
-    Vector v2 = Vector(10, 11, 12);
-    Vector result1 = v1 + v2;
-    Vector result2 = v2 + v1;
+    Vector3 v1 = Vector3(1, 2, 3);
+    Vector3 v2 = Vector3(10, 11, 12);
+    Vector3 result1 = v1 + v2;
+    Vector3 result2 = v2 + v1;
 
 
     std::cout
         << "2. Dodawanie 1: " << result1 << "\nDodawanie 2: " << result2;
 
     //3
-    Vector v3 = Vector(0, 3, 0);
-    Vector v4 = Vector(5, 5, 0);
+    Vector3 v3 = Vector3(0, 3, 0);
+    Vector3 v4 = Vector3(5, 5, 0);
     float angle = acosf((v3.dotProduct(v4))/(v3.length() * v4.length()));
     angle = angle * 180 / M_PI;
     std::cout
         << "\n\n3. Kat (w stopniach): " << angle;
 
     //4
-    Vector v5 = Vector(4, 5, 1);
-    Vector v6 = Vector(4, 1, 3);
-    Vector result3 = v5.cross(v6);
+    Vector3 v5 = Vector3(4, 5, 1);
+    Vector3 v6 = Vector3(4, 1, 3);
+    Vector3 result3 = v5.cross(v6);
     std::cout
         << "\n\n4. Wektor: " << result3;
 
     //5
-    Vector norm1 = result3.normalize();
+    Vector3 norm1 = result3.normalize();
     std::cout
         << "\n\n5. Wektor znormalizowany: " << norm1;
 
     //6
     //7
-    Sphere s = Sphere(Vector(0, 0, 0), 10);
+    Sphere s = Sphere(Vector3(0, 0, 0), 10);
 
     //8
-    Ray r1 = Ray(Vector(0, 0, -20), s.center, false);
+    Ray r1 = Ray(Vector3(0, 0, -20), s.center, false);
 
     //9
-    Ray r2 = Ray(r1.origin, Vector(0, 1, 0));
+    Ray r2 = Ray(r1.origin, Vector3(0, 1, 0));
 
     //10
-    Vector intPoint1 = Vector();
-    Vector intPoint2 = Vector();
+    Vector3 intPoint1 = Vector3();
+    Vector3 intPoint2 = Vector3();
 
     bool intersectionSphereR1 = s.hit(r1, 0, 1000, intPoint1); // ten sie pownienie przciaæ
     bool intersectionSphereR2 = s.hit(r2, 0, 1000, intPoint2);
@@ -79,8 +79,8 @@ int main()
     }
 
     //12
-    Ray r3 = Ray(Vector(0, -1, 10), Vector(0, 1, 0));
-    Vector intPoint3 = Vector();
+    Ray r3 = Ray(Vector3(0, -1, 10), Vector3(0, 1, 0));
+    Vector3 intPoint3 = Vector3();
     bool intersectionSphereR3 = s.hit(r3, 0, 1000, intPoint3); // ten sie pownienie przciaæ
     std::cout
         << "\n\n12. Czy istnieje przeciecie sfery i r3: " << intersectionSphereR3;
@@ -90,20 +90,20 @@ int main()
     }
 
     //13 14
-    Plane p1 = Plane(Vector(0, 0, 0), Vector(0, 1, 1));
-    Vector intPoint4 = Vector();
+    Plane p1 = Plane(Vector3(0, 0, 0), Vector3(0, 1, 1));
+    Vector3 intPoint4 = Vector3();
 
     bool intersectionPlaneR2 = p1.intersects(r2, 1000, intPoint4);
     std::cout
         << "\n\n14. Punkt przeciecia: " << intPoint4;
 
     //15
-    Triangle t1 = Triangle(Vector(0, 0, 0), Vector(1, 0, 0), Vector(0, 1, 0));
+    Triangle t1 = Triangle(Vector3(0, 0, 0), Vector3(1, 0, 0), Vector3(0, 1, 0));
 
-    Vector point1 = Vector(-1, 0.5, 0);
-    Vector point2 = Vector(1, 0.5, 0);
-    Vector intPoint5 = Vector();
-    Vector intPoint6 = Vector();
+    Vector3 point1 = Vector3(-1, 0.5, 0);
+    Vector3 point2 = Vector3(1, 0.5, 0);
+    Vector3 intPoint5 = Vector3();
+    Vector3 intPoint6 = Vector3();
 
 
     Ray r4 = Ray(point1, point2, false);
@@ -125,8 +125,8 @@ int main()
     }
 
     //16
-    Vector point3 = Vector(2, -1, 0);
-    Vector point4 = Vector(2, 2, 0);
+    Vector3 point3 = Vector3(2, -1, 0);
+    Vector3 point4 = Vector3(2, 2, 0);
 
     Ray r6 = Ray(point3, point4, false);
     Ray r7 = Ray(point4, point3, false);
@@ -147,8 +147,8 @@ int main()
     }
 
     //15.3
-    Vector point5 = Vector(0, 0, -1);
-    Vector point6 = Vector(0, 0, 1);
+    Vector3 point5 = Vector3(0, 0, -1);
+    Vector3 point6 = Vector3(0, 0, 1);
 
     Ray r8 = Ray(point5, point6, false);
     Ray r9 = Ray(point6, point5, false);

@@ -1,12 +1,12 @@
 #include "Ray.h"
 
-Ray::Ray(const Vector& origin, const Vector& direction) : origin(origin) {
+Ray::Ray(const Vector3& origin, const Vector3& direction) : origin(origin) {
     this->direction = direction.normalize();
 }
 
-Ray::Ray(const Vector& origin, const Vector& destination, const bool& DirDes) : origin(origin) { // true - direction false - destination
+Ray::Ray(const Vector3& origin, const Vector3& destination, const bool& DirDes) : origin(origin) { // true - direction false - destination
     if (DirDes == 0) { //mamy podane destination
-        Vector dir = Vector(destination.x - origin.x, destination.y - origin.y, destination.z - origin.z);
+        Vector3 dir = Vector3(destination.x - origin.x, destination.y - origin.y, destination.z - origin.z);
         this->direction = dir.normalize();
         this->destination = destination;
     }
@@ -26,11 +26,11 @@ std::ostream& operator<<(std::ostream& stream, const Ray& ray) {
 }
 
 
-Vector Ray::crossingOfTwoLines(Ray l1, Ray l2) {
+Vector3 Ray::crossingOfTwoLines(Ray l1, Ray l2) {
     float t = ((l2.origin - l1.origin).cross(l2.direction)).dotProduct(((l1.direction).cross(l2.direction)));
     float mianownik = ((l1.direction).cross(l2.direction)).length();
     t = t / (mianownik * mianownik);
-    Vector crossingPoint = Vector((l1.origin).x + (l1.direction).x * t, (l1.origin).y + (l1.direction).y * t, (l1.origin).z + (l1.direction).z * t);
+    Vector3 crossingPoint = Vector3((l1.origin).x + (l1.direction).x * t, (l1.origin).y + (l1.direction).y * t, (l1.origin).z + (l1.direction).z * t);
     return crossingPoint;
 }
 

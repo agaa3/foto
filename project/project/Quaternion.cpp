@@ -3,7 +3,7 @@
 Quaternion::Quaternion()
 {}
 
-Quaternion::Quaternion(float a, Vector v) {
+Quaternion::Quaternion(float a, Vector3 v) {
     this->a = a;
     this->v = v;
 }
@@ -85,7 +85,7 @@ Quaternion Quaternion::getUnitNormQuaternion() {
 
 Quaternion Quaternion::conjugate() {
     float scalar = this->a;
-    Vector imaginary = this->v * (-1);
+    Vector3 imaginary = this->v * (-1);
     return Quaternion(scalar, imaginary);
 }
 
@@ -97,7 +97,7 @@ Quaternion Quaternion::inverse() {
     Quaternion conjugateValue = this->conjugate();
 
     float scalar = conjugateValue.a * absoluteValue;
-    Vector imaginary = conjugateValue.v * absoluteValue;
+    Vector3 imaginary = conjugateValue.v * absoluteValue;
 
     return Quaternion(scalar, imaginary);
 }

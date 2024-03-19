@@ -2,15 +2,15 @@
 #define MATMA_QUATERNION_H
 
 
-#include "Vector.h"
+#include "Vector3.h"
 
 class Quaternion {
 public:
     float a;
-    Vector v;
+    Vector3 v;
 
     Quaternion();
-    Quaternion(float a, Vector v);
+    Quaternion(float a, Vector3 v);
     Quaternion(float a, float x, float y, float z);
     ~Quaternion();
     Quaternion(const Quaternion& q);

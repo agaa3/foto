@@ -2,22 +2,22 @@
 #define MATMA_LINE_H
 
 
-#include "Vector.h"
+#include "Vector3.h"
 
 class Ray {
 public:
     //p(t) = o + td
-    Vector origin;  //o
-    Vector direction;  //d
-    Vector destination;
-    float distance;
+    Vector3 origin;  //o
+    Vector3 direction;  //d
+    Vector3 destination;
+    float distance = 0.0f;
 
     Ray();
-    Ray(const Vector& origin, const Vector& direction);
-    Ray(const Vector& origin, const Vector& destination, const bool& DirDes);
+    Ray(const Vector3& origin, const Vector3& direction);
+    Ray(const Vector3& origin, const Vector3& destination, const bool& DirDes);
 
-    Ray(const Vector& origin, const float& dis);
-    Ray(const Vector& origin, const Vector& direction, const float& dis);
+    Ray(const Vector3& origin, const float& dis);
+    Ray(const Vector3& origin, const Vector3& direction, const float& dis);
 
     ~Ray();
     /* w razie jakby daæ pola do private!!
@@ -30,7 +30,7 @@ public:
     float distance() const { return distance; };
     void distance(float d) { distance = d; };*/
 
-    static Vector crossingOfTwoLines(Ray l1, Ray l2);
+    static Vector3 crossingOfTwoLines(Ray l1, Ray l2);
     static float angleOfTwoLines(Ray l1, Ray l2);
 
     friend std::ostream& operator<<(std::ostream& stream, const Ray& ray);

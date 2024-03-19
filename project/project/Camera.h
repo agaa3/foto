@@ -7,15 +7,15 @@
 
 class Camera {
 public:
-    Vector position;
+    Vector3 position;
     float radius;
-    Vector direction;
-    Vector up;
+    Vector3 direction;
+    Vector3 up;
 
     Camera(float radius);
 
     Ray ray = Ray(position, direction);
-    Camera(const Vector& position, const Vector& direction, const Vector& up);
+    Camera(const Vector3& position, const Vector3& direction, const Vector3& up);
     Camera();
 
     void rotateY(float angle);
@@ -25,9 +25,9 @@ public:
     void rotateY1(float angle);
     void rotateX1(float angle);
     void rotateZ1(float angle);
-    void rotateAxis(float angle, Vector axis);
+    void rotateAxis(float angle, Vector3 axis);
 
-    Vector right = Vector(0, 0, 0);
+    Vector3 right = Vector3(0, 0, 0);
 
 
 };

@@ -1,18 +1,18 @@
 #pragma once
 
-#include "Vector.h"
+#include "Vector3.h"
 #include "Ray.h"
 class Triangle
 {
 public:
-	Vector vertices[2];
-	Vector normals[2];
+	Vector3 vertices[2];
+	Vector3 normals[2];
 
 	Triangle();
-	Triangle(const Vector& vertex1, const Vector& vertex2, const Vector& vertex3);
-	Triangle(const Vector& vertex1, const Vector& vertex2, const Vector& vertex3, const Vector& normal1, const Vector& normal2, const Vector& normal3);
+	Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3);
+	Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3, const Vector3& normal1, const Vector3& normal2, const Vector3& normal3);
 
-	bool hit(const Ray ray, Vector& intPoint);
+	bool hit(const Ray& ray, Vector3& intPoint);
 
 	~Triangle();
 
