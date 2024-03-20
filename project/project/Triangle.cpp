@@ -1,13 +1,5 @@
 #include "Triangle.h"
 
-Triangle::Triangle()
-{
-}
-
-Triangle::~Triangle()
-{
-}
-
 Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3) {
 	vertices[0] = vertex1;
 	vertices[1] = vertex2;
@@ -25,7 +17,7 @@ Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3
 	normals[2] = normal3;
 }
 
-bool Triangle::hit(const Ray& ray, Vector3& intPoint) {
+bool Triangle::hit(const Ray& ray, Vector3& intPoint, float t_min, float t_max) const {
 
 	Vector3 AB = vertices[1] - vertices[0];
 	Vector3 AC = vertices[2] - vertices[0];

@@ -3,21 +3,13 @@
 
 Sphere::Sphere(const Vector3 center, const float radius) : center(center), radius(radius) {}
 
-Sphere::Sphere()
-{
-}
-
-Sphere::~Sphere()
-{
-}
-
 std::ostream& operator<<(std::ostream& os, const Sphere& sph)
 {
 	os << "[" << sph.center << ", " << sph.radius << "]";
 	return os;
 }
 
-bool Sphere::hit(const Ray& ray, float t_min, float t_max, Vector3& intPoint) const
+bool Sphere::hit(const Ray& ray, Vector3& intPoint, float t_min, float t_max) const
 {
 	Vector3 oc = ray.origin- this->center; // oc - vector od początku promienia do środka sfery czyli w zasadzie direction
 

@@ -14,7 +14,7 @@ public:
 
 	Vector3(float x, float y, float z);
 
-	~Vector3();
+	~Vector3() = default;
 
 	Vector3(const Vector3& v);
 	friend std::ostream& operator<<(std::ostream& stream, const Vector3& v);
@@ -44,10 +44,6 @@ public:
 	Vector3 cross(const Vector3 v) const;
 
 	Vector3 rotateByQuaternion(float angle, const Vector3& axis);
-
-	Vector3 crossingOfTwoLines(Vector3 p1, Vector3 v1, Vector3 p2, Vector3 v2);
-
-	Vector3 crossingOfTwoSegments(Vector3 a1, Vector3 a2, Vector3 b1, Vector3 b2);
 
 	//to samo co rotateByQuaternion tylko sposobem z kwaternionami
 	//angle jako radian (chyba)

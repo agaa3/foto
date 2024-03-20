@@ -9,10 +9,10 @@ public:
     float a;
     Vector3 v;
 
-    Quaternion();
+    Quaternion() = delete;
     Quaternion(float a, Vector3 v);
     Quaternion(float a, float x, float y, float z);
-    ~Quaternion();
+    ~Quaternion() = default;
     Quaternion(const Quaternion& q);
     //    Quaternion(Vector axis, float angle); //wazna kolejnosc
 

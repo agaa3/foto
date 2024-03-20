@@ -1,7 +1,5 @@
 #include "Quaternion.h"
 
-Quaternion::Quaternion()
-{}
 
 Quaternion::Quaternion(float a, Vector3 v) {
     this->a = a;
@@ -15,9 +13,6 @@ Quaternion::Quaternion(float a, float x, float y, float z) {
     this->v.z = z;
 }
 
-Quaternion::~Quaternion() {
-
-}
 
 Quaternion::Quaternion(const Quaternion& q) {
     this->a = q.a;

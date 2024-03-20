@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Sphere.h"
 #include "Triangle.h"
+#include "ObjectOnScene.h"
 
 const int SIZE = 60;
 
@@ -42,6 +43,8 @@ int main()
     std::cout
         << "\n\n4. Wektor: " << result3;
 
+    
+
     //5
     Vector3 norm1 = result3.normalize();
     std::cout
@@ -61,8 +64,8 @@ int main()
     Vector3 intPoint1 = Vector3();
     Vector3 intPoint2 = Vector3();
 
-    bool intersectionSphereR1 = s.hit(r1, 0, 1000, intPoint1); // ten sie pownienie przciaæ
-    bool intersectionSphereR2 = s.hit(r2, 0, 1000, intPoint2);
+    bool intersectionSphereR1 = s.hit(r1, intPoint1); // ten sie pownienie przciaæ
+    bool intersectionSphereR2 = s.hit(r2, intPoint2);
 
     std::cout
         << "\n\n10. Czy istnieje przeciecie sfery i r1: " << intersectionSphereR1;
@@ -81,7 +84,7 @@ int main()
     //12
     Ray r3 = Ray(Vector3(0, -1, 10), Vector3(0, 1, 0));
     Vector3 intPoint3 = Vector3();
-    bool intersectionSphereR3 = s.hit(r3, 0, 1000, intPoint3); // ten sie pownienie przciaæ
+    bool intersectionSphereR3 = s.hit(r3, intPoint3); // ten sie pownienie przciaæ
     std::cout
         << "\n\n12. Czy istnieje przeciecie sfery i r3: " << intersectionSphereR3;
     if (intersectionSphereR3) {
@@ -93,7 +96,7 @@ int main()
     Plane p1 = Plane(Vector3(0, 0, 0), Vector3(0, 1, 1));
     Vector3 intPoint4 = Vector3();
 
-    bool intersectionPlaneR2 = p1.intersects(r2, 1000, intPoint4);
+    bool intersectionPlaneR2 = p1.hit(r2, intPoint4);
     std::cout
         << "\n\n14. Punkt przeciecia: " << intPoint4;
 
@@ -167,6 +170,10 @@ int main()
         std::cout
             << "\nPunkt przeciecia: " << intPoint5;
     }
+
+
+
+    
 
     /*Ray r4 = Ray(Vector(0, 0, -20), Vector(0, 1, -1));
     bool intersectionPlaneR4 = p1.intersects(r4, 1000, intPoint4);

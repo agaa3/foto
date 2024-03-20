@@ -4,23 +4,21 @@
 
 #include "Vector3.h"
 #include "Ray.h"
+#include "ObjectOnScene.h"
 
-class Plane {
+class Plane : public ObjectOnScene
+{
 public:
     Vector3 point;
     Vector3 normal;
-    Plane();
+    Plane() = delete;
+    ~Plane() = default;
 
     Plane(const Vector3& point, const Vector3& normal);
-    static Vector3 crossingOfLineAndPlane(Ray l, Plane p);
-    static bool isLineAndPlaneCrossing(Ray l, Plane p);
-    static float angleOfLineAndPlane(Ray l, Plane p);
-
     
    // bool are3PlanesIntersecting(const Plane& p2, const Plane& p3, Vector& result);
 
-    bool intersects(const Ray& ray, float range, Vector3& intPoint);
-    Vector3 intersectionPoint(const Ray& ray, float range) const;
+    bool hit(const Ray& ray, Vector3& intPoint, float t_min = 0, float t_max = 1000) const override;
 };
 
 

@@ -1,22 +1,23 @@
 #pragma once
 #include "Vector3.h"
 #include "Ray.h"
+#include "ObjectOnScene.h"
 
 
-class Sphere
+class Sphere : public ObjectOnScene
 {
 public:
 	Vector3 center;
 	float radius;
 
-	Sphere();
+	Sphere() = delete;
 	Sphere(float r);
 	Sphere(Vector3 v);
 	Sphere(Vector3 v, float r);
 
-	bool hit(const Ray& ray, float t_min, float t_max, Vector3& intPoint) const; //t_min
+	bool hit(const Ray& ray, Vector3& intPoint, float t_min = 0, float t_max = 1000) const override; 
 
-	~Sphere();
+	~Sphere() = default;
 
 	friend std::ostream& operator <<(std::ostream& os, const Sphere& sph);
 
