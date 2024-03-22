@@ -10,14 +10,25 @@ void OrthogonalCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) 
     float centerY;
     Vector3 intPoint = Vector3();
     LightIntensity color = LightIntensity(1, 1, 0);
-    LightIntensity colorBckg = LightIntensity(1, 1, 0);
+    LightIntensity colorBckg = LightIntensity(0, 0, 0);
     float t = FLT_MAX;
     float tempT = FLT_MAX;
+    float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
+    LightIntensity bckgColors[6] = {LightIntensity(1, 0, 0), LightIntensity(0, 1, 0), LightIntensity(0, 0, 1), 
+                                    LightIntensity(100, 0, 1), LightIntensity(0, 100, 1), LightIntensity(100, 100, 1) };
+    int fragment = img.col / 6; //100
 
     for (int i = 0; i < img.col; i++)
     {
+        if (i % fragment == 0) {
+            colorBckg = bckgColors[i / fragment]; //zmiana koloru we fragmencie
+        } 
         for (int j = 0; j < img.rows; j++)
         {
+            if (j % fragment == 0) {
+
+                colorBckg = bckgColors[i / fragment] * valueOfBckg[j / fragment];
+            }
             t = FLT_MAX;
             tempT = FLT_MAX;
             centerX = -1.0f + (i + 0.5f) * widthPixel;
@@ -31,7 +42,6 @@ void OrthogonalCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) 
                 {
                     if (t < tempT) {
                         LightIntensity objectColor = LightIntensity((objects[k]->color).x, (objects[k]->color).y, (objects[k]->color).z);
-                        //std::cout << objects[k]->color;
                         img.setPixel(i, j, objectColor);
                     }
                 }

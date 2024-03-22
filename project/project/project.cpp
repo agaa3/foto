@@ -38,55 +38,17 @@ int main()
     
 
     PerspectiveCamera cam2 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0));
-    /*Sphere sfera3 = Sphere(Vector3(0, 0, 3), 1, c1);
-    Sphere sfera4 = Sphere(Vector3(2, 0, 4), 1, c2);
+    /*Sphere sfera3 = Sphere(Vector3(0, 0, 2.7), 1, c1);
+    Sphere sfera4 = Sphere(Vector3(5, 0, 10), 2, c2);
     objects.push_back(&sfera3);
     objects.push_back(&sfera4);*/
 
-    //cam1.RenderImage(img, objects);
     cam1.RenderImage(img, objects);
-
-    //for (int i = 0; i < sizeY; i++) { //rzedy
-    //   for (int j = 0; j < sizeX; j++) { //kolumnach
-    //       img.setPixel(j, i, color);
-
-    //    }
-    //}
-
-
-
+    //cam2.RenderImage(img, objects);
 
 
     sf::RenderWindow window(sf::VideoMode(sizeX, sizeY), "SFML works!");
     window.setSize(sf::Vector2u(sizeX, sizeY));
-    //sf::CircleShape shape(100.f);
-    
-    //shape.setFillColor(sf::Color::Green);
-
-    //sf::Vertex point(sf::Vector2f(10, 10), sf::Color::Green);
-
-    //sf::VertexArray image1(sf::Vector2f);
-    
-
-    //std::vector<sf::Vertex> vertices;
-    //vertices[3][4] = 
-
-    //for (int i = 0; i < sizeY; i++) { //rzedy
-    //    for (int j = 0; j < sizeX; j++) { //kolumnach
-    //        vertices.push_back(sf::Vertex(sf::Vector2f(i, j), sf::Color(255, 255, 0)));
-    //        /*
-    //        if(j >100){
-    //            vertices.push_back(sf::Vertex(sf::Vector2f(i, j), sf::Color(255, 255, 0)));
-    //        }
-    //        else {
-    //            vertices.push_back(sf::Vertex(sf::Vector2f(i, j), sf::Color(255, 0, 0)));
-    //            //vertices[i * sizeY + j].color(100, 100, 100);
-    //        }*/
-
-    //    }
-    //   //std::cout << i <<"\n";
-    //}
-
 
     while (window.isOpen())
     {
@@ -107,7 +69,6 @@ int main()
         window.display();
     }
 
-    //strzelamy promieniamy z kamery, jak sie przetnie to bierzemy lokacjê trafienia, obliczamy kolor i wpisujemy do tablicy VertexArray
         
     return 0;
 }
