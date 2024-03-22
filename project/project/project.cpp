@@ -35,11 +35,11 @@ int main()
     Sphere sfera2 = Sphere(Vector3(.5, 0, 4), .25, c2);
     objects.push_back(&sfera1);
     objects.push_back(&sfera2);
-
+    
 
     PerspectiveCamera cam2 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0));
-    /*Sphere sfera3 = Sphere(Vector3(0, 0, 2), .5, c1);
-    Sphere sfera4 = Sphere(Vector3(.6, 0, 4), .25, c2);
+    /*Sphere sfera3 = Sphere(Vector3(0, 0, 3), 1, c1);
+    Sphere sfera4 = Sphere(Vector3(2, 0, 4), 1, c2);
     objects.push_back(&sfera3);
     objects.push_back(&sfera4);*/
 

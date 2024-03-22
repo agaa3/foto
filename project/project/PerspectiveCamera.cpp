@@ -8,6 +8,8 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
     float heightPixel = pixelSize / img.col;
     float centerX;
     float centerY;
+    float t = FLT_MAX;
+    float tempT = FLT_MAX;
 
     float s = 1; // s - odleg³oœæ siatki od kamery
     Vector3 e = this->position + this->direction * s;  // e - srodek siatki
@@ -30,24 +32,35 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
 
     Vector3 intPoint = Vector3();
     LightIntensity color = LightIntensity(1, 1, 0);
-    LightIntensity colorBckg = LightIntensity(1, 0, 0);
-    float t = 0;
+    LightIntensity colorBckg = LightIntensity(1, 1, 0);
 
     for (int i = 0; i < img.col; i++) // lewo prawo
     {
         for (int j = 0; j < img.rows; j++) //góra dó³
         {
+            t = FLT_MAX;
+            tempT = FLT_MAX;
             currentPixel = firstPixelCenter - dirToTop * heightPixel * j;
             currentPixel = currentPixel - dirToLeft * widthPixel * i;
 
             Ray ray = Ray(this->position, currentPixel, false);
             //Sphere sfera1 = Sphere(Vector3(0, 0, 5), 1);
-            bool intersects = objects[0]->hit(ray, intPoint, t);
-            if (intersects)
-            {
-                img.setPixel(j, i, color);
+            for (int k = 0; k < objects.size(); k++) {
+                tempT = t;
+                bool intersects = objects[k]->hit(ray, intPoint, t);
+
+                if (intersects)
+                {
+                    if (t < tempT) {
+                        LightIntensity objectColor = LightIntensity((objects[k]->color).x, (objects[k]->color).y, (objects[k]->color).z);
+                        //std::cout << objects[k]->color;
+                        img.setPixel(i, j, objectColor);
+                    }
+                }
+                else if (t == FLT_MAX) {
+                    img.setPixel(i, j, colorBckg);
+                }
             }
-            else img.setPixel(j, i, colorBckg);
         }
     }
 }
