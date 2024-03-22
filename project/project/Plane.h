@@ -14,11 +14,11 @@ public:
     Plane() = delete;
     ~Plane() = default;
 
-    Plane(const Vector3& point, const Vector3& normal);
+    Plane(const Vector3& point, const Vector3& normal, const Vector3& color);
     
    // bool are3PlanesIntersecting(const Plane& p2, const Plane& p3, Vector& result);
 
-    bool hit(const Ray& ray, Vector3& intPoint, float t_min = 0, float t_max = 1000) const override;
+    bool hit(const Ray& ray, Vector3& intPoint, float& t, float t_min = 0, float t_max = 1000) const override;
 };
 
 

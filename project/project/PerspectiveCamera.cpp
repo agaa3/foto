@@ -1,11 +1,11 @@
 #include "PerspectiveCamera.h"
 
-
+static float pixelSize = 2.0f;
 
 void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) {
     //img.col =200
-    float widthPixel = 2.0f / img.rows;
-    float heightPixel = 2.0f / img.col;
+    float widthPixel = pixelSize / img.rows;
+    float heightPixel = pixelSize / img.col;
     float centerX;
     float centerY;
 
@@ -31,7 +31,7 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
     Vector3 intPoint = Vector3();
     LightIntensity color = LightIntensity(1, 1, 0);
     LightIntensity colorBckg = LightIntensity(1, 0, 0);
-
+    float t = 0;
 
     for (int i = 0; i < img.col; i++) // lewo prawo
     {
@@ -42,7 +42,8 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
 
             Ray ray = Ray(this->position, currentPixel, false);
             //Sphere sfera1 = Sphere(Vector3(0, 0, 5), 1);
-            if (objects[0]->hit(ray, intPoint))
+            bool intersects = objects[0]->hit(ray, intPoint, t);
+            if (intersects)
             {
                 img.setPixel(j, i, color);
             }

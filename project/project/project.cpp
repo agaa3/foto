@@ -21,21 +21,30 @@ const int SIZE = 60;
 
 int main()
 {
-    int sizeX = 400;
-    int sizeY = 400;
+    int sizeX = 600;
+    int sizeY = 600;
     LightIntensity color = LightIntensity(1, 0, 0);
     Image img = Image(sizeX, sizeY); 
-    
-    PerspectiveCamera cam2 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0));
+    std::vector<ObjectOnScene*> objects;
+    Vector3 c1 = Vector3(0, 0, 1);
+    Vector3 c2 = Vector3(1, 0, 0);
+
 
     OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0));
-    Sphere sfera = Sphere(Vector3(0, 0, 2), 1);
-     
-    std::vector<ObjectOnScene*> objects;
-    objects.push_back(&sfera);
+    Sphere sfera1 = Sphere(Vector3(0, 0, 2), .4, c1);
+    Sphere sfera2 = Sphere(Vector3(.5, 0, 4), .25, c2);
+    objects.push_back(&sfera1);
+    objects.push_back(&sfera2);
+
+
+    PerspectiveCamera cam2 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0));
+    /*Sphere sfera3 = Sphere(Vector3(0, 0, 2), .5, c1);
+    Sphere sfera4 = Sphere(Vector3(.6, 0, 4), .25, c2);
+    objects.push_back(&sfera3);
+    objects.push_back(&sfera4);*/
 
     //cam1.RenderImage(img, objects);
-    cam2.RenderImage(img, objects);
+    cam1.RenderImage(img, objects);
 
     //for (int i = 0; i < sizeY; i++) { //rzedy
     //   for (int j = 0; j < sizeX; j++) { //kolumnach
