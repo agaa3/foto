@@ -21,10 +21,12 @@ public:
     float nearPlane = 0, farPlane = 1000;
     int sampler;
     float spatialContrast;
+    float pixelHeight = 1;
+    float pixelWidth = 1;
 
     Camera(float radius);
 
-    Camera(const Vector3& position, const Vector3& direction, const Vector3& up, const int& sampler=0, const float& spatialContrast=1);
+    Camera(const Vector3& position, const Vector3& direction, const Vector3& up,  const int& sampler=0, const float& spatialContrast=1);
     Camera();
 
     virtual ~Camera() {}

@@ -32,7 +32,7 @@ int main()
 
 
    // OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0));
-    OrthogonalCamera cam3 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), 2, 0.05);
+    OrthogonalCamera cam3 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), 3, 0.05);
 
     Sphere sfera1 = Sphere(Vector3(0, 0, 2), .4, c1);
     Sphere sfera2 = Sphere(Vector3(.5, 0, 4), .25, c2);
