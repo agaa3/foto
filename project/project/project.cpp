@@ -16,6 +16,7 @@
 #include "Image.h"
 #include "OrthogonalCamera.h"
 #include "PerspectiveCamera.h"
+#include "Color.h"
 
 const int SIZE = 60;
 
@@ -23,14 +24,16 @@ int main()
 {
     int sizeX = 600;
     int sizeY = 600;
-    LightIntensity color = LightIntensity(1, 0, 0);
+    Color color = Color(1, 0, 0);
     Image img = Image(sizeX, sizeY); 
     std::vector<ObjectOnScene*> objects;
     Vector3 c1 = Vector3(0, 0, 1);
     Vector3 c2 = Vector3(1, 0, 0);
 
 
-    OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0));
+   // OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0));
+    OrthogonalCamera cam3 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), 2, 0.05);
+
     Sphere sfera1 = Sphere(Vector3(0, 0, 2), .4, c1);
     Sphere sfera2 = Sphere(Vector3(.5, 0, 4), .25, c2);
     objects.push_back(&sfera1);
@@ -43,8 +46,9 @@ int main()
     objects.push_back(&sfera3);
     objects.push_back(&sfera4);*/
 
-    cam1.RenderImage(img, objects);
-    //cam2.RenderImage(img, objects);
+    //cam1.RenderImage(img, objects);
+   // cam2.RenderImage(img, objects);
+    cam3.RenderImage(img, objects);
 
 
     sf::RenderWindow window(sf::VideoMode(sizeX, sizeY), "SFML works!");

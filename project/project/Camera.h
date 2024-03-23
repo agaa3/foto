@@ -6,9 +6,9 @@
 #include "Ray.h"
 #include "Image.h"
 #include "Sphere.h"
-//#include "Vector"
 #include <vector>
 #include "ObjectOnScene.h"
+#include "Color.h"
 
 using namespace std;
 
@@ -19,11 +19,12 @@ public:
     Vector3 direction;
     Vector3 up;
     float nearPlane = 0, farPlane = 1000;
-
+    int sampler;
+    float spatialContrast;
 
     Camera(float radius);
 
-    Camera(const Vector3& position, const Vector3& direction, const Vector3& up);
+    Camera(const Vector3& position, const Vector3& direction, const Vector3& up, const int& sampler=0, const float& spatialContrast=1);
     Camera();
 
     virtual ~Camera() {}

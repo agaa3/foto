@@ -31,11 +31,11 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
     Vector3 currentPixel = firstPixelCenter; //polozenie obecnego piksela na plaszczyznie
 
     Vector3 intPoint = Vector3();
-    LightIntensity color = LightIntensity(1, 1, 0);
-    LightIntensity colorBckg = LightIntensity(1, 1, 0);
+    Color color = Color(1, 1, 0);
+    Color colorBckg = Color(1, 1, 0);
     float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
-    LightIntensity bckgColors[6] = { LightIntensity(1, 0, 0), LightIntensity(0, 1, 0), LightIntensity(0, 0, 1),
-                                    LightIntensity(100, 0, 1), LightIntensity(0, 100, 1), LightIntensity(100, 100, 1) };
+    Color bckgColors[6] = { Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1),
+                                    Color(100, 0, 1), Color(0, 100, 1), Color(100, 100, 1) };
         int fragment = img.col / 6; //100
 
     for (int i = 0; i < img.col; i++) // lewo prawo
@@ -62,7 +62,7 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
                 if (intersects)
                 {
                     if (t < tempT) {
-                        LightIntensity objectColor = LightIntensity((objects[k]->color).x, (objects[k]->color).y, (objects[k]->color).z);
+                        Color objectColor = Color((objects[k]->color).x, (objects[k]->color).y, (objects[k]->color).z);
                         //std::cout << objects[k]->color;
                         img.setPixel(i, j, objectColor);
                     }

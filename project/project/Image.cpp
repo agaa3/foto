@@ -1,6 +1,6 @@
 #include "Image.h"
 
-void Image::setPixel(int x, int y, LightIntensity pixel) {
+void Image::setPixel(int x, int y, Color pixel) {
 	int red = (int)(pixel.r * 255);
 	int green = (int)(pixel.g * 255);
 	int blue = (int)(pixel.b * 255);

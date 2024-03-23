@@ -1,5 +1,5 @@
 #pragma once
-#include "LightIntensity.h"
+#include "Color.h"
 #include <SFML/Graphics.hpp>
 #include "Vector3.h"
 
@@ -30,7 +30,7 @@ public:
 
 	//Image(int sizeX, int sizeY) : col(sizeX), rows(sizeY) {};
 
-	void setPixel(int x, int y, LightIntensity pixel);
+	void setPixel(int x, int y, Color pixel);
 
 };
 
