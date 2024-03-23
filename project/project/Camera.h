@@ -32,6 +32,10 @@ public:
     virtual ~Camera() {}
     virtual void RenderImage(Image& img, vector<ObjectOnScene*>& objects) = 0;
 
+    virtual Color shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects) = 0;
+
+    virtual Color sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter) = 0;
+
 
 
 

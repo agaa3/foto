@@ -2,17 +2,13 @@
 #include "Vector"
 
 static float pixelSize = 2.0f;
-static Color colorBckg = Color(0, 0, 0);
+Color colorBckg = Color(0.9, 0.9, 0.9);
 
 void OrthogonalCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
     float centerX;
     float centerY;
-    Vector3 intPoint = Vector3();
-    Color color = Color(1, 1, 0);
-    float t = FLT_MAX;
-    float tempT = FLT_MAX;
     float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
     Color bckgColors[6] = { Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1),
                                     Color(100, 0, 1), Color(0, 100, 1), Color(100, 100, 1) };
@@ -21,16 +17,15 @@ void OrthogonalCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) 
     for (int i = 0; i < img.col; i++)
     {
         if (i % fragment == 0) {
-            colorBckg = bckgColors[i / fragment]; //zmiana koloru we fragmencie
+            //colorBckg = bckgColors[i / fragment]; //zmiana koloru we fragmencie
         } 
         for (int j = 0; j < img.rows; j++)
         {
             if (j % fragment == 0) {
 
-                colorBckg = bckgColors[i / fragment] * valueOfBckg[j / fragment];
+                //colorBckg = bckgColors[i / fragment] * valueOfBckg[j / fragment];
             }
-            t = FLT_MAX;
-            tempT = FLT_MAX;
+
             centerX = -1.0f + (i + 0.5f) * pixelWidth;
             centerY = 1.0f - (j + 0.5f) * pixelHeight;
             Color colorOfPixel;
@@ -87,7 +82,7 @@ Color OrthogonalCamera::shootingRay(const Vector3& origin, const Vector3& direct
     return colorOfPixel;
 }
 
-Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter = 0) {
+Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter=0) {
     Color result = Color(0, 0, 0);
     float currentWidth = pixelWidth;
     float currentHeight = pixelHeight;

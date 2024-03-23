@@ -40,9 +40,9 @@ int main()
     objects.push_back(&sfera2);
     
 
-    PerspectiveCamera cam2 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0));
+    PerspectiveCamera cam2 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0), 2, 0.05);
     /*Sphere sfera3 = Sphere(Vector3(0, 0, 2.7), 1, c1);
-    Sphere sfera4 = Sphere(Vector3(5, 0, 10), 2, c2);
+    Sphere sfera4 = Sphere(Vector3(5.5, 0, 10), 2, c2);
     objects.push_back(&sfera3);
     objects.push_back(&sfera4);*/
 
