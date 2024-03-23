@@ -16,8 +16,12 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
     float centerX;
     float centerY;
 	float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
-	Color bckgColors[6] = { Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1),
-									Color(100, 0, 1), Color(0, 100, 1), Color(100, 100, 1) };
+	Color bckgColors[36] = {Color(0.1, 0, 0), Color(0, 0.1, 0), Color(0, 0, 0.1), Color(1, 0, 0.1), Color(0, 1, 0.1), Color(1, 1, 0.1), 
+                            Color(0.2, 0, 0), Color(0, 0.2, 0), Color(0, 0, 0.2), Color(1, 0, 0.2), Color(0, 1, 0.2), Color(1, 1, 0.2), 
+                            Color(0.4, 0, 0), Color(0, 0.4, 0), Color(0, 0, 0.4), Color(1, 0, 0.4), Color(0, 1, 0.4), Color(1, 1, 0.4), 
+                            Color(0.6, 0, 0), Color(0, 0.6, 0), Color(0, 0, 0.6), Color(1, 0, 0.6), Color(0, 1, 0.6), Color(1, 1, 0.6), 
+                            Color(0.8, 0, 0), Color(0, 0.8, 0), Color(0, 0, 0.8), Color(1, 0, 0.8), Color(0, 1, 0.8), Color(1, 1, 0.8), 
+                            Color(1.0, 0, 0), Color(0, 1.0, 0), Color(0, 0, 1.0), Color(1, 0, 1.0), Color(0, 1, 1.0), Color(1, 1, 1.0) };
     int fragment = img.col / 6; //100
 
 
@@ -49,7 +53,7 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
         {
             if (j % fragment == 0) {
 
-                colorBckg = bckgColors[i / fragment] * valueOfBckg[j / fragment];
+                colorBckg = bckgColors[(j/fragment)*6+(i/fragment)];
             }
 
             currentPixel = firstPixelCenter - dirToTop * pixelHeight * j;
