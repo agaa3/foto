@@ -32,23 +32,23 @@ int main()
 
 
    // OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0));
-    OrthogonalCamera cam3 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), 3, 0.05);
+    //OrthogonalCamera cam3 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), 3, 0.05);
 
-    Sphere sfera1 = Sphere(Vector3(0, 0, 2), .4, c1);
+    /*Sphere sfera1 = Sphere(Vector3(0, 0, 2), .4, c1);
     Sphere sfera2 = Sphere(Vector3(.5, 0, 4), .25, c2);
     objects.push_back(&sfera1);
     objects.push_back(&sfera2);
-    
+    */
 
     PerspectiveCamera cam2 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0), 2, 0.05);
-    /*Sphere sfera3 = Sphere(Vector3(0, 0, 2.7), 1, c1);
+    Sphere sfera3 = Sphere(Vector3(0, 0, 2.7), 1, c1);
     Sphere sfera4 = Sphere(Vector3(5.5, 0, 10), 2, c2);
     objects.push_back(&sfera3);
-    objects.push_back(&sfera4);*/
+    objects.push_back(&sfera4);
 
     //cam1.RenderImage(img, objects);
    // cam2.RenderImage(img, objects);
-    cam3.RenderImage(img, objects);
+    cam2.RenderImage(img, objects);
 
 
     sf::RenderWindow window(sf::VideoMode(sizeX, sizeY), "SFML works!");

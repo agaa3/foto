@@ -37,20 +37,6 @@ public:
     virtual Color sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter) = 0;
 
 
-
-
-
-
-
-    /*void rotateY(float angle);
-    void rotateX(float angle);
-    void rotateZ(float angle);
-
-    void rotateY1(float angle);
-    void rotateX1(float angle);
-    void rotateZ1(float angle);
-    void rotateAxis(float angle, Vector3 axis);*/
-
     Vector3 right = Vector3(0, 0, 0);
 
 

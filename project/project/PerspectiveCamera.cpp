@@ -10,19 +10,14 @@ PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& dir
 
 
 void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) {
-    //img.col =200
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
     float centerX;
     float centerY;
 	float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
-	Color bckgColors[36] = {Color(0.1, 0, 0), Color(0, 0.1, 0), Color(0, 0, 0.1), Color(1, 0, 0.1), Color(0, 1, 0.1), Color(1, 1, 0.1), 
-                            Color(0.2, 0, 0), Color(0, 0.2, 0), Color(0, 0, 0.2), Color(1, 0, 0.2), Color(0, 1, 0.2), Color(1, 1, 0.2), 
-                            Color(0.4, 0, 0), Color(0, 0.4, 0), Color(0, 0, 0.4), Color(1, 0, 0.4), Color(0, 1, 0.4), Color(1, 1, 0.4), 
-                            Color(0.6, 0, 0), Color(0, 0.6, 0), Color(0, 0, 0.6), Color(1, 0, 0.6), Color(0, 1, 0.6), Color(1, 1, 0.6), 
-                            Color(0.8, 0, 0), Color(0, 0.8, 0), Color(0, 0, 0.8), Color(1, 0, 0.8), Color(0, 1, 0.8), Color(1, 1, 0.8), 
-                            Color(1.0, 0, 0), Color(0, 1.0, 0), Color(0, 0, 1.0), Color(1, 0, 1.0), Color(0, 1, 1.0), Color(1, 1, 1.0) };
-    int fragment = img.col / 6; //100
+	Color bckgColors[6] = { Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1),
+                                    Color(100, 0, 1), Color(0, 100, 1), Color(100, 100, 1) };
+    int fragment = img.col / 6; 
 
 
     float s = 1; // s - odleg³oœæ siatki od kamery
@@ -34,11 +29,6 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
 
     float distanceToLeft = ((img.col / 2) - 1) * pixelWidth + (pixelWidth / 2); // ile musimy przesun¹æ od œrodka do lewej
     float distanceToTop = ((img.rows / 2) - 1) * pixelHeight + (pixelHeight / 2); // ile musimy przesun¹æ od œrodka do góry
-    //Vector3 dirToLeft = (this->direction.cross(this->up)).normalize(); //wektor równoleg³y do p³aszczyzny id¹cy w lewo
-    //Vector3 przesuniecie = a * odleglosclewejkrawedziodsrodka; // wektor od œrodka siatki do lewej krawêdzi
-    //Vector3 x1 = e + przesuniecie; //punkt na œrodku lewje krawêdzi
-
-    //Vector3 dirToTop = this->up.normalize(); //wektror równoleg³y do p³aszczyzny id¹cy w górê
 
     const Vector3 firstPixelCenter = e + dirToLeft * distanceToLeft + dirToTop * distanceToTop;
 
@@ -52,8 +42,9 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
         for (int j = 0; j < img.rows; j++) //góra dó³
         {
             if (j % fragment == 0) {
+                colorBckg.setValues(bckgColors[i / fragment] * valueOfBckg[j / fragment]);
 
-                colorBckg = bckgColors[(j/fragment)*6+(i/fragment)];
+                //colorBckg = bckgColors[(j/fragment)*6+(i/fragment)];
             }
 
             currentPixel = firstPixelCenter - dirToTop * pixelHeight * j;
@@ -65,25 +56,7 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
             }
             else {
                 colorOfPixel = shootingRay(this->position, currentPixel, objects);
-               // std::cout << "shooting" << "/n";
             }
-            //Ray ray = Ray(this->position, currentPixel, false);
-            //for (int k = 0; k < objects.size(); k++) {
-            //    tempT = t;
-            //    bool intersects = objects[k]->hit(ray, intPoint, t);
-
-            //    if (intersects)
-            //    {
-            //        if (t < tempT) {
-            //            Color objectColor = Color((objects[k]->color).x, (objects[k]->color).y, (objects[k]->color).z);
-            //            //std::cout << objects[k]->color;
-            //            img.setPixel(i, j, objectColor);
-            //        }
-            //    }
-            //    else if (t == FLT_MAX) {
-            //        img.setPixel(i, j, colorBckg);
-            //    }
-            //}
 
 			img.setPixel(i, j, colorOfPixel);
         }

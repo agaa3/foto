@@ -30,6 +30,21 @@ float Color::calculateDifference(const Color& other) {
 	return diff;
 }
 
+void Color::setValues(Color newColor) {
+	this->r = newColor.r;
+	this->g = newColor.g;
+	this->b = newColor.b;
+	if (newColor.r > 1) {
+		this->r = 1;
+	}
+	if (newColor.g > 1) {
+		this->g = 1;
+	}
+	if (newColor.b > 1) {
+		this->b = 1;
+	}
+
+}
 
 
 Color Color::operator+(Color& li) {

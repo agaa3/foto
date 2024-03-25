@@ -22,15 +22,12 @@ bool Plane::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, float 
     if (t1 > 0) {
         if (t_max == 0.0f || t1 < t_max) {
             if (ndotD < 0) {
-                return false; //HIT //promien w kierunku przeciwnym do p³aszczyzny (od p³aszczyzny)
+                return false; //promien w kierunku przeciwnym do p³aszczyzny (od p³aszczyzny)
             }
             else {
                 intPoint = ray.direction * t1 + ray.origin;
                 t = t1;
-                return true; //INSIDE_PRIMITIVE
-                //result.LPOINT = ray.origin + t * ray.direction;
-                //result.distance = t;
-                //result.intersectionLPOINTNormal = normal;
+                return true;
             }
         }
     }
