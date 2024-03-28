@@ -1,7 +1,5 @@
-
 #ifndef MATMA_CAMERA_H
 #define MATMA_CAMERA_H
-
 
 #include "Ray.h"
 #include "Image.h"
@@ -24,13 +22,15 @@ public:
     float pixelHeight = 1;
     float pixelWidth = 1;
 
-    Camera(float radius);
+    Image img;
 
-    Camera(const Vector3& position, const Vector3& direction, const Vector3& up,  const int& sampler=0, const float& spatialContrast=1);
+    Camera(float radius, Image& img);
+
+    Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1);
     Camera();
 
     virtual ~Camera() {}
-    virtual void RenderImage(Image& img, vector<ObjectOnScene*>& objects) = 0;
+    virtual void RenderImage(vector<ObjectOnScene*>& objects) = 0;
 
     virtual Color shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects) = 0;
 
@@ -41,9 +41,5 @@ public:
 
 
 };
-
-
-
-
 
 #endif //MATMA_CAMERA_H

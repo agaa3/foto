@@ -17,45 +17,25 @@ Vector3::Vector3(const Vector3& v) {
 	this->x = v.x;
 	this->y = v.y;
 	this->z = v.z;
-
 }
-Vector3 Vector3::operator+(const Vector3& w) const {
-	Vector3 res(0, 0, 0);
-	res.x = w.x + this->x;
-	res.y = w.y + this->y;
-	res.z = w.z + this->z;
 
-	return res;
+Vector3 Vector3::operator+(const Vector3& w) const {
+	return Vector3(w.x + this->x, w.y + this->y, w.z + this->z);
 }
 
 Vector3 Vector3::operator-(const Vector3& w) const {
-	Vector3 res(0, 0, 0);
-	res.x = this->x - w.x;
-	res.y = this->y - w.y;
-	res.z = this->z - w.z;
-
-	return res;
+	return Vector3(this->x - w.x, this->y - w.y, this->z - w.z);
 }
 
 Vector3 Vector3::operator*(const float& k) const {
-	Vector3 res(0, 0, 0);
-	res.x = this->x * k;
-	res.y = this->y * k;
-	res.z = this->z * k;
-
-	return res;
+	return Vector3(this->x * k, this->y * k, this->z * k);
 }
 
 Vector3 Vector3::operator/(const float& k) const {
 	if (k == 0)
 		throw std::invalid_argument("Dzielenie przez 0");
 
-	Vector3 res(0, 0, 0);
-	res.x = this->x / k;
-	res.y = this->y / k;
-	res.z = this->z / k;
-
-	return res;
+	return Vector3(this->x / k, this->y / k, this->z / k);
 }
 
 float Vector3::length() const {
@@ -73,11 +53,11 @@ Vector3 Vector3::dot(const Vector3 v) const {
 	return Vector3(this->x * v.x, this->y * v.y, this->z * v.z);
 }
 
-float Vector3::dotProduct(const Vector3 v) const{
+float Vector3::dotProduct(const Vector3 v) const {
 	return (this->x * v.x + this->y * v.y + this->z * v.z);
 }
 
-Vector3 Vector3::cross(const Vector3 v) const{
+Vector3 Vector3::cross(const Vector3 v) const {
 	return Vector3(this->y * v.z - this->z * v.y,
 		this->z * v.x - this->x * v.z,
 		this->x * v.y - this->y * v.x);

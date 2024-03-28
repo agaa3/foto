@@ -3,29 +3,27 @@
 static float pixelSize = 2.0f;
 static Color colorBckg = Color(0, 1, 0.4);
 
-PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& direction, const Vector3& up, const int& sampler, const float& spatialContrast) : Camera(position, direction, up, sampler, spatialContrast) {
+PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast) : Camera(position, direction, up, img, sampler, spatialContrast) {
     this->dirToLeft = (this->direction.cross(this->up)).normalize();
     this->dirToTop = this->up.normalize();
 }
 
 
-void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) {
+void PerspectiveCamera::RenderImage(vector<ObjectOnScene*>& objects) {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
-    float centerX;
-    float centerY;
-	float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
-	Color bckgColors[6] = { Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1),
+    float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
+    Color bckgColors[6] = { Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1),
                                     Color(100, 0, 1), Color(0, 100, 1), Color(100, 100, 1) };
-    int fragment = img.col / 6; 
+    int fragment = img.col / 6;
 
 
     float s = 1; // s - odleg³oœæ siatki od kamery
     Vector3 e = this->position + this->direction * s;  // e - srodek siatki
 
-       //n-szerokosc (liczba pixeli w poziomie)
-    //(n/2-1) * szerokoœæ piksela + 1/2 szerokoœæ piksela -> Y pierwszego piksela
-    // potem w forze idziemy w prawo tyle razy ile mammy pikseli
+    //n-szerokosc (liczba pixeli w poziomie)
+ //(n/2-1) * szerokoœæ piksela + 1/2 szerokoœæ piksela -> Y pierwszego piksela
+ // potem w forze idziemy w prawo tyle razy ile mammy pikseli
 
     float distanceToLeft = ((img.col / 2) - 1) * pixelWidth + (pixelWidth / 2); // ile musimy przesun¹æ od œrodka do lewej
     float distanceToTop = ((img.rows / 2) - 1) * pixelHeight + (pixelHeight / 2); // ile musimy przesun¹æ od œrodka do góry
@@ -36,15 +34,10 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
 
     for (int i = 0; i < img.col; i++) // lewo prawo
     {
-        if (i % fragment == 0) {
-            //colorBckg = bckgColors[i / fragment]; //zmiana koloru we fragmencie
-        }
         for (int j = 0; j < img.rows; j++) //góra dó³
         {
             if (j % fragment == 0) {
                 colorBckg.setValues(bckgColors[i / fragment] * valueOfBckg[j / fragment]);
-
-                //colorBckg = bckgColors[(j/fragment)*6+(i/fragment)];
             }
 
             currentPixel = firstPixelCenter - dirToTop * pixelHeight * j;
@@ -58,7 +51,7 @@ void PerspectiveCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects)
                 colorOfPixel = shootingRay(this->position, currentPixel, objects);
             }
 
-			img.setPixel(i, j, colorOfPixel);
+            this->img.setPixel(i, j, colorOfPixel);
         }
     }
 }
@@ -69,7 +62,23 @@ Color PerspectiveCamera::shootingRay(const Vector3& origin, const Vector3& desti
     float tempT = FLT_MAX;
     Vector3 intPoint;
     Color colorOfPixel = Color::undefined;
-    for (int k = 0; k < objects.size(); k++) {
+    for (ObjectOnScene* object : objects) {
+        tempT = t;
+        bool intersects = object->hit(ray, intPoint, t);
+
+        if (intersects)
+        {
+            if (t < tempT) {
+                Color objectColor = Color((object->color).x, (object->color).y, (object->color).z);
+                colorOfPixel = objectColor;
+            }
+        }
+        else if (t == FLT_MAX) {
+            colorOfPixel = colorBckg;
+        }
+    }
+
+    /*for (int k = 0; k < objects.size(); k++) {
         tempT = t;
         bool intersects = objects[k]->hit(ray, intPoint, t);
 
@@ -83,11 +92,11 @@ Color PerspectiveCamera::shootingRay(const Vector3& origin, const Vector3& desti
         else if (t == FLT_MAX) {
             colorOfPixel = colorBckg;
         }
-    }
+    }*/
     return colorOfPixel;
 }
 
-Color PerspectiveCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter=0) {
+Color PerspectiveCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter = 0) {
     Color result = Color(0, 0, 0);
     float currentWidth = pixelWidth;
     float currentHeight = pixelHeight;

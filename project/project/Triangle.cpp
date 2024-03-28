@@ -22,7 +22,7 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, flo
 
 	Vector3 AB = vertices[1] - vertices[0];
 	Vector3 AC = vertices[2] - vertices[0];
-	Vector3 BC = vertices[2] - vertices[1];
+	Vector3 CB = vertices[2] - vertices[1];
 	Vector3 normal = AB.cross(AC);
 
 	float dotProduct = normal.dotProduct(ray.direction);
@@ -36,19 +36,27 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, flo
 		return false;
 	}
 
-	intPoint = ray.origin + ray.direction * t;
+	intPoint = ray.origin + ray.direction * t1;
+
+
+	float a = -dotProduct;
+	float v = ray.direction.dotProduct((ray.origin - vertices[0]).cross(AB)) / a;
+	float u = (ray.origin - vertices[0]).dotProduct(ray.direction.cross(AC)) / a;
+	if (u < 0 || u>1 || v < 0 || (u + v)>1) {
+		return false;
+	}
 
 	Vector3 AP = intPoint - vertices[0];
 	Vector3 BP = intPoint - vertices[1];
 	Vector3 CP = intPoint - vertices[2];
 	Vector3 v1 = AB.cross(AP);
 	Vector3 v2 = AC.cross(BP);
-	Vector3 v3 = BC.cross(CP);
+	Vector3 v3 = CB.cross(CP);
 	if (v1.dotProduct(normal) >= 0.0f && v2.dotProduct(normal) >= 0.0f && v3.dotProduct(normal) >= 0.0f) {
 		t = t1;
 		return true;
 	}
-	
+
 	return false;
 }
 

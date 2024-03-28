@@ -8,16 +8,17 @@ Camera::Camera() {
     this->up = Vector3(0, 1, 0);
     this->sampler = 0;
     this->spatialContrast = 1;
+    this->img = Image(100, 100);
 }
 
 
-Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, const int& sampler, const float& spatialContrast) : position(position), direction(direction), up(up), sampler(sampler), spatialContrast(spatialContrast) {
+Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast) : position(position), direction(direction), up(up), img(img), sampler(sampler), spatialContrast(spatialContrast) {
     this->radius = sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
     this->nearPlane = 1;
     this->farPlane = 1000;
 }
 
-Camera::Camera(float radius) : radius(radius) {
+Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
     this->position = Vector3(0, 0, radius);
     this->direction = Vector3(0, 0, -1);
     this->up = Vector3(0, 1, 0);

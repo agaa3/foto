@@ -134,8 +134,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightIntensity.cpp" />
     <ClCompile Include="OrthogonalCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Ray.cpp" />
@@ -149,8 +152,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="LightIntensity.h" />
     <ClInclude Include="ObjectOnScene.h" />
     <ClInclude Include="OrthogonalCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />

@@ -7,8 +7,8 @@
 class Triangle : public ObjectOnScene
 {
 public:
-	Vector3 vertices[2];
-	Vector3 normals[2];
+	Vector3 vertices[3];
+	Vector3 normals[3];
 
 	Triangle() = delete;
 	Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3, const Vector3& color);

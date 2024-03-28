@@ -1,35 +1,29 @@
 #include "OrthogonalCamera.h"
-#include "Vector"
 
 static float pixelSize = 2.0f;
 static Color colorBckg = Color(0.9, 0.9, 0.9);
 
-void OrthogonalCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) {
+void OrthogonalCamera::RenderImage(vector<ObjectOnScene*>& objects) {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
     float centerX;
     float centerY;
     float valueOfBckg[6] = { 0.1, 0.2, 0.4, 0.6, 0.8, 1 };
-   // float valueOfFragment = valueOfBckg[0];
+    // float valueOfFragment = valueOfBckg[0];
     Color bckgColors[6] = { Color(1, 0, 0), Color(0, 1, 0), Color(0, 0, 1),
                                     Color(100, 0, 1), Color(0, 100, 1), Color(100, 100, 1) };
     int fragment = img.col / 6; //100
 
     for (int i = 0; i < img.col; i++)
     {
-        if (i % fragment == 0) {
-           // colorBckg.setValues(bckgColors[i / fragment]); //zmiana koloru we fragmencie
-        } 
+        centerX = -1.0f + (i + 0.5f) * pixelWidth;
         for (int j = 0; j < img.rows; j++)
         {
             if (j % fragment == 0) {
 
                 colorBckg.setValues(bckgColors[i / fragment] * valueOfBckg[j / fragment]);
-
-               // colorBckg = bckgColors[(j / fragment) * 6 + (i / fragment)];
             }
 
-            centerX = -1.0f + (i + 0.5f) * pixelWidth;
             centerY = 1.0f - (j + 0.5f) * pixelHeight;
             Color colorOfPixel;
             if (sampler > 0) {
@@ -39,25 +33,26 @@ void OrthogonalCamera::RenderImage(Image& img, vector<ObjectOnScene*>& objects) 
                 colorOfPixel = shootingRay(Vector3(centerX, centerY, 0), this->direction, objects);
             }
 
-           img.setPixel(i, j, colorOfPixel);
+            this->img.setPixel(i, j, colorOfPixel);
         }
     }
 }
 
-Color OrthogonalCamera::shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects){
+Color OrthogonalCamera::shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects) {
     Ray ray = Ray(origin, direction);
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     Vector3 intPoint;
     Color colorOfPixel = Color::undefined;
-    for (int k = 0; k < objects.size(); k++) { // pêtla po obiektach na scenie
+    for (ObjectOnScene* object : objects)
+    {
         tempT = t;
-        bool intersects = objects[k]->hit(ray, intPoint, t);
+        bool intersects = object->hit(ray, intPoint, t);
 
         if (intersects)
         {
             if (t < tempT) {
-                Color objectColor = Color((objects[k]->color).x, (objects[k]->color).y, (objects[k]->color).z);
+                Color objectColor = Color((object->color).x, (object->color).y, (object->color).z);
                 colorOfPixel = objectColor;
             }
         }
@@ -68,16 +63,16 @@ Color OrthogonalCamera::shootingRay(const Vector3& origin, const Vector3& direct
     return colorOfPixel;
 }
 
-Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter=0) {
+Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter = 0) {
     Color result = Color(0, 0, 0);
     float currentWidth = pixelWidth;
     float currentHeight = pixelHeight;
 
-    Vector3 LUposition; 
+    Vector3 LUposition;
     Vector3 RUposition;
     Vector3 RDposition;
     Vector3 LDposition;
-    for(int i = 0; i<iter + 1; i++){
+    for (int i = 0; i < iter + 1; i++) {
         currentWidth /= 2;
         currentHeight /= 2;
     }
@@ -106,12 +101,12 @@ Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Col
         result = result + newColor;
     }
     else {
-        Color temp = (LU + center)/2;
+        Color temp = (LU + center) / 2;
         result = result + temp;
     }
     float difRU = RU.calculateDifference(center);
     if (difRU > spatialContrast && iter < sampler) {
-        Color newColor = sampling((RUposition + centerPosition) / 2, Color::undefined, RU, Color::undefined, center, objects, ++iter); 
+        Color newColor = sampling((RUposition + centerPosition) / 2, Color::undefined, RU, Color::undefined, center, objects, ++iter);
         result = result + newColor;
     }
     else {
@@ -120,7 +115,7 @@ Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Col
     }
     float difRD = RD.calculateDifference(center);
     if (difRD > spatialContrast && iter < sampler) {
-        Color newColor = sampling((RDposition + centerPosition) / 2, center, Color::undefined, RD, Color::undefined, objects, ++iter); 
+        Color newColor = sampling((RDposition + centerPosition) / 2, center, Color::undefined, RD, Color::undefined, objects, ++iter);
         result = result + newColor;
     }
     else {
@@ -129,7 +124,7 @@ Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Col
     }
     float difLD = LD.calculateDifference(center);
     if (difLD > spatialContrast && iter < sampler) {
-        Color newColor = sampling((LDposition + centerPosition) / 2, Color::undefined, center, Color::undefined, LD, objects, ++iter); 
+        Color newColor = sampling((LDposition + centerPosition) / 2, Color::undefined, center, Color::undefined, LD, objects, ++iter);
         result = result + newColor;
     }
     else {
@@ -138,5 +133,5 @@ Color OrthogonalCamera::sampling(Vector3 centerPosition, Color LU, Color RU, Col
     }
 
     return result / 4;
-    
+
 }

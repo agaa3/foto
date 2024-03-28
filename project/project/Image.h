@@ -8,9 +8,9 @@ class Image
 {
 public:
 	int col, rows;
-    std::vector<sf::Vertex> pixels;
+	std::vector<sf::Vertex> pixels;
 
-	
+	Image() = default;
 	Image(int sizeX, int sizeY) : col(sizeX), rows(sizeY) {};
 
 	~Image() = default;
