@@ -45,11 +45,11 @@ int main()
     objects.push_back(&sfera2);*/
 
 
-    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 2, 0.05);
-    Sphere sfera3 = Sphere(Vector3(0, 0, 2.7), 1, mat1);
-    Sphere sfera4 = Sphere(Vector3(5.5, 0, 10), 2, mat2);
+    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 2, 0.05);
+    Sphere sfera3 = Sphere(Vector3(0, 0, 0), 1, mat1);
+    //Sphere sfera4 = Sphere(Vector3(5.5, 0, 10), 2, mat2);
     objects.push_back(&sfera3);
-    objects.push_back(&sfera4);
+    //objects.push_back(&sfera4);
 
     Triangle triangle1 = Triangle(Vector3(0, 0, 2), Vector3(.5, 0, 1), Vector3(.25, .25, 1), mat3);
     objects.push_back(&triangle1);

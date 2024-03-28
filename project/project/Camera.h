@@ -8,6 +8,7 @@
 #include "ObjectOnScene.h"
 #include "LightIntensity.h"
 
+
 using namespace std;
 
 class Camera {
@@ -29,7 +30,7 @@ public:
     Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1);
     Camera();
 
-    virtual ~Camera() {}
+    virtual ~Camera() {};
     virtual void RenderImage(vector<ObjectOnScene*>& objects) = 0;
 
     virtual LightIntensity shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects) = 0;

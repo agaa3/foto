@@ -9,7 +9,7 @@ std::ostream& operator<<(std::ostream& os, const Sphere& sph)
 	return os;
 }
 
-bool Sphere::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, float t_max) const
+bool Sphere::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, float t_min, float t_max) const
 {
 	Vector3 oc = ray.origin- this->center; // oc - vector od początku promienia do środka sfery czyli w zasadzie direction
 
@@ -27,6 +27,7 @@ bool Sphere::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, float
 		if (temp < t_max && temp > t_min) { // traktujemy t_max i t_min jako stricte współczynniki odpowiedzialne za punk ta promieniu (sama odleglość)
 			// nie patrzymy w jakim miejscu w przestrzeni jest to przecięcie tylko w którym miejscu na Ray'u dochodzi do przecięcia
 			intPoint = ray.direction * temp + ray.origin;
+			normal = intPoint - this->center;
 			t = temp;
 			return true;
 		}

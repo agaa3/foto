@@ -6,7 +6,7 @@
 Plane::Plane(const Vector3& point, const Vector3& normal, const Material& mat) : point(point), normal(normal), ObjectOnScene(mat) {}
 
 
-bool Plane::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, float t_max) const {  //po co jest range??
+bool Plane::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, float t_min, float t_max) const {  //po co jest range??
     //intPoint - do dodania punkt przeciecia
 
     bool result = false;
@@ -26,6 +26,7 @@ bool Plane::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, float 
             }
             else {
                 intPoint = ray.direction * t1 + ray.origin;
+                normal = this->normal;
                 t = t1;
                 return true;
             }

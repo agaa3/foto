@@ -43,11 +43,13 @@ LightIntensity OrthogonalCamera::shootingRay(const Vector3& origin, const Vector
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     Vector3 intPoint;
+	Vector3 normal;
+
 	LightIntensity colorOfPixel = LightIntensity::undefined;
     for (ObjectOnScene* object : objects)
     {
         tempT = t;
-        bool intersects = object->hit(ray, intPoint, t);
+        bool intersects = object->hit(ray, intPoint, normal, t);
 
         if (intersects)
         {

@@ -18,12 +18,12 @@ Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3
 	normals[2] = normal3;
 }
 
-bool Triangle::hit(const Ray& ray, Vector3& intPoint, float& t, float t_min, float t_max) const {
+bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, float t_min, float t_max) const {
 
 	Vector3 AB = vertices[1] - vertices[0];
 	Vector3 AC = vertices[2] - vertices[0];
 	Vector3 CB = vertices[2] - vertices[1];
-	Vector3 normal = AB.cross(AC);
+	normal = AB.cross(AC);
 
 	float dotProduct = normal.dotProduct(ray.direction);
 	if (fabsf(dotProduct) < FLT_EPSILON) {  //FLT_Epsilon - najmniejsza mozliwa reprezentacja float
