@@ -1,6 +1,8 @@
 #pragma once
 #include "Light.h"
 
+using namespace std;
+
 class PointLight : public Light
 {
 public: 

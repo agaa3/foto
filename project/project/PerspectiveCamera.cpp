@@ -61,7 +61,7 @@ void PerspectiveCamera::RenderImage(vector<ObjectOnScene*>& objects) {
 
 LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vector3& destination, vector<ObjectOnScene*>& objects) { //direction = destination
     Ray ray = Ray(origin, destination, false);
-    PointLight light = PointLight(Vector3(0, 2, 0), LightIntensity(.5, 1, 1));
+    PointLight light = PointLight(Vector3(0, 2, -1), LightIntensity(.5, 1, 1));
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     Vector3 intPoint;
@@ -76,7 +76,7 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
             if (t < tempT) { //phong
 				//lightDir = intPoint - light.position
             //viewDir = cam.position - intPoint
-                colorOfPixel = phongReflection((intPoint-light.location), normal, this->position-intPoint, .5, .5, .1, .1);
+                colorOfPixel = phongReflection((light.location-intPoint), normal, this->position-intPoint, .1, .5, .9, .6);
                 //colorOfPixel = colorBckg;
 				/*LightIntensity objectColor = LightIntensity((object->color).x, (object->color).y, (object->color).z);
                 colorOfPixel = objectColor;*/
@@ -87,41 +87,10 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
         }
     }
 
-    return colorBckg;
+    return colorOfPixel;
 }
 
-//phong(Ray ray) {
-//	//Vector n = new Vector(s.getCenter(), intersetion);
-////Vector l = new Vector(intersetion, source.getPosition());
-//	float r, g, b, cosinus;
-//	I = ray.direction().normalizujVector();
-//	N = s.normal(intersetion);
-//	R = I - (N * N.iloczynSkalarny(I) * 2.0f);
-//	ss = ray.direction().normalizujVector().iloczynSkalarny(R);
-//	if (-ss > 0)
-//	{
-//		specular = Math.Pow(ss, a);
-//	}
-//	else
-//	{
-//		specular = 0;
-//	}
-//	specular *= specularCoef;
-//	sIntensity = source.Intensity * specular;
-//	// diffuse
-//	cosinus = ray.direction().normalizujVector
-//	().iloczynSkalarny(s.normal(intersetion));
-//	r = -source.Intensity.getRed() * k * cosinus;
-//	g = -source.Intensity.getGreen() * k * cosinus;
-//	b = -source.Intensity.getBlue() * k * cosinus;
-//	Intensity diffuseIntensity = new Intensity(255, g,
-//		b) + aIntensity;
-//	img.setPixel(i, j, sIntensity + diffuseIntensity);
-//}
-
-//lightDir = intPoint - light.position
-//viewDir = cam.position - intPoint
-
+                                                                                                                    //do zmienienia float na LightIntensity dla ambient, diffuse itp
 LightIntensity PerspectiveCamera::phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, float ambient, float diffuse, float specular, float shininess) {
     // Normalizacja wektorów
     Vector3 L = lightDir.normalize();
@@ -136,7 +105,7 @@ LightIntensity PerspectiveCamera::phongReflection(const Vector3& lightDir, const
     float specularTerm = std::pow(std::max(0.0f, R.x * V.x + R.y * V.y + R.z * V.z), shininess);
 
     // Obliczenie koñcowego koloru odbicia Phonga
-    LightIntensity phongColor = LightIntensity(ambient, ambient, ambient) ;
+    LightIntensity phongColor = LightIntensity(1, 0, 0) ;
     phongColor += LightIntensity(diffuse * diffuseTerm, diffuse * diffuseTerm, diffuse * diffuseTerm);
     phongColor += LightIntensity(specular * specularTerm, specular * specularTerm, specular * specularTerm);
 
