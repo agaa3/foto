@@ -12,7 +12,7 @@ public:
 
 
 	Sphere() = delete;
-	Sphere(Vector3 v, float r, const Vector3& color);
+	Sphere(Vector3 v, float r, const Material& mat);
 
 	bool hit(const Ray& ray, Vector3& intPoint, float& t, float t_min = 0, float t_max = 1000) const override;
 

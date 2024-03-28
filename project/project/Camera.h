@@ -6,7 +6,7 @@
 #include "Sphere.h"
 #include <vector>
 #include "ObjectOnScene.h"
-#include "Color.h"
+#include "LightIntensity.h"
 
 using namespace std;
 
@@ -32,9 +32,9 @@ public:
     virtual ~Camera() {}
     virtual void RenderImage(vector<ObjectOnScene*>& objects) = 0;
 
-    virtual Color shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects) = 0;
+    virtual LightIntensity shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects) = 0;
 
-    virtual Color sampling(Vector3 centerPosition, Color LU, Color RU, Color RD, Color LD, vector<ObjectOnScene*>& objects, int iter) = 0;
+    virtual LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, vector<ObjectOnScene*>& objects, int iter) = 0;
 
 
     Vector3 right = Vector3(0, 0, 0);

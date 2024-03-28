@@ -139,14 +139,17 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightIntensity.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="OrthogonalCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="project.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
@@ -157,14 +160,17 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightIntensity.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="ObjectOnScene.h" />
     <ClInclude Include="OrthogonalCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>

@@ -17,6 +17,7 @@
 #include "OrthogonalCamera.h"
 #include "PerspectiveCamera.h"
 #include "Color.h"
+#include "Material.h"
 
 const int SIZE = 60;
 
@@ -24,12 +25,16 @@ int main()
 {
     int sizeX = 600;
     int sizeY = 600;
-    Color color = Color(1, 0, 0);
+    LightIntensity color = LightIntensity(1, 0, 0);
     Image img = Image(sizeX, sizeY);
     std::vector<ObjectOnScene*> objects;
-    Vector3 c1 = Vector3(0, 0, 1);
-    Vector3 c2 = Vector3(1, 0, 0);
+    /*Vector3 c1 = Vector3(0, 0, 1);
+    Vector3 c2 = Vector3(1, 0, 0);*/
+    Material mat1 = Material(LightIntensity(0, 0, 1));
+    Material mat2 = Material(LightIntensity(1, 0, 0));
+    Material mat3 = Material(LightIntensity(1, 1, 0));
 
+  
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img);
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 3, 0.05);
@@ -41,12 +46,12 @@ int main()
 
 
     PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 2, 0.05);
-    Sphere sfera3 = Sphere(Vector3(0, 0, 2.7), 1, c1);
-    Sphere sfera4 = Sphere(Vector3(5.5, 0, 10), 2, c2);
+    Sphere sfera3 = Sphere(Vector3(0, 0, 2.7), 1, mat1);
+    Sphere sfera4 = Sphere(Vector3(5.5, 0, 10), 2, mat2);
     objects.push_back(&sfera3);
     objects.push_back(&sfera4);
 
-    Triangle triangle1 = Triangle(Vector3(0, 0, 2), Vector3(.5, 0, 1), Vector3(.25, .25, 1), Vector3(1, 1, 0));
+    Triangle triangle1 = Triangle(Vector3(0, 0, 2), Vector3(.5, 0, 1), Vector3(.25, .25, 1), mat3);
     objects.push_back(&triangle1);
 
     cam1.RenderImage(objects);
