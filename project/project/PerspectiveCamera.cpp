@@ -61,15 +61,16 @@ void PerspectiveCamera::RenderImage(/*vector<ObjectOnScene*>& objects, vector<Li
 
 LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vector3& destination/*, vector<ObjectOnScene*>& objects*/) { //direction = destination
     Ray ray = Ray(origin, destination, false);
-    PointLight light1 = PointLight(Vector3(2, 0, -1), LightIntensity(.5, 1, 1));
+    //PointLight light1 = PointLight(Vector3(2, 0, -1), LightIntensity(.5, 1, 1));
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     Vector3 intPoint;
     Vector3 normal;
+    ObjectOnScene *temp = nullptr;
+    Vector3 intersectionPoint;
 
     //trzeba zrobiæ zmienn¹ Material temp i j¹ ustawiaæ na materia³ najli¿szego obiektu i potem przekazywaæ phongowi wyci¹gniête z niego parametry
     //a potem sumowac otrzymany kolor phonga z tym pobranym normalnie i dopiero zwracac
-
 	LightIntensity colorOfPixel = LightIntensity(colorBckg);
     for (ObjectOnScene* object : this->objects) {
         tempT = t;
@@ -79,14 +80,10 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
         {
             if (t < tempT) { //phong
 
-
-                //tu trzeba dodaæ przechodzenie po wszystkich obiektach w pêtli i sprawdzanie czy sie nie przeci
-				//lightDir = intPoint - light.position
-            //viewDir = cam.position - intPoint
-                colorOfPixel = phongReflection((light1.location-intPoint), normal, this->position-intPoint, .1, .5, .9, .6);
-                //colorOfPixel = colorBckg;
-				LightIntensity objectColor = LightIntensity((object->material.diffuseColor).R, (object->material.diffuseColor).G, (object->material.diffuseColor).B);
-                colorOfPixel = objectColor;
+                intersectionPoint = intPoint;
+                temp = object;
+				//LightIntensity objectColor = LightIntensity((object->material.diffuseColor).R, (object->material.diffuseColor).G, (object->material.diffuseColor).B);
+                //colorOfPixel = objectColor;
             }
         }
         else if (t == FLT_MAX) {
@@ -94,31 +91,41 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
         }
 
     }
-    if (colorOfPixel != colorBckg) {
-
+    if (temp != nullptr) {
+        for (Light* light : this->lights) {
+            colorOfPixel = phongReflection(light->getDirFromObj(intersectionPoint), normal, this->position- intersectionPoint, temp->material, light->color); //tu zamianiæ na dodawanie/srednia swiatel
+        }
     }
 
     return colorOfPixel;
 }
 
                                                                                                                     //do zmienienia float na LightIntensity dla ambient, diffuse itp
-LightIntensity PerspectiveCamera::phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, float ambient, float diffuse, float specular, float shininess) {
+LightIntensity PerspectiveCamera::phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor) {
     // Normalizacja wektorów
     Vector3 L = lightDir.normalize();
     Vector3 N = normal.normalize();
     Vector3 V = viewDir.normalize();
 
     // Obliczenie wektora odbicia
-    Vector3 R = (N * (2.0f * (N.x * L.x + N.y * L.y + N.z * L.z))) - L;
+    //Vector3 R = (N * (2.0f * (N.x * L.x + N.y * L.y + N.z * L.z))) - L;
+	Vector3 R = N * (N.dotProduct(L) * 2) - L; 
 
     // Obliczenie sk³adowych oœwietlenia
-    float diffuseTerm = std::max(0.0f, N.x * L.x + N.y * L.y + N.z * L.z);
-    float specularTerm = std::pow(std::max(0.0f, R.x * V.x + R.y * V.y + R.z * V.z), shininess);
+    float diffuseTerm = std::max(0.0f, N.dotProduct(L));
+    float specularTerm = std::pow(std::max(0.0f, R.dotProduct(V)), objMaterial.shininess); //shininess = n -> (VdotR)^n
 
     // Obliczenie koñcowego koloru odbicia Phonga
-    LightIntensity phongColor = LightIntensity(0, 0, 0) ; // tu chyba powinnien byæ kolor samego obiektu
-    phongColor += LightIntensity(diffuse * diffuseTerm, diffuse * diffuseTerm, diffuse * diffuseTerm);
-    phongColor += LightIntensity(specular * specularTerm, specular * specularTerm, specular * specularTerm);
+    LightIntensity phongColor = objMaterial.diffuseColor ; // tu chyba powinnien byæ kolor samego obiektu
+    phongColor += objMaterial.kDiffuse * diffuseTerm;
+    phongColor += objMaterial.kSpecular * specularTerm;
+
+    /*//to troche inaczej zrobione
+	LightIntensity ambient = objMaterial.kAmbient * lightColor;
+	LightIntensity diffuse = objMaterial.kDiffuse * lightColor * diffuseTerm;
+	LightIntensity specular = objMaterial.kSpecular * lightColor *specularTerm;
+	return ambient + diffuse + specular;*/
+
 
     return phongColor;
 }

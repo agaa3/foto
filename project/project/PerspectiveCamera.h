@@ -18,7 +18,7 @@ public:
 	void RenderImage(/*vector<ObjectOnScene*>& objects, vector<Light*>& lights*/) override;
     LightIntensity shootingRay(const Vector3& origin, const Vector3& destination/*, vector<ObjectOnScene*>& objects*/) override;
 	
-	LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, float ambient, float diffuse, float specular, float shininess);
+	LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor);
 
     LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, /*vector<ObjectOnScene*>& objects,*/ int iter) override;
 };

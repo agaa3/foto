@@ -11,3 +11,7 @@ Vector3 SpotLight::getSpecular(Vector3 cameraPosition, Vector3 intPoint) {
 bool SpotLight::isInShadow(Vector3 intPoint, vector<ObjectOnScene*>& objects) {
 	return true;
 }
+
+Vector3 SpotLight::getDirFromObj(Vector3 intPoint) {
+    return this->location - intPoint;
+}

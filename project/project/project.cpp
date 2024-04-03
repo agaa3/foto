@@ -37,7 +37,7 @@ int main()
     Material mat2 = Material(LightIntensity(1, 0, 0));
     Material mat3 = Material(LightIntensity(1, 1, 0));
 
-    PointLight light1 = PointLight(Vector3(0, 2, -1), LightIntensity(.5, 1, 1));
+    PointLight light1 = PointLight(Vector3(2, 0, 0), LightIntensity(.5, 1, 1));
     lights.push_back(&light1);
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img);
