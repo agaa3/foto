@@ -18,6 +18,8 @@
 #include "PerspectiveCamera.h"
 #include "Color.h"
 #include "Material.h"
+#include "Light.h"
+#include "PointLight.h"
 
 const int SIZE = 60;
 
@@ -25,16 +27,18 @@ int main()
 {
     int sizeX = 600;
     int sizeY = 600;
-    LightIntensity color = LightIntensity(1, 0, 0);
+    //LightIntensity color = LightIntensity(1, 0, 0);
     Image img = Image(sizeX, sizeY);
     std::vector<ObjectOnScene*> objects;
+    std::vector<Light*> lights;
     /*Vector3 c1 = Vector3(0, 0, 1);
     Vector3 c2 = Vector3(1, 0, 0);*/
     Material mat1 = Material(LightIntensity(0, 0, 1));
     Material mat2 = Material(LightIntensity(1, 0, 0));
     Material mat3 = Material(LightIntensity(1, 1, 0));
 
-  
+    PointLight light1 = PointLight(Vector3(0, 2, -1), LightIntensity(.5, 1, 1));
+    lights.push_back(&light1);
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img);
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 3, 0.05);
@@ -45,16 +49,19 @@ int main()
     objects.push_back(&sfera2);*/
 
 
-    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05);
+   
     Sphere sfera3 = Sphere(Vector3(0, 0, 0), 1, mat1);
+    //Plane plane = Plane(Vector3(0, -0.5, 0), Vector3(0, 1, -1), mat2);
     //Sphere sfera4 = Sphere(Vector3(5.5, 0, 10), 2, mat2);
     objects.push_back(&sfera3);
+    //objects.push_back(&plane);
     //objects.push_back(&sfera4);
 
-    Triangle triangle1 = Triangle(Vector3(0, 0, 2), Vector3(.5, 0, 1), Vector3(.25, .25, 1), mat3);
+    Triangle triangle1 = Triangle(Vector3(-1, -1.5, 0), Vector3(0, -1.5, 1), Vector3(1, -1.5, 0), mat2);
     objects.push_back(&triangle1);
 
-    cam1.RenderImage(objects);
+    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
+    cam1.RenderImage();
 
 
     sf::RenderWindow window(sf::VideoMode(sizeX, sizeY), "SFML works!");

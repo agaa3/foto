@@ -23,6 +23,7 @@ public:
 	LightIntensity operator*(float num);
 	LightIntensity operator/(float li);
 	void operator/=(const float& li);
+	bool operator!=(const LightIntensity& li);
 	friend std::ostream& operator<<(std::ostream& str, LightIntensity& li) ;
 };
 

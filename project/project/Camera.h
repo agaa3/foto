@@ -7,6 +7,7 @@
 #include <vector>
 #include "ObjectOnScene.h"
 #include "LightIntensity.h"
+#include "Light.h"
 
 
 using namespace std;
@@ -22,20 +23,22 @@ public:
     float spatialContrast;
     float pixelHeight = 1;
     float pixelWidth = 1;
+    vector<ObjectOnScene*> objects;
+    vector<Light*> lights;
 
     Image img;
 
     Camera(float radius, Image& img);
 
-    Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1);
+    Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1, const vector<ObjectOnScene*>& objects = {}, const vector<Light*>& lights = {});
     Camera();
 
     virtual ~Camera() {};
-    virtual void RenderImage(vector<ObjectOnScene*>& objects) = 0;
+    virtual void RenderImage(/*vector<ObjectOnScene*>& objects, vector<Light*>& lights*/) = 0;
 
-    virtual LightIntensity shootingRay(const Vector3& origin, const Vector3& direction, vector<ObjectOnScene*>& objects) = 0;
+    virtual LightIntensity shootingRay(const Vector3& origin, const Vector3& direction/*, vector<ObjectOnScene*>& objects*/) = 0;
 
-    virtual LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, vector<ObjectOnScene*>& objects, int iter) = 0;
+    virtual LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, /*vector<ObjectOnScene*>& objects,*/ int iter) = 0;
 
 
     Vector3 right = Vector3(0, 0, 0);

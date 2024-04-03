@@ -34,6 +34,15 @@ LightIntensity LightIntensity::operator/(float li) {
 	return LightIntensity(this->R / li, this->G / li, this->B / li);
 }
 
+bool LightIntensity::operator!=(const LightIntensity& li) {
+	if (this->R != li.R || this->G != li.G || this->B != li.B) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 std::ostream& operator<<(std::ostream& str, LightIntensity& li) {
 	str << "[ " << li.R << ", " << li.G << ", " << li.B << "]";
 	return str;

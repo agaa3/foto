@@ -9,13 +9,15 @@ Camera::Camera() {
     this->sampler = 0;
     this->spatialContrast = 1;
     this->img = Image(100, 100);
+    
 }
 
 
-Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast) : position(position), direction(direction), up(up), img(img), sampler(sampler), spatialContrast(spatialContrast) {
+Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights) : position(position), direction(direction), up(up), img(img), sampler(sampler), spatialContrast(spatialContrast), objects(objects), lights(lights){
     this->radius = sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
     this->nearPlane = 1;
     this->farPlane = 1000;
+    
 }
 
 Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
