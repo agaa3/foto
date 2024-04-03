@@ -27,6 +27,10 @@ LightIntensity LightIntensity::operator-(LightIntensity& li) {
 	return LightIntensity(this->R - li.R, this->G - li.G, this->B - li.B);
 }
 
+LightIntensity LightIntensity::operator*(LightIntensity& li) {
+	return LightIntensity(this->R * li.R, this->G * li.G, this->B * li.B);
+}
+
 LightIntensity LightIntensity::operator/(float li) {
 	if (li == 0) {
 		return LightIntensity(0, 0, 0);

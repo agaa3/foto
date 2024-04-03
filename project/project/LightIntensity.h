@@ -3,13 +3,15 @@
 #include <iostream>
 class LightIntensity { //UWAZAC NA OBCINANIE WARTOSCI PRZY OBLICZENIACH
 public:
-	float R, G, B;
+	float R=0, G=0, B=0;
     static LightIntensity undefined;
 
 
 	~LightIntensity() = default;
-	//LightIntensity();
-	LightIntensity(float r=0, float g=0, float b=0);
+	LightIntensity() = default;
+	LightIntensity(float r, float g, float b);
+	LightIntensity(float x) : R(x), G(x), B(x) {};
+
 	LightIntensity(const LightIntensity& li) : R(li.R), G(li.G), B(li.B) {};
 
 	float calculateDifference(const LightIntensity& other);
@@ -21,6 +23,7 @@ public:
 
 	void operator+=(const LightIntensity& li);
 	LightIntensity operator*(float num);
+	LightIntensity operator*(LightIntensity& li);
 	LightIntensity operator/(float li);
 	void operator/=(const float& li);
 	bool operator!=(const LightIntensity& li);
