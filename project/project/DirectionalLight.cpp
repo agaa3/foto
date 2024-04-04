@@ -12,5 +12,5 @@ bool DirectionalLight::isInShadow(Vector3 intPoint, vector<ObjectOnScene*>& obje
 	return true;
 }
 Vector3 DirectionalLight::getDirFromObj(Vector3 intPoint) {
-	return this->direction;
+	return this->direction*(-1);
 }

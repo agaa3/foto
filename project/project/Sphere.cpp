@@ -36,7 +36,7 @@ bool Sphere::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, f
 
 		temp = (-b + std::sqrtf(discriminant)) / (2 * a);
 
-		if (temp < t_max && temp > t_min) {
+		if (temp < t_max && temp > FLT_EPSILON) {
 			intPoint = ray.direction * temp + ray.origin;
 			t = temp;
 			return true;

@@ -65,13 +65,15 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     Vector3 intPoint;
+    Vector3 intPoint2;
     Vector3 normal;
     ObjectOnScene *temp = nullptr;
     Vector3 intersectionPoint;
     Vector3 normalIntersection;
     bool intersects = false;
-    //trzeba zrobiæ zmienn¹ Material temp i j¹ ustawiaæ na materia³ najli¿szego obiektu i potem przekazywaæ phongowi wyci¹gniête z niego parametry
-    //a potem sumowac otrzymany kolor phonga z tym pobranym normalnie i dopiero zwracac
+
+
+    //sprawdzenie który obiekt jest z przodu
 	LightIntensity colorOfPixel = LightIntensity(0);
     for (ObjectOnScene* object : this->objects) {
         tempT = t;
@@ -81,18 +83,41 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
         {
             intersectionPoint = intPoint;
             temp = object;
-            normalIntersection = normal;
-		    //LightIntensity objectColor = LightIntensity((object->material.diffuseColor).R, (object->material.diffuseColor).G, (object->material.diffuseColor).B);
-            //colorOfPixel = objectColor;
- 
+            normalIntersection = normal; 
         } 
-
     }
+
+    //jesli nie tlo, to sprawdzanie swiatel i cieni
     if (temp != nullptr) {
-        /*LightIntensity objectColor = LightIntensity((temp->material.diffuseColor).R, (temp->material.diffuseColor).G, (temp->material.diffuseColor).B);
-        colorOfPixel = objectColor;*/
+        bool shadowed = false;
+
+        //przejscie po wszystkich swiatlach z punktu przeciecia
         for (Light* light : this->lights) {
-            colorOfPixel += phongReflection(light->getDirFromObj(intersectionPoint), normalIntersection, this->position-intersectionPoint, temp->material, light->color); //tu zamianiæ na dodawanie/srednia swiatel
+            shadowed = false;
+            Ray rayToLight = Ray(intPoint, light->getDirFromObj(intPoint)*(1));
+            
+            //przejscie po wszystkich obiektach na drodze od przeciecia do swiatla (sprawdzenie cieni)
+            //tutaj pewnie jakis blad przy sprawdzaniu (moze trzeba dodac te ograniczniki promienia zeby nie sprawdzal za promieniem i za daleko za swiatlem)
+            for (ObjectOnScene* object : this->objects) {
+                if (object != temp) {
+                    shadowed = object->hit(rayToLight, intPoint2, normal, tempT);
+                    if (shadowed) {
+                        break;
+                    }
+                    else {
+                        shadowed = false;
+                    }
+                }
+                
+            }
+
+            //jesli zacienione to daje tylko kolor obiektu z ambientem 
+            if (shadowed) {
+                colorOfPixel += temp->material.diffuseColor * temp->material.kAmbient * light->color;
+            }
+            else {
+                colorOfPixel += phongReflection(light->getDirFromObj(intersectionPoint), normalIntersection, this->position - intersectionPoint, temp->material, light->color); //tu zamianiæ na dodawanie/srednia swiatel
+            }
         }
     }
     else {
