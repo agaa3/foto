@@ -36,7 +36,9 @@ public:
     virtual ~Camera() {};
     virtual void RenderImage(/*vector<ObjectOnScene*>& objects, vector<Light*>& lights*/) = 0;
 
-    virtual LightIntensity shootingRay(const Vector3& origin, const Vector3& direction/*, vector<ObjectOnScene*>& objects*/) = 0;
+    LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor);
+
+    virtual LightIntensity shootingRay(const Ray& ray) = 0;
 
     virtual LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, /*vector<ObjectOnScene*>& objects,*/ int iter) = 0;
 

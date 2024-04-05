@@ -14,7 +14,9 @@ public:
 
 
     void RenderImage(/*vector<ObjectOnScene*>& objects, vector<Light*>& lights*/) override;
-	LightIntensity shootingRay(const Vector3& origin, const Vector3& direction/*, vector<ObjectOnScene*>& objects*/) override;
+    LightIntensity shootingRay(const Ray& ray) override {
+        return Camera::shootingRay(ray);
+    };
 
 	LightIntensity sampling(Vector3 center, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, /*vector<ObjectOnScene*>& objects,*/  int iter) override;
 };

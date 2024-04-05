@@ -51,9 +51,9 @@ void PerspectiveCamera::RenderImage(/*vector<ObjectOnScene*>& objects, vector<Li
                 colorOfPixel = sampling(currentPixel, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, /*this->objects,*/ 0);
             }
             else {
-                //Ray ray = Ray(origin, destination, false);
+                Ray ray = Ray(this->position, currentPixel, false);
 
-                colorOfPixel = shootingRay(this->position, currentPixel/*, this->objects*/);
+                colorOfPixel = Camera::shootingRay(ray);
             }
 
             this->img.setPixel(i, j, colorOfPixel);
@@ -61,110 +61,8 @@ void PerspectiveCamera::RenderImage(/*vector<ObjectOnScene*>& objects, vector<Li
     }
 }
 
-LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vector3& destination/*, vector<ObjectOnScene*>& objects*/) { //direction = destination
-    Ray ray = Ray(origin, destination, false);
-    //PointLight light1 = PointLight(Vector3(2, 0, -1), LightIntensity(.5, 1, 1));
-    float t = FLT_MAX;
-    float tempT = FLT_MAX;
-    float tempT2 = FLT_MAX;
-
-    Vector3 intPoint;
-    Vector3 intPoint2;
-    Vector3 normal;
-    ObjectOnScene *temp = nullptr;
-    Vector3 intersectionPoint;
-    Vector3 normalIntersection;
-    bool intersects = false;
-
-
-    //sprawdzenie który obiekt jest z przodu
-	LightIntensity colorOfPixel = LightIntensity(0);
-    for (ObjectOnScene* object : this->objects) {
-        
-        //tempT = t;
-        intersects = object->hit(ray, intPoint, normal, t);
-
-        if (intersects && (t < tempT))
-        {
-            tempT = t;
-            intersectionPoint = intPoint;
-            temp = object;
-            normalIntersection = normal; 
-        } 
-    }
-
-    //jesli nie tlo, to sprawdzanie swiatel i cieni
-    if (temp != nullptr) {
-        bool shadowed = false;
-
-        //przejscie po wszystkich swiatlach z punktu przeciecia
-        for (Light* light : this->lights) {
-            shadowed = false;
-            float tMax = FLT_MAX;
-            Vector3 locOfLight;
-            if (light->getLocation(locOfLight)) {
-                Vector3 distanceToLight = Vector3(locOfLight - intersectionPoint);
-                tMax = distanceToLight.length();
-            }
-
-            Ray rayToLight = Ray(intersectionPoint, light->getDirFromObj(intersectionPoint));
-            
-            //przejscie po wszystkich obiektach na drodze od przeciecia do swiatla (sprawdzenie cieni)
-            //tutaj pewnie jakis blad przy sprawdzaniu (moze trzeba dodac te ograniczniki promienia zeby nie sprawdzal za promieniem i za daleko za swiatlem)
-            for (ObjectOnScene* object : this->objects) {
-                if (object != temp) {
-                    shadowed = object->hit(rayToLight, intPoint2, normal, tempT2, FLT_MIN, tMax);
-                    if (shadowed) {
-                        break;
-                    }
-                    else {
-                        shadowed = false;
-                    }
-                }
-                
-            }
-
-            //jesli zacienione to daje tylko kolor obiektu z ambientem 
-            if (shadowed) {
-                //colorOfPixel = LightIntensity(1, 1, 0);
-                colorOfPixel += temp->material.diffuseColor* temp->material.kAmbient* light->color;
-            }
-            else {
-                //colorOfPixel = LightIntensity(1, 1, 0);
-                colorOfPixel += phongReflection(light->getDirFromObj(intersectionPoint), normalIntersection, this->position - intersectionPoint, temp->material, light->color); //tu zamianiæ na dodawanie/srednia swiatel
-            }
-        }
-    }
-    else {
-        colorOfPixel = colorBckg;
-    }
-
-    return colorOfPixel;
-}
 
                                                                                                                     //do zmienienia float na LightIntensity dla ambient, diffuse itp
-LightIntensity PerspectiveCamera::phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor) {
-    // Normalizacja wektorów
-    Vector3 L = lightDir.normalize();
-    Vector3 N = normal.normalize();
-    Vector3 V = viewDir.normalize();
-
-    // Obliczenie wektora odbicia
-    //Vector3 R = (N * (2.0f * (N.x * L.x + N.y * L.y + N.z * L.z))) - L;
-	Vector3 R = N * (N.dotProduct(L) * 2) - L; 
-
-    // Obliczenie sk³adowych oœwietlenia
-    float diffuseTerm = std::max(0.0f, N.dotProduct(L));
-    float specularTerm = std::pow(std::max(0.0f, R.dotProduct(V)), objMaterial.shininess); //shininess = n -> (VdotR)^n
-
-    // Obliczenie koñcowego koloru odbicia Phonga
-    LightIntensity phongColor = lightColor * objMaterial.kAmbient * objMaterial.diffuseColor;// objMaterial.kAmbient; // tu chyba powinnien byæ kolor samego obiektu
-    phongColor += objMaterial.kDiffuse * lightColor * diffuseTerm * objMaterial.diffuseColor;
-    phongColor += objMaterial.kSpecular * lightColor * specularTerm;
-    //phongColor = phongColor * objMaterial.diffuseColor;
-
-    return phongColor;
-}
 
 //pytanie czy powinno sie z punktu przeciêcia do œwiate³ strzelaæ po ustaleniu koloru pixela czy przy ka¿dym pojedyñczym samplu przy antyaliazingu
 LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD,/* vector<ObjectOnScene*>& objects,*/ int iter = 0) {
@@ -182,22 +80,22 @@ LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensit
     }
     if (LU == LightIntensity::undefined) {
         LUposition = Vector3(centerPosition - dirToLeft * currentWidth + dirToTop * currentHeight); // zero jest wpisane fixed dla kamery ortogonalnej 
-        LU = shootingRay(this->position, LUposition/*, objects*/);
+        LU = shootingRay(Ray(this->position, LUposition, false)/*, objects*/);
     }
     if (RU == LightIntensity::undefined) {
         RUposition = Vector3(centerPosition + dirToLeft * currentWidth + dirToTop * currentHeight); // zero jest wpisane fixed dla kamery ortogonalnej 
-        RU = shootingRay(this->position, RUposition/*, objects*/);
+        RU = shootingRay(Ray(this->position, RUposition, false)/*, objects*/);
     }
     if (RD == LightIntensity::undefined) {
         RDposition = Vector3(centerPosition + dirToLeft * currentWidth - dirToTop * currentHeight); // zero jest wpisane fixed dla kamery ortogonalnej 
-        RD = shootingRay(this->position, RDposition/*, objects*/);
+        RD = shootingRay(Ray(this->position, RDposition, false)/*, objects*/);
     }
     if (LD == LightIntensity::undefined) {
         LDposition = Vector3(centerPosition - dirToLeft * currentWidth - dirToTop * currentHeight); // zero jest wpisane fixed dla kamery ortogonalnej 
-        LD = shootingRay(this->position, LDposition/*, objects*/);
+        LD = shootingRay(Ray(this->position, LDposition, false)/*, objects*/);
     }
 
-    LightIntensity center = shootingRay(this->position, centerPosition/*, objects*/);
+    LightIntensity center = shootingRay(Ray(this->position, centerPosition, false)/*, objects*/);
 
     float difLU = LU.calculateDifference(center);
     if (difLU > spatialContrast && iter < sampler) {
