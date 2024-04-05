@@ -15,9 +15,10 @@ public:
 	float cutOffAngle;
 	float dropOffRate;
 
-	Vector3 getDiffuse(Vector3 cameraPosition, Vector3 intPoint) override;
-	Vector3 getSpecular(Vector3 cameraPosition, Vector3 intPoint) override;
-	bool isInShadow(Vector3 intPoint, vector<ObjectOnScene*>& objects) override;
+	SpotLight(Vector3 loc, Vector3 dir, const LightIntensity& col) : Light(col), location(loc), direction(dir) {};
+	SpotLight(Vector3 loc, Vector3 dir, const LightIntensity& col, float cut, float drop) : Light(col), location(loc), direction(dir), cutOffAngle(cut), dropOffRate(drop) {};
+
+
     Vector3 getDirFromObj(Vector3 intPoint) override;
 
 };

@@ -34,14 +34,7 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t,
 	float v = f * ray.direction.dotProduct(q);
 	if (v < 0.0f || u + v > 1.0f)
 		return false;
-	t = f * edge2.dotProduct(q);
-	/*if (t > FLT_EPSILON) {
-		normal = edge1.cross(edge2);
-		return true;
-	}
-	return false;*/
-	//^kod z chatu dla porownania jakby czegos jeszcze u nas brakowalo (jakies warunki itp)
-
+	//t = f * edge2.dotProduct(q);
 
 
 	Vector3 AB = vertices[1] - vertices[0];
