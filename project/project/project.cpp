@@ -33,17 +33,17 @@ int main()
     std::vector<Light*> lights;
     /*Vector3 c1 = Vector3(0, 0, 1);
     Vector3 c2 = Vector3(1, 0, 0);*/
-    Material mat1 = Material(LightIntensity(0, 0, 1));
+    Material mat1 = Material(LightIntensity(0, 0, 1), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
                            //diffuseColor             kAmbient           kDiffuse           kSpecular          shininess
     Material mat2 = Material(LightIntensity(1, .5, .5), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
     Material mat3 = Material(LightIntensity(1, 1, 0),   LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
     Material mat4 = Material(LightIntensity(1, .1, 1),  LightIntensity(0.5), LightIntensity(.5), LightIntensity(.3), 16);
     Material mat5 = Material(LightIntensity(.2, .7, 1), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.3), 16);
 
-    PointLight light1 = PointLight(Vector3(0, 3.5, -2), LightIntensity(.5, .5, .5));
+    PointLight light1 = PointLight(Vector3(0, -1, -2), LightIntensity(.5, .5, .5));
     lights.push_back(&light1);
     PointLight light2 = PointLight(Vector3(-2, 0, -2), LightIntensity(.1, .5, .5));
-    lights.push_back(&light2);
+    //lights.push_back(&light2);
 
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img);
@@ -56,20 +56,23 @@ int main()
 
 
    
-    Sphere sfera3 = Sphere(Vector3(0, .7, .5), .5, mat2); //centralna
+    Sphere sfera3 = Sphere(Vector3(.1, .1, .5), .5, mat2); //centralna
     objects.push_back(&sfera3);
 
     Sphere sfera4 = Sphere(Vector3(-2, 0, 4), 3, mat5); //lewa najbardziej z tylu
     objects.push_back(&sfera4);
 
-    Sphere sfera5 = Sphere(Vector3(1, .5, 2), 1, mat4); //prawa za centralna
-    objects.push_back(&sfera5);
+    Sphere sfera5 = Sphere(Vector3(1, .5, 3), 1, mat4); //prawa za centralna
+    //objects.push_back(&sfera5);
 
-    Plane plane = Plane(Vector3(0, 0, 4), Vector3(0, 1, -1), mat4); //z tylu
+    Plane plane = Plane(Vector3(0, 0, 10), Vector3(0, 1, -1), mat4); //z tylu
     //objects.push_back(&plane);
 
-    Triangle triangle1 = Triangle(Vector3(-4, -1.5, -2), Vector3(0, -1, 15), Vector3(4, -1.5, -2), mat1); //na dole / podloga
+    Triangle triangle1 = Triangle(Vector3(-4, -2.5, -2), Vector3(0, -2, 15), Vector3(4, -2.5, -2), mat1); //na dole / podloga
     objects.push_back(&triangle1);
+
+    Triangle triangle3 = Triangle(Vector3(-4, -2.5, 1), Vector3(0, 5, 1), Vector3(5, -2.5, 1), mat1); //na dole / podloga
+    //objects.push_back(&triangle3);
 
     Triangle triangle2 = Triangle(Vector3(-15, -7, 5), Vector3(0, 10, 5), Vector3(15, -7, 5), mat1); //z tylu
     //objects.push_back(&triangle2);

@@ -19,7 +19,7 @@ Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3
 }
 
 bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, float t_min, float t_max) const {
-	/*Vector3 edge1 = vertices[1] - vertices[0];
+	Vector3 edge1 = vertices[1] - vertices[0];
 	Vector3 edge2 = vertices[2] - vertices[0];
 	Vector3 h = ray.direction.cross(edge2);
 	float a = edge1.dotProduct(h);
@@ -35,7 +35,7 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t,
 	if (v < 0.0f || u + v > 1.0f)
 		return false;
 	t = f * edge2.dotProduct(q);
-	if (t > FLT_EPSILON) {
+	/*if (t > FLT_EPSILON) {
 		normal = edge1.cross(edge2);
 		return true;
 	}
@@ -56,16 +56,16 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t,
 
 	float t1 = normal.dotProduct(vertices[0] - ray.origin) / dotProduct;
 
-	if (t1 < 0.0f) { // tu patrzymy czy trójk¹t jest ZA poczatkiem promienia
+	if (t1 < FLT_EPSILON) { // tu patrzymy czy trójk¹t jest ZA poczatkiem promienia
 		return false;
 	}
 
 	intPoint = ray.origin + ray.direction * t1;
 
-
-	float a = -dotProduct;
-	float v = ray.direction.dotProduct((ray.origin - vertices[0]).cross(AB)) / a;
-	float u = (ray.origin - vertices[0]).dotProduct(ray.direction.cross(AC)) / a;
+	
+	a = -dotProduct;
+	 v = ray.direction.dotProduct((ray.origin - vertices[0]).cross(AB)) / a;
+	 u = (ray.origin - vertices[0]).dotProduct(ray.direction.cross(AC)) / a;
 	if (u < 0 || u>1 || v < 0 || (u + v)>1) {
 		return false;
 	}
@@ -76,7 +76,7 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t,
 	Vector3 v1 = AB.cross(AP);
 	Vector3 v2 = AC.cross(BP);
 	Vector3 v3 = CB.cross(CP);
-	if ((v1.dotProduct(normal) >= 0.0f && v2.dotProduct(normal) >= 0.0f && v3.dotProduct(normal) >= 0.0f) && t1 >FLT_EPSILON) {
+	if ((v1.dotProduct(normal) >= 0.0f && v2.dotProduct(normal) >= 0.0f && v3.dotProduct(normal) >= 0.0f) && fabs(t1) >FLT_EPSILON) {
 		t = t1;
 		return true;
 	}

@@ -94,7 +94,7 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
         //przejscie po wszystkich swiatlach z punktu przeciecia
         for (Light* light : this->lights) {
             shadowed = false;
-            Ray rayToLight = Ray(intPoint, light->getDirFromObj(intPoint)*(1));
+            Ray rayToLight = Ray(intersectionPoint, light->getDirFromObj(intersectionPoint));
             
             //przejscie po wszystkich obiektach na drodze od przeciecia do swiatla (sprawdzenie cieni)
             //tutaj pewnie jakis blad przy sprawdzaniu (moze trzeba dodac te ograniczniki promienia zeby nie sprawdzal za promieniem i za daleko za swiatlem)
@@ -113,9 +113,11 @@ LightIntensity PerspectiveCamera::shootingRay(const Vector3& origin, const Vecto
 
             //jesli zacienione to daje tylko kolor obiektu z ambientem 
             if (shadowed) {
-                colorOfPixel += temp->material.diffuseColor * temp->material.kAmbient * light->color;
+                //colorOfPixel = LightIntensity(1, 1, 0);
+                colorOfPixel += temp->material.diffuseColor* temp->material.kAmbient* light->color;
             }
             else {
+                //colorOfPixel = LightIntensity(1, 1, 0);
                 colorOfPixel += phongReflection(light->getDirFromObj(intersectionPoint), normalIntersection, this->position - intersectionPoint, temp->material, light->color); //tu zamianiæ na dodawanie/srednia swiatel
             }
         }
@@ -147,12 +149,6 @@ LightIntensity PerspectiveCamera::phongReflection(const Vector3& lightDir, const
     phongColor += objMaterial.kDiffuse * lightColor * diffuseTerm;
     phongColor += objMaterial.kSpecular * lightColor * specularTerm;
     phongColor = phongColor * objMaterial.diffuseColor;
-    /*//to troche inaczej zrobione
-	LightIntensity ambient = objMaterial.kAmbient * lightColor;
-	LightIntensity diffuse = objMaterial.kDiffuse * lightColor * diffuseTerm;
-	LightIntensity specular = objMaterial.kSpecular * lightColor *specularTerm;
-	return ambient + diffuse + specular;*/
-
 
     return phongColor;
 }
