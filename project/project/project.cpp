@@ -116,8 +116,8 @@ int main()
 
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img);
-    OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 1, 0.05, objects, lights);
-    //PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 2, 0.05, objects, lights);
+    //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
+    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
     cam1.RenderImage();
 
 

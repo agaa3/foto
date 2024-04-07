@@ -36,8 +36,6 @@ Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
 }
 
 LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
-    //Ray ray = Ray(origin, destination, false);
-    //PointLight light1 = PointLight(Vector3(2, 0, -1), LightIntensity(.5, 1, 1));
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     float tempT2 = FLT_MAX;
@@ -55,7 +53,6 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
     LightIntensity colorOfPixel = LightIntensity(0);
     for (ObjectOnScene* object : this->objects) {
 
-        //tempT = t;
         intersects = object->hit(ray, intPoint, normal, t);
 
         if (intersects && (t < tempT))
@@ -73,6 +70,7 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
 
         //przejscie po wszystkich swiatlach z punktu przeciecia
         for (Light* light : this->lights) {
+
             shadowed = false;
             float tMax = FLT_MAX;
             Vector3 locOfLight;
@@ -100,11 +98,9 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
 
             //jesli zacienione to daje tylko kolor obiektu z ambientem 
             if (shadowed) {
-                //colorOfPixel = LightIntensity(1, 1, 0);
                 colorOfPixel += temp->material.diffuseColor * temp->material.kAmbient * light->color;
             }
             else {
-                //colorOfPixel = LightIntensity(1, 1, 0);
                 colorOfPixel += phongReflection(light->getDirFromObj(intersectionPoint), normalIntersection, this->position - intersectionPoint, temp->material, light->color); //tu zamianiæ na dodawanie/srednia swiatel
             }
         }
@@ -123,7 +119,6 @@ LightIntensity Camera::phongReflection(const Vector3& lightDir, const Vector3& n
     Vector3 V = viewDir.normalize();
 
     // Obliczenie wektora odbicia
-    //Vector3 R = (N * (2.0f * (N.x * L.x + N.y * L.y + N.z * L.z))) - L;
     Vector3 R = N * (N.dotProduct(L) * 2) - L;
 
     // Obliczenie sk³adowych oœwietlenia
@@ -134,7 +129,7 @@ LightIntensity Camera::phongReflection(const Vector3& lightDir, const Vector3& n
     LightIntensity phongColor = lightColor * objMaterial.kAmbient * objMaterial.diffuseColor;// objMaterial.kAmbient; // tu chyba powinnien byæ kolor samego obiektu
     phongColor += objMaterial.kDiffuse * lightColor * diffuseTerm * objMaterial.diffuseColor;
     phongColor += objMaterial.kSpecular * lightColor * specularTerm;
-    //phongColor = phongColor * objMaterial.diffuseColor;
+    
 
     return phongColor;
 }
