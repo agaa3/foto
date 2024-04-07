@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Spotlight.h"
 
 static LightIntensity colorBckg = LightIntensity(0, 1, 0);
 
@@ -70,7 +71,7 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
 
         //przejscie po wszystkich swiatlach z punktu przeciecia
         for (Light* light : this->lights) {
-
+            
             shadowed = false;
             float tMax = FLT_MAX;
             Vector3 locOfLight;
@@ -80,6 +81,14 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
             }
 
             Ray rayToLight = Ray(intersectionPoint, light->getDirFromObj(intersectionPoint));
+            if (SpotLight* spotLight = dynamic_cast<SpotLight*>(light)) {
+                // Jeœli tak, wywo³aj metodê isInCone
+                if(!spotLight->isInCone(rayToLight)){
+                    colorOfPixel += temp->material.diffuseColor * temp->material.kAmbient * light->color;
+                    continue;
+                }
+            }
+            //light.isInCone(rayToLight);
 
             //przejscie po wszystkich obiektach na drodze od przeciecia do swiatla (sprawdzenie cieni)
             //tutaj pewnie jakis blad przy sprawdzaniu (moze trzeba dodac te ograniczniki promienia zeby nie sprawdzal za promieniem i za daleko za swiatlem)

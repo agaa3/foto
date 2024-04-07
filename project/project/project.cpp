@@ -47,11 +47,11 @@ int main()
     PointLight light1 = PointLight(Vector3(0, 1, -2), LightIntensity(.5, .5, .5));
     //lights.push_back(&light1);
     PointLight light2 = PointLight(Vector3(-2, 0, -2), LightIntensity(.1, .5, .5));
-    lights.push_back(&light2);
-    //SpotLight light3 = SpotLight(Vector3(0, 1, -2), Vector3(0, 0, 1), LightIntensity(.5, .5, .5));
-    //lights.push_back(&light3);
+    //lights.push_back(&light2);
+    SpotLight light3 = SpotLight(Vector3(0, 1, -2), Vector3(0, -.2, 1), LightIntensity(1, .2, .75), 15, 0);
+    lights.push_back(&light3);
     DirectionalLight light4 = DirectionalLight(Vector3(0, 0.5, 1), LightIntensity(.5, .5, .5));
-    lights.push_back(&light4);
+    //lights.push_back(&light4);
 
     
 
@@ -63,19 +63,19 @@ int main()
 
    
     Sphere sfera3 = Sphere(Vector3(.1, .1, .5), .5, mat2); //centralna
-    objects.push_back(&sfera3);
+    //objects.push_back(&sfera3);
 
     Sphere sfera2 = Sphere(Vector3(.1, 2, 5), 2, mat2); //centralna
     //objects.push_back(&sfera2);
 
     Sphere sfera4 = Sphere(Vector3(-2, 0, 4), 3, mat5); //lewa najbardziej z tylu
-    //objects.push_back(&sfera4);
+    objects.push_back(&sfera4);
 
     Sphere sfera1 = Sphere(Vector3(2, 0, 4), 3, mat5); //lewa najbardziej z tylu
     //objects.push_back(&sfera1);
 
     Sphere sfera5 = Sphere(Vector3(1, .5, 3), 1, mat4); //prawa za centralna
-    objects.push_back(&sfera5);
+    //objects.push_back(&sfera5);
 
     Plane plane = Plane(Vector3(0, 0, 5), Vector3(0, 1, -1), mat4); //z tylu
     //objects.push_back(&plane);
@@ -102,10 +102,10 @@ int main()
     //objects.push_back(&triangle4);
 
     Triangle triangle5 = Triangle(Vector3(leftX, downY, backZ), Vector3(leftX, upY, backZ), Vector3(rightX, downY, backZ), mat7); //sciana
-    //objects.push_back(&triangle5);
+    objects.push_back(&triangle5);
 
     Triangle triangle6 = Triangle(Vector3(leftX, upY, backZ), Vector3(rightX, upY, backZ), Vector3(rightX, downY, backZ), mat7); //sciana
-    //objects.push_back(&triangle6);
+    objects.push_back(&triangle6);
 
     Triangle triangle3 = Triangle(Vector3(0, -2, 1), Vector3(0, 1, 1), Vector3(5, 1, 1), mat1); //na dole / podloga
     //objects.push_back(&triangle3);
