@@ -16,5 +16,9 @@ public:
 
 	Vector3 getDirFromObj(Vector3 intPoint) override;
 	//~PointLight() = default;
+
+	bool isInShadow(const vector<ObjectOnScene*>& objects, const Vector3& intersectionPoint, ObjectOnScene* closestObject) override;
+	//LightIntensity calculateColor(const vector<ObjectOnScene*>& objects, const Vector3& intersectionPoint, const Vector3& normalIntersection, ObjectOnScene* closestObject, const Vector3& viewDir) override ;
+
 };
 

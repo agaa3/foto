@@ -17,7 +17,9 @@ public:
 
     Plane(const Vector3& point, const Vector3& normal, const Material& mat);
     
-    bool hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, float t_min = 0, float t_max = 1000) const override;
+    bool hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, float t_min = 0, float t_max = FLT_MAX) const override;
+    bool hit(const Ray& ray, float t_min = 0, float t_max = 1000) const override; 
+
 };
 
 

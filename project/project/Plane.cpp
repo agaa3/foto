@@ -35,3 +35,30 @@ bool Plane::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, fl
 
     return result;
 }
+
+bool Plane::hit(const Ray& ray, float t_min, float t_max) const {  //po co jest range??
+    //intPoint - do dodania punkt przeciecia
+
+    bool result = false;
+    float ndotD = (this->normal).dotProduct(ray.direction);
+    if (ndotD == 0) {
+        return false; //promien prostopadly do normal, wiec rownolegly do plane
+        //nie zmieniamy intPoint
+    }
+
+    float t1;
+    t1 = ((this->point.dotProduct(this->normal)) - (this->normal).dotProduct(ray.origin)) / ndotD;
+
+    if (t1 > 0) {
+        if (t_max == 0.0f || t1 < t_max) {
+            if (ndotD > 0) {
+                return false; //promien w kierunku przeciwnym do p³aszczyzny (od p³aszczyzny)
+            }
+            else {
+                return true;
+            }
+        }
+    }
+
+    return result;
+}

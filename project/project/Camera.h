@@ -36,7 +36,7 @@ public:
     virtual ~Camera() {};
     virtual void RenderImage() = 0;
 
-    LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor);
+    //LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor);
 
     virtual LightIntensity shootingRay(const Ray& ray) = 0;
 

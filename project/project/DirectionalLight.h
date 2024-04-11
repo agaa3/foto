@@ -12,5 +12,7 @@ public:
 	bool getLocation(Vector3& loc) override { return false; };
 
 	Vector3 getDirFromObj(Vector3 intPoint) override;
+	bool isInShadow(const vector<ObjectOnScene*>& objects, const Vector3& intersectionPoint, ObjectOnScene* closestObject) override;
+
 };
 

@@ -18,6 +18,15 @@ public:
 	virtual bool getLocation(Vector3& loc) { return false; };
 
 	virtual Vector3 getDirFromObj(Vector3 intPoint);
+
+	virtual LightIntensity calculateColor(const vector<ObjectOnScene*>& objects, const Vector3& intersectionPoint, const Vector3& normalIntersection, ObjectOnScene* closestObject, const Vector3& viewDir);
+
+	virtual bool isInShadow(const vector<ObjectOnScene*>& objects, const Vector3& intersectionPoint, ObjectOnScene* closestObject);
+
+	LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor);
+
+
+
 };
 
 #endif // LIGHT_H

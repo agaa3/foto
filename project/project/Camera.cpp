@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Spotlight.h"
 
-static LightIntensity colorBckg = LightIntensity(0, 1, 0);
+static LightIntensity colorBckg = LightIntensity(0, 0, 0);
 
 
 Camera::Camera() {
@@ -39,12 +39,12 @@ Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
 LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
     float t = FLT_MAX;
     float tempT = FLT_MAX;
-    float tempT2 = FLT_MAX;
+    float tForShadows = FLT_MAX;
 
     Vector3 intPoint;
     Vector3 intPoint2;
     Vector3 normal;
-    ObjectOnScene* temp = nullptr;
+    ObjectOnScene* closestObject = nullptr;
     Vector3 intersectionPoint;
     Vector3 normalIntersection;
     bool intersects = false;
@@ -52,7 +52,7 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
 
     //sprawdzenie który obiekt jest z przodu
     LightIntensity colorOfPixel = LightIntensity(0);
-    for (ObjectOnScene* object : this->objects) {
+    for (auto object : this->objects) {
 
         intersects = object->hit(ray, intPoint, normal, t);
 
@@ -60,58 +60,18 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
         {
             tempT = t;
             intersectionPoint = intPoint;
-            temp = object;
+            closestObject = object;
             normalIntersection = normal;
         }
     }
 
     //jesli nie tlo, to sprawdzanie swiatel i cieni
-    if (temp != nullptr) {
-        bool shadowed = false;
+    if (closestObject != nullptr) {
 
         //przejscie po wszystkich swiatlach z punktu przeciecia
-        for (Light* light : this->lights) {
+        for (auto light : this->lights) {
+            colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, this->position - intersectionPoint);
             
-            shadowed = false;
-            float tMax = FLT_MAX;
-            Vector3 locOfLight;
-            if (light->getLocation(locOfLight)) {
-                Vector3 distanceToLight = Vector3(locOfLight - intersectionPoint);
-                tMax = distanceToLight.length();
-            }
-
-            Ray rayToLight = Ray(intersectionPoint, light->getDirFromObj(intersectionPoint));
-            if (SpotLight* spotLight = dynamic_cast<SpotLight*>(light)) {
-                // Jeœli tak, wywo³aj metodê isInCone
-                if(!spotLight->isInCone(rayToLight)){
-                    colorOfPixel += temp->material.diffuseColor * temp->material.kAmbient * light->color;
-                    continue;
-                }
-            }
-            //light.isInCone(rayToLight);
-
-            //przejscie po wszystkich obiektach na drodze od przeciecia do swiatla (sprawdzenie cieni)
-            //tutaj pewnie jakis blad przy sprawdzaniu (moze trzeba dodac te ograniczniki promienia zeby nie sprawdzal za promieniem i za daleko za swiatlem)
-            for (ObjectOnScene* object : this->objects) {
-                if (object != temp) {
-                    shadowed = object->hit(rayToLight, intPoint2, normal, tempT2, FLT_MIN, tMax);
-                    if (shadowed) {
-                        break;
-                    }
-                    else {
-                        shadowed = false;
-                    }
-                }
-
-            }
-
-            //jesli zacienione to daje tylko kolor obiektu z ambientem 
-            if (shadowed) {
-                colorOfPixel += temp->material.diffuseColor * temp->material.kAmbient * light->color;
-            }
-            else {
-                colorOfPixel += phongReflection(light->getDirFromObj(intersectionPoint), normalIntersection, this->position - intersectionPoint, temp->material, light->color); //tu zamianiæ na dodawanie/srednia swiatel
-            }
         }
     }
     else {
@@ -120,30 +80,6 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
 
     return colorOfPixel;
 }
-
-LightIntensity Camera::phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor) {
-    // Normalizacja wektorów
-    Vector3 L = lightDir.normalize();
-    Vector3 N = normal.normalize();
-    Vector3 V = viewDir.normalize();
-
-    // Obliczenie wektora odbicia
-    Vector3 R = N * (N.dotProduct(L) * 2) - L;
-
-    // Obliczenie sk³adowych oœwietlenia
-    float diffuseTerm = std::max(0.0f, N.dotProduct(L));
-    float specularTerm = std::pow(std::max(0.0f, R.dotProduct(V)), objMaterial.shininess); //shininess = n -> (VdotR)^n
-
-    // Obliczenie koñcowego koloru odbicia Phonga
-    LightIntensity phongColor = lightColor * objMaterial.kAmbient * objMaterial.diffuseColor;// objMaterial.kAmbient; // tu chyba powinnien byæ kolor samego obiektu
-    phongColor += objMaterial.kDiffuse * lightColor * diffuseTerm * objMaterial.diffuseColor;
-    phongColor += objMaterial.kSpecular * lightColor * specularTerm;
-    
-
-    return phongColor;
-}
-
-
 
 
 
