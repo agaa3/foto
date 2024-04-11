@@ -10,7 +10,7 @@ PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& dir
 }
 
 
-void PerspectiveCamera::RenderImage() {
+void PerspectiveCamera::RenderImage(int depth) {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
 
@@ -37,12 +37,12 @@ void PerspectiveCamera::RenderImage() {
 
             LightIntensity colorOfPixel = LightIntensity(0);
             if (sampler > 0) {
-                colorOfPixel = sampling(currentPixel, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 0);
+                colorOfPixel = sampling(currentPixel, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, depth, 0);
             }
             else {
                 Ray ray = Ray(this->position, currentPixel, false);
 
-                colorOfPixel = Camera::shootingRay(ray);
+                colorOfPixel = Camera::shootingRay(ray, depth);
             }
 
             this->img.setPixel(i, j, colorOfPixel);
@@ -52,7 +52,7 @@ void PerspectiveCamera::RenderImage() {
 
 
 //pytanie czy powinno sie z punktu przeciêcia do œwiate³ strzelaæ po ustaleniu koloru pixela czy przy ka¿dym pojedyñczym samplu przy antyaliazingu
-LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, int iter = 0) {
+LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, int depthOfReflections, int iter = 0) {
     LightIntensity result = LightIntensity(0, 0, 0);
     float currentWidth = pixelWidth;
     float currentHeight = pixelHeight;
@@ -67,26 +67,26 @@ LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensit
     }
     if (LU == LightIntensity::undefined) {
         LUposition = Vector3(centerPosition - dirToLeft * currentWidth + dirToTop * currentHeight); // zero jest wpisane fixed dla kamery ortogonalnej 
-        LU = shootingRay(Ray(this->position, LUposition, false));
+        LU = shootingRay(Ray(this->position, LUposition, false), depthOfReflections);
     }
     if (RU == LightIntensity::undefined) {
         RUposition = Vector3(centerPosition + dirToLeft * currentWidth + dirToTop * currentHeight); 
-        RU = shootingRay(Ray(this->position, RUposition, false));
+        RU = shootingRay(Ray(this->position, RUposition, false), depthOfReflections);
     }
     if (RD == LightIntensity::undefined) {
         RDposition = Vector3(centerPosition + dirToLeft * currentWidth - dirToTop * currentHeight);  
-        RD = shootingRay(Ray(this->position, RDposition, false));
+        RD = shootingRay(Ray(this->position, RDposition, false), depthOfReflections);
     }
     if (LD == LightIntensity::undefined) {
         LDposition = Vector3(centerPosition - dirToLeft * currentWidth - dirToTop * currentHeight);  
-        LD = shootingRay(Ray(this->position, LDposition, false));
+        LD = shootingRay(Ray(this->position, LDposition, false), depthOfReflections);
     }
 
-    LightIntensity center = shootingRay(Ray(this->position, centerPosition, false));
+    LightIntensity center = shootingRay(Ray(this->position, centerPosition, false), depthOfReflections);
 
     float difLU = LU.calculateDifference(center);
     if (difLU > spatialContrast && iter < sampler) {
-        LightIntensity newColor = sampling((LUposition + centerPosition) / 2, LU, LightIntensity::undefined, center, LightIntensity::undefined, ++iter);
+        LightIntensity newColor = sampling((LUposition + centerPosition) / 2, LU, LightIntensity::undefined, center, LightIntensity::undefined, depthOfReflections, ++iter);
         result = result + newColor;
     }
     else {
@@ -95,7 +95,7 @@ LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensit
     }
     float difRU = RU.calculateDifference(center);
     if (difRU > spatialContrast && iter < sampler) {
-        LightIntensity newColor = sampling((RUposition + centerPosition) / 2, LightIntensity::undefined, RU, LightIntensity::undefined, center, ++iter);
+        LightIntensity newColor = sampling((RUposition + centerPosition) / 2, LightIntensity::undefined, RU, LightIntensity::undefined, center, depthOfReflections, ++iter);
         result = result + newColor;
     }
     else {
@@ -104,7 +104,7 @@ LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensit
     }
     float difRD = RD.calculateDifference(center);
     if (difRD > spatialContrast && iter < sampler) {
-		LightIntensity newColor = sampling((RDposition + centerPosition) / 2, center, LightIntensity::undefined, RD, LightIntensity::undefined, ++iter);
+		LightIntensity newColor = sampling((RDposition + centerPosition) / 2, center, LightIntensity::undefined, RD, LightIntensity::undefined, depthOfReflections, ++iter);
         result = result + newColor;
     }
     else {
@@ -113,7 +113,7 @@ LightIntensity PerspectiveCamera::sampling(Vector3 centerPosition, LightIntensit
     }
     float difLD = LD.calculateDifference(center);
     if (difLD > spatialContrast && iter < sampler) {
-		LightIntensity newColor = sampling((LDposition + centerPosition) / 2, LightIntensity::undefined, center, LightIntensity::undefined, LD,  ++iter);
+		LightIntensity newColor = sampling((LDposition + centerPosition) / 2, LightIntensity::undefined, center, LightIntensity::undefined, LD, depthOfReflections, ++iter);
         result = result + newColor;
     }
     else {

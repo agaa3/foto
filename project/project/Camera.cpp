@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Spotlight.h"
 
-static LightIntensity colorBckg = LightIntensity(0, 0, 0);
+static LightIntensity colorBckg = LightIntensity(0, 1, 0);
 
 
 Camera::Camera() {
@@ -13,15 +13,14 @@ Camera::Camera() {
     this->sampler = 0;
     this->spatialContrast = 1;
     this->img = Image(100, 100);
-    
 }
 
 
-Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights) : position(position), direction(direction), up(up), img(img), sampler(sampler), spatialContrast(spatialContrast), objects(objects), lights(lights){
+Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights) : position(position), direction(direction), up(up), img(img), sampler(sampler), spatialContrast(spatialContrast), objects(objects), lights(lights) {
     this->radius = sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
     this->nearPlane = 1;
     this->farPlane = 1000;
-    
+       
 }
 
 Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
@@ -33,10 +32,9 @@ Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
     this->sampler = 0;
     this->spatialContrast = 1;
 
-
 }
 
-LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
+LightIntensity Camera::shootingRay(const Ray& ray, int depth) { //direction = destination
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     float tForShadows = FLT_MAX;
@@ -59,19 +57,37 @@ LightIntensity Camera::shootingRay(const Ray& ray) { //direction = destination
         if (intersects && (t < tempT))
         {
             tempT = t;
-            intersectionPoint = intPoint;
+            intersectionPoint = intPoint + normal * 0.001;
             closestObject = object;
             normalIntersection = normal;
         }
     }
 
+    if (closestObject != nullptr && closestObject->material.matType == reflective && depth > 0) {
+        //colorOfPixel = LightIntensity(0, 1, 0);
+        Vector3 I = ray.direction.normalize();
+        Vector3 N = normalIntersection.normalize();
+        Vector3 reflectedRay = I -N * (N.dotProduct(I) * 2); // -I;
+        depth = depth - 1;
+        LightIntensity colTemp = shootingRay(Ray(intersectionPoint, reflectedRay), depth);
+        colorOfPixel = colorOfPixel + colTemp;
+    }
     //jesli nie tlo, to sprawdzanie swiatel i cieni
-    if (closestObject != nullptr) {
+    else if (closestObject != nullptr && closestObject->material.matType == diffuse) {
 
         //przejscie po wszystkich swiatlach z punktu przeciecia
         for (auto light : this->lights) {
-            colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, this->position - intersectionPoint);
+            colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
             
+        }
+    }
+    else if (closestObject != nullptr) {
+        if (closestObject->material.matType == reflective) {
+            colorOfPixel = LightIntensity(0, 0, 1);
+        }
+        else {
+            colorOfPixel = LightIntensity(1, 0, 0);
+
         }
     }
     else {

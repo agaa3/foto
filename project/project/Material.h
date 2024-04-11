@@ -1,6 +1,12 @@
 #pragma once
 
 #include "LightIntensity.h"
+enum materialType {
+	diffuse,
+	reflective,
+	refractive
+};
+
 class Material
 {
 public:
@@ -11,12 +17,14 @@ public:
 	float alpha = 0;
 	LightIntensity diffuseColor = LightIntensity(0,0,0);
 	float shininess = 16;
+	materialType matType;
+	//bool isRefractive;
 
 	Material();
-	Material(const LightIntensity& diffuse)
-		: diffuseColor(diffuse) {};
-	Material(const LightIntensity& diffuse, const LightIntensity& kAmbient, const LightIntensity& kDiffuse, const LightIntensity& kSpecular, const float& shininess) 
-			: diffuseColor(diffuse), kAmbient(kAmbient), kDiffuse(kDiffuse), kSpecular(kSpecular), shininess(shininess) {};
+	Material(const LightIntensity& diffuse, const materialType matType = diffuse)
+		: diffuseColor(diffuse), matType(matType) {};
+	Material(const LightIntensity& diffuse, const LightIntensity& kAmbient, const LightIntensity& kDiffuse, const LightIntensity& kSpecular, const float& shininess, const materialType matType = diffuse)
+			: diffuseColor(diffuse), kAmbient(kAmbient), kDiffuse(kDiffuse), kSpecular(kSpecular), shininess(shininess), matType(matType) {};
 	~Material() = default;
 	
 

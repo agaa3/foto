@@ -41,11 +41,13 @@ int main()
     Material mat5 = Material(LightIntensity(.2, .7, 1), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.8), 32);
     Material mat6 = Material(LightIntensity(.5, .5, .5), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
     Material mat7 = Material(LightIntensity(.7, .7, .7), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
+    Material mat8 = Material(LightIntensity(.7, .7, .7), reflective);
 
-    PointLight light1 = PointLight(Vector3(0, -1, -2), LightIntensity(.5, .5, .5));
+
+    PointLight light1 = PointLight(Vector3(0, 1, -2), LightIntensity(.5, .5, .5));
     lights.push_back(&light1);
     PointLight light2 = PointLight(Vector3(-2, 0, -2), LightIntensity(.1, .5, .5));
-    lights.push_back(&light2);
+    //lights.push_back(&light2);
     SpotLight light3 = SpotLight(Vector3(0, 1, -2), Vector3(0, -.2, 1), LightIntensity(1, .2, .75), 15, 0);
     //lights.push_back(&light3);
     DirectionalLight light4 = DirectionalLight(Vector3(0, .7, 1), LightIntensity(.5, .5, .5));
@@ -60,13 +62,13 @@ int main()
 
 
    
-    Sphere sfera3 = Sphere(Vector3(.1, .1, .5), .5, mat2); //centralna
+    Sphere sfera3 = Sphere(Vector3(2, -1, .5), .5, mat5); //centralna
     objects.push_back(&sfera3);
 
     Sphere sfera2 = Sphere(Vector3(.3, 3, 5), 2, mat21); //centralna
     //objects.push_back(&sfera2);
 
-    Sphere sfera4 = Sphere(Vector3(-2, 0, 4), 3, mat5); //lewa najbardziej z tylu
+    Sphere sfera4 = Sphere(Vector3(-1, -1, 3), 2, mat8); //lewa najbardziej z tylu
     objects.push_back(&sfera4);
 
     Sphere sfera1 = Sphere(Vector3(2, 0, 4), 3, mat5); //lewa najbardziej z tylu
@@ -75,18 +77,26 @@ int main()
     Sphere sfera5 = Sphere(Vector3(1, .5, 3), 1, mat4); //prawa za centralna
     //objects.push_back(&sfera5);
 
-    Plane plane = Plane(Vector3(0, 5, 15), Vector3(0, 1, -1.02), mat4); //z tylu
-    objects.push_back(&plane);
+    Plane plane = Plane(Vector3(0, 0, 10), Vector3(0, 0, -1), mat4); //przodu
+    //objects.push_back(&plane);
 
-    Plane plane1 = Plane(Vector3(0, -3.5, 0), Vector3(0, 1, 0), mat6); //dol
-    objects.push_back(&plane1);
+    Plane plane1 = Plane(Vector3(0, -3, 0), Vector3(0, 1, 0), mat6); //dol
+    //objects.push_back(&plane1);
     
-    Plane plane2 = Plane(Vector3(0, 0, 4.5), Vector3(0, 0, -1), mat7); //z tylu
-    //objects.push_back(&plane2);
+    Plane plane2 = Plane(Vector3(0, 0, -4.5), Vector3(0, 0, 1), mat7); //z tylu
+    objects.push_back(&plane2);
+
+    Plane plane3 = Plane(Vector3(-7, 0, 0), Vector3(1, 0, 0), mat2); //z prawej
+    objects.push_back(&plane3);
+
+    Plane plane4 = Plane(Vector3(7, 0, 0), Vector3(-1, 0, 0), mat3); //z lewej
+    objects.push_back(&plane4);
+
+    Plane plane5 = Plane(Vector3(0, 10, 0), Vector3(0, -1, 0), mat7); //na górze
+    objects.push_back(&plane5);
 
 
-
-    float backZ = 4.5;
+    float backZ = 10;
     float backZ2 = 10;
 
     float frontZ = -2;
@@ -96,16 +106,16 @@ int main()
     float rightX = 10;
 
     Triangle triangle1 = Triangle(Vector3(leftX, downY, frontZ), Vector3(leftX, downY, backZ2), Vector3(rightX, downY, frontZ), mat1); //na dole / podloga
-    //objects.push_back(&triangle1);
+    objects.push_back(&triangle1);
 
     Triangle triangle4 = Triangle(Vector3(leftX, downY, backZ2), Vector3(rightX, downY, backZ2), Vector3(rightX, downY, frontZ), mat1); //na dole / podloga
     //objects.push_back(&triangle4);
 
     Triangle triangle5 = Triangle(Vector3(leftX, downY, backZ), Vector3(leftX, upY, backZ), Vector3(rightX, downY, backZ), mat7); //sciana
-    //objects.push_back(&triangle5);
+    objects.push_back(&triangle5);
 
     Triangle triangle6 = Triangle(Vector3(leftX, upY, backZ), Vector3(rightX, upY, backZ), Vector3(rightX, downY, backZ), mat7); //sciana
-    //objects.push_back(&triangle6);
+    objects.push_back(&triangle6);
 
     Triangle triangle3 = Triangle(Vector3(0, -2, 1), Vector3(0, 1, 1), Vector3(5, 1, 1), mat1); //na dole / podloga
     //objects.push_back(&triangle3);
@@ -113,13 +123,13 @@ int main()
     Triangle triangle2 = Triangle(Vector3(-15, -7, 5), Vector3(0, 10, 5), Vector3(15, -7, 5), mat1); //z tylu
     //objects.push_back(&triangle2);
 
-    Triangle triangle7 = Triangle(Vector3(1, 0, 1), Vector3(4, 5, 3), Vector3(5, 1, 2), mat1); //z tylu
-    //objects.push_back(&triangle7);
+    Triangle triangle7 = Triangle(Vector3(-1, -4, 2), Vector3(3, 1, 3), Vector3(5, -2, 4), mat3); //z tylu
+    objects.push_back(&triangle7);
 
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
     PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
-    cam1.RenderImage();
+    cam1.RenderImage(1);
 
 
     sf::RenderWindow window(sf::VideoMode(sizeX, sizeY), "SFML works!");
