@@ -1,4 +1,4 @@
-#include "Triangle.h"
+ï»¿#include "Triangle.h"
 
 Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3, const Material& mat) : ObjectOnScene(mat) {
 	vertices[0] = vertex1;
@@ -49,7 +49,7 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t,
 
 	float t1 = normal.dotProduct(vertices[0] - ray.origin) / dotProduct;
 
-	if (t1 < FLT_EPSILON) { // tu patrzymy czy trójk¹t jest ZA poczatkiem promienia
+	if (t1 < FLT_EPSILON) { // tu patrzymy czy trÃ³jkÄ…t jest ZA poczatkiem promienia
 		return false;
 	}
 
@@ -71,6 +71,9 @@ bool Triangle::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t,
 	Vector3 v3 = CB.cross(CP);
 	if ((v1.dotProduct(normal) >= 0.0f && v2.dotProduct(normal) >= 0.0f && v3.dotProduct(normal) >= 0.0f) && fabs(t1) >FLT_EPSILON) {
 		t = t1;
+		if (ray.direction.dotProduct(AB.cross(AC)) > 0) {
+			normal = normal * (-1);
+		}
 		return true;
 	}
 
@@ -108,7 +111,7 @@ bool Triangle::hit(const Ray& ray, float t_min, float t_max) const {
 
 	float t1 = normal.dotProduct(vertices[0] - ray.origin) / dotProduct;
 
-	if (t1 < FLT_EPSILON) { // tu patrzymy czy trójk¹t jest ZA poczatkiem promienia
+	if (t1 < FLT_EPSILON) { // tu patrzymy czy trÃ³jkÄ…t jest ZA poczatkiem promienia
 		return false;
 	}
 
@@ -129,6 +132,10 @@ bool Triangle::hit(const Ray& ray, float t_min, float t_max) const {
 	Vector3 v2 = AC.cross(BP);
 	Vector3 v3 = CB.cross(CP);
 	if ((v1.dotProduct(normal) >= 0.0f && v2.dotProduct(normal) >= 0.0f && v3.dotProduct(normal) >= 0.0f) && fabs(t1) > FLT_EPSILON) {
+		if (ray.direction.dotProduct(normal) < 0) {
+			//normal = normal * (-1);
+			return false;
+		}
 		return true;
 	}
 

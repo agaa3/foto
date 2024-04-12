@@ -48,6 +48,7 @@ public:
 	//to samo co rotateByQuaternion tylko sposobem z kwaternionami
 	//angle jako radian (chyba)
 	Vector3 rotateVectorAboutAngleAndAxis(float angle, const Vector3& axis);
+
 };
 
 #endif // VECTOR_H

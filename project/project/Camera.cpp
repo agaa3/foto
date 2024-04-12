@@ -34,7 +34,7 @@ Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
 
 }
 
-LightIntensity Camera::shootingRay(const Ray& ray, int depth) { //direction = destination
+LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) { //direction = destination
     float t = FLT_MAX;
     float tempT = FLT_MAX;
     float tForShadows = FLT_MAX;
@@ -54,7 +54,7 @@ LightIntensity Camera::shootingRay(const Ray& ray, int depth) { //direction = de
 
         intersects = object->hit(ray, intPoint, normal, t);
 
-        if (intersects && (t < tempT))
+        if (intersects && (t < tempT) && t > 0.1)
         {
             tempT = t;
             intersectionPoint = intPoint + normal * 0.001;
@@ -64,7 +64,6 @@ LightIntensity Camera::shootingRay(const Ray& ray, int depth) { //direction = de
     }
 
     if (closestObject != nullptr && closestObject->material.matType == reflective && depth > 0) {
-        //colorOfPixel = LightIntensity(0, 1, 0);
         Vector3 I = ray.direction.normalize();
         Vector3 N = normalIntersection.normalize();
         Vector3 reflectedRay = I -N * (N.dotProduct(I) * 2); // -I;
@@ -72,7 +71,62 @@ LightIntensity Camera::shootingRay(const Ray& ray, int depth) { //direction = de
         LightIntensity colTemp = shootingRay(Ray(intersectionPoint, reflectedRay), depth);
         colorOfPixel = colorOfPixel + colTemp;
     }
-    //jesli nie tlo, to sprawdzanie swiatel i cieni
+    else if (closestObject != nullptr && closestObject->material.matType == refractive && depth > 0) {
+        //colorOfPixel = LightIntensity(0, 1, 0);
+
+        
+        Vector3 I = ray.direction.normalize();
+        Vector3 N = normalIntersection.normalize();
+        
+
+        float nOld = nOfMedium;
+        float nNew = closestObject->material.nRefraction;
+        if (nOfMedium == closestObject->material.nRefraction) {
+            nNew = 1;
+            N = N * (-1);
+        }
+        float n = nOld / nNew;
+
+        float anglePadania = acos(N.dotProduct(I));
+        Vector3 osObrotu = I.cross(N);
+        float angleOdbity = asin((nOfMedium / closestObject->material.nRefraction) * sin(anglePadania));
+        //std::cout<< angleOdbity;
+        Vector3 refractedDir = N *(-1);
+        refractedDir = refractedDir.rotateVectorAboutAngleAndAxis(angleOdbity, osObrotu);
+        float angleCritical = asin(nNew / nOld);
+        //float n = nOfMedium / closestObject->material.nRefraction;
+        //float sinTheta2Squared = n * n * (1.0f - I.dotProduct(N) * I.dotProduct(N));
+
+        float a = sin(angleOdbity) / sin(anglePadania);
+        Vector3 newT = (ray.direction + N) * a;
+        //t = t / sin(anglePadania);
+        newT = newT - N * cos(angleOdbity);
+
+        // Sprawdzenie, czy wystêpuje ca³kowite wewnêtrzne odbicie
+        if (anglePadania >= angleCritical) {
+            // Ca³kowite wewnêtrzne odbicie, wiêc promieñ odbija siê od powierzchni
+            return LightIntensity(0, 1, 0);
+            Vector3 reflectedRay = I - N * (N.dotProduct(I) * 2); // -I;
+            depth = depth - 1;
+            LightIntensity colTemp = shootingRay(Ray(intersectionPoint, refractedDir), nOld, depth);
+            colorOfPixel = colorOfPixel + colTemp;
+
+            //return Vector3::reflect(incidentDirection, normal);
+        }
+        else {
+
+        // Obliczenie kierunku za³amania
+        //float cosTheta2 = std::sqrt(1.0f - sinTheta2Squared);
+        //Vector3 directionAfterRefraction = ray.direction * n + normal * (n * I.dotProduct(N) - cosTheta2);
+
+
+        //Vector3 reflectedRay = I - N * (N.dotProduct(I) * 2); // -I;
+        depth = depth - 1;
+        LightIntensity colTemp = shootingRay(Ray(intersectionPoint, refractedDir), nNew, depth);
+        colorOfPixel = colorOfPixel + colTemp;
+        }
+
+    }
     else if (closestObject != nullptr && closestObject->material.matType == diffuse) {
 
         //przejscie po wszystkich swiatlach z punktu przeciecia
@@ -83,10 +137,11 @@ LightIntensity Camera::shootingRay(const Ray& ray, int depth) { //direction = de
     }
     else if (closestObject != nullptr) {
         if (closestObject->material.matType == reflective) {
-            colorOfPixel = LightIntensity(0, 0, 1);
+            colorOfPixel = LightIntensity(1, 0, 0);
         }
         else {
-            colorOfPixel = LightIntensity(1, 0, 0);
+            colorOfPixel = LightIntensity(0, 1, 0);
+            //std::cout << depth;
 
         }
     }
