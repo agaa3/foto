@@ -62,90 +62,63 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
             normalIntersection = normal;
         }
     }
-
-    if (closestObject != nullptr && closestObject->material.matType == reflective && depth > 0) {
-        Vector3 I = ray.direction.normalize();
-        Vector3 N = normalIntersection.normalize();
-        Vector3 reflectedRay = I -N * (N.dotProduct(I) * 2); // -I;
-        depth = depth - 1;
-        LightIntensity colTemp = shootingRay(Ray(intersectionPoint, reflectedRay), depth);
-        colorOfPixel = colorOfPixel + colTemp;
-    }
-    else if (closestObject != nullptr && closestObject->material.matType == refractive && depth > 0) {
-        //colorOfPixel = LightIntensity(0, 1, 0);
-
-        
-        Vector3 I = ray.direction.normalize();
-        Vector3 N = normalIntersection.normalize();
-        
-
-        float nOld = nOfMedium;
-        float nNew = closestObject->material.nRefraction;
-        if (nOfMedium == closestObject->material.nRefraction) {
-            nNew = 1;
-            N = N * (-1);
-        }
-        float n = nOld / nNew;
-
-        float anglePadania = acos(N.dotProduct(I));
-        Vector3 osObrotu = I.cross(N);
-        float angleOdbity = asin((nOfMedium / closestObject->material.nRefraction) * sin(anglePadania));
-        //std::cout<< angleOdbity;
-        Vector3 refractedDir = N *(-1);
-        refractedDir = refractedDir.rotateVectorAboutAngleAndAxis(angleOdbity, osObrotu);
-        float angleCritical = asin(nNew / nOld);
-        //float n = nOfMedium / closestObject->material.nRefraction;
-        //float sinTheta2Squared = n * n * (1.0f - I.dotProduct(N) * I.dotProduct(N));
-
-        float a = sin(angleOdbity) / sin(anglePadania);
-        Vector3 newT = (ray.direction + N) * a;
-        //t = t / sin(anglePadania);
-        newT = newT - N * cos(angleOdbity);
-
-        // Sprawdzenie, czy wystêpuje ca³kowite wewnêtrzne odbicie
-        if (anglePadania >= angleCritical) {
-            // Ca³kowite wewnêtrzne odbicie, wiêc promieñ odbija siê od powierzchni
-            return LightIntensity(0, 1, 0);
-            Vector3 reflectedRay = I - N * (N.dotProduct(I) * 2); // -I;
+    if (closestObject != nullptr) {
+        if (closestObject->material.matType == reflective && depth >= 0) {
+            Vector3 I = ray.direction.normalize();
+            Vector3 N = normalIntersection.normalize();
+            Vector3 reflectedRay = I -N * (N.dotProduct(I) * 2); // -I;
             depth = depth - 1;
-            LightIntensity colTemp = shootingRay(Ray(intersectionPoint, refractedDir), nOld, depth);
+            LightIntensity colTemp = shootingRay(Ray(intersectionPoint, reflectedRay), depth);
             colorOfPixel = colorOfPixel + colTemp;
-
-            //return Vector3::reflect(incidentDirection, normal);
         }
-        else {
+        else if (closestObject->material.matType == refractive && depth >= 0) {
+        
+            Vector3 I = ray.direction.normalize();
+            Vector3 N = normalIntersection.normalize();
+        
+            float nOld = nOfMedium;
+            float nNew = closestObject->material.nRefraction;
+            if (nOfMedium == closestObject->material.nRefraction) { //czy z kulki na zewn¹trz
+                nNew = 1;
+                N = N * (-1);
+            }
+            float n = nOld / nNew;
 
-        // Obliczenie kierunku za³amania
-        //float cosTheta2 = std::sqrt(1.0f - sinTheta2Squared);
-        //Vector3 directionAfterRefraction = ray.direction * n + normal * (n * I.dotProduct(N) - cosTheta2);
+            float anglePadania = acos(N.dotProduct(I));
+            float angleCritical = asin(nNew / nOld);
 
+            depth = depth - 1;
 
-        //Vector3 reflectedRay = I - N * (N.dotProduct(I) * 2); // -I;
-        depth = depth - 1;
-        LightIntensity colTemp = shootingRay(Ray(intersectionPoint, refractedDir), nNew, depth);
-        colorOfPixel = colorOfPixel + colTemp;
-        }
-
-    }
-    else if (closestObject != nullptr && closestObject->material.matType == diffuse) {
-
-        //przejscie po wszystkich swiatlach z punktu przeciecia
-        for (auto light : this->lights) {
-            colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
+            // Sprawdzenie, czy wystêpuje ca³kowite wewnêtrzne odbicie
+            if (anglePadania >= angleCritical) {
+                // Ca³kowite wewnêtrzne odbicie, wiêc promieñ odbija siê od powierzchni
+                Vector3 reflectedRay = I - N * (N.dotProduct(I) * 2); // -I;
             
+                LightIntensity colTemp = shootingRay(Ray(intersectionPoint, reflectedRay), nOld, depth);
+                colorOfPixel = colorOfPixel + colTemp;
+            } else {
+                float angleOdbity = asin((nOfMedium / closestObject->material.nRefraction) * sin(anglePadania));
+                Vector3 osObrotu = I.cross(N);
+
+                Vector3 refractedDir = N * (-1);
+                refractedDir = refractedDir.rotateVectorAboutAngleAndAxis(angleOdbity, osObrotu);
+
+                LightIntensity colTemp = shootingRay(Ray(intersectionPoint, refractedDir), nNew, depth);
+                colorOfPixel = colorOfPixel + colTemp;
+            }
         }
-    }
-    else if (closestObject != nullptr) {
-        if (closestObject->material.matType == reflective) {
-            colorOfPixel = LightIntensity(1, 0, 0);
+        else if (closestObject->material.matType == diffuse) {
+
+            //przejscie po wszystkich swiatlach z punktu przeciecia
+            for (auto light : this->lights) {
+                colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
+            
+            }
         }
         else {
-            colorOfPixel = LightIntensity(0, 1, 0);
-            //std::cout << depth;
-
+            colorOfPixel = LightIntensity(1);
         }
-    }
-    else {
+    } else {
         colorOfPixel = colorBckg;
     }
 

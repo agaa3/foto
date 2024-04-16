@@ -2,7 +2,7 @@
 #include "PointLight.h"
 #include "Light.h"
 
-static float pixelSize = 2.0f;
+static float pixelSize = 1.f;
 
 PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights) : Camera(position, direction, up, img, sampler, spatialContrast, objects, lights) {
     this->dirToLeft = (this->direction.cross(this->up)).normalize();

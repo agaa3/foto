@@ -1,7 +1,7 @@
 #include "OrthogonalCamera.h"
 #include "Light.h"
 
-static float pixelSize = 2.0f;
+static float pixelSize = 10.0f;
 
 void OrthogonalCamera::RenderImage(int depth) {
     pixelHeight = pixelSize / img.col;
@@ -11,10 +11,10 @@ void OrthogonalCamera::RenderImage(int depth) {
 
     for (int i = 0; i < img.col; i++)
     {
-        centerX = -1.0f + (i + 0.5f) * pixelWidth;
+        centerX = -(pixelSize/2) + (i + 0.5f) * pixelWidth;
         for (int j = 0; j < img.rows; j++)
         {
-            centerY = 1.0f - (j + 0.5f) * pixelHeight;
+            centerY = (pixelSize / 2) - (j + 0.5f) * pixelHeight;
             LightIntensity colorOfPixel = LightIntensity(0,0,0);
             if (sampler > 0) {
                 colorOfPixel = sampling(Vector3(centerX, centerY, 0), LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 1, depth,  0);
