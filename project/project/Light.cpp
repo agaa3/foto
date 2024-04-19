@@ -1,4 +1,5 @@
 #include "Light.h"
+#include "Material.h"
 
 Vector3 Light::getDirFromObj(Vector3 intPoint) {
 	return Vector3();
@@ -11,10 +12,10 @@ LightIntensity Light::calculateColor(const vector<ObjectOnScene*>& objects, cons
     bool shadowed = this->isInShadow(objects, intersectionPoint, closestObject);
 
 	if (shadowed) {
-		colorOfPixel += closestObject->material.diffuseColor * closestObject->material.kAmbient * this->color;
+		colorOfPixel += closestObject->material->diffuseColor * closestObject->material->kAmbient * this->color;
 	}
 	else {
-		colorOfPixel += phongReflection(this->getDirFromObj(intersectionPoint), normalIntersection, viewDir, closestObject->material, this->color); //tu zamianiæ na dodawanie/srednia swiatel
+		colorOfPixel += phongReflection(this->getDirFromObj(intersectionPoint), normalIntersection, viewDir, *closestObject->material, this->color); //tu zamianiæ na dodawanie/srednia swiatel
 	}
     return colorOfPixel;
 }

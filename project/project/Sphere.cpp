@@ -1,7 +1,7 @@
 ﻿#include "Sphere.h"
 #include "Vector3.h"
 
-Sphere::Sphere(const Vector3 center, const float radius, const Material& mat) : center(center), radius(radius), ObjectOnScene(mat) {}
+Sphere::Sphere(const Vector3 center, const float radius, const std::shared_ptr<Material> mat) : center(center), radius(radius), ObjectOnScene(mat) {}
 
 std::ostream& operator<<(std::ostream& os, const Sphere& sph)
 {

@@ -1,13 +1,13 @@
 ﻿#include "Triangle.h"
 
-Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3, const Material& mat) : ObjectOnScene(mat) {
+Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3, const std::shared_ptr<Material> mat) : ObjectOnScene(mat) {
 	vertices[0] = vertex1;
 	vertices[1] = vertex2;
 	vertices[2] = vertex3;
 	this->material = mat;
 }
 
-Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3, const Vector3& normal1, const Vector3& normal2, const Vector3& normal3, const Material& mat) : vertices(), normals(), ObjectOnScene(mat)
+Triangle::Triangle(const Vector3& vertex1, const Vector3& vertex2, const Vector3& vertex3, const Vector3& normal1, const Vector3& normal2, const Vector3& normal3, const std::shared_ptr<Material> mat) : vertices(), normals(), ObjectOnScene(mat)
 {
 	vertices[0] = vertex1;
 	vertices[1] = vertex2;

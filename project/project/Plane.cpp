@@ -3,7 +3,7 @@
 
 
 
-Plane::Plane(const Vector3& point, const Vector3& normal, const Material& mat) : point(point), normal(normal), ObjectOnScene(mat) {}
+Plane::Plane(const Vector3& point, const Vector3& normal, const std::shared_ptr<Material> mat) : point(point), normal(normal), ObjectOnScene(mat) {}
 
 
 bool Plane::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, float t_min, float t_max) const {  //po co jest range??

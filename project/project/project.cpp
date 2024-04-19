@@ -22,36 +22,42 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "DirectionalLight.h"
+#include "DiffuseMaterial.h"
+#include "ReflectiveMaterial.h"
+#include "RefractiveMaterial.h"
+
 
 const int SIZE = 60;
 
 int main()
 {
-    int sizeX = 600;
-    int sizeY = 600;
+    int sizeX = 400;
+    int sizeY = 400;
     Image img = Image(sizeX, sizeY);
     std::vector<ObjectOnScene*> objects;
     std::vector<Light*> lights;
                                  //diffuseColor             kAmbient             kDiffuse             kSpecular       shininess
-    Material matYellow = Material(LightIntensity(1, 1, 0),   LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
-    Material matMagenta = Material(LightIntensity(1, .1, 1),  LightIntensity(0.5), LightIntensity(.5), LightIntensity(.3), 16);
-    Material matCyjan = Material(LightIntensity(.2, .7, 1), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.8), 32);
-    Material matPurple = Material(LightIntensity(1, .5, 1), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
-    Material matRed = Material(LightIntensity(.5, 0, 0), LightIntensity(0.5), LightIntensity(1), LightIntensity(.2), 1);
-    Material matBlue = Material(LightIntensity(0, 0, .5), LightIntensity(0.5), LightIntensity(1), LightIntensity(.1), 8);
-    Material matGrey = Material(LightIntensity(.4, .4, .4), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.4), 2);
-    Material matGrey1 = Material(LightIntensity(.2, .2, .2), LightIntensity(1), LightIntensity(.5), LightIntensity(.2), 1);
-    Material matDark = Material(LightIntensity(.1, .1, .1), LightIntensity(0.1), LightIntensity(.5), LightIntensity(.1), 1);
+    auto matYellow = std::make_shared < DiffuseMaterial>(LightIntensity(1, 1, 0),   LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
+	auto matMagenta = std::make_shared<DiffuseMaterial>(LightIntensity(1, .1, 1),  LightIntensity(0.5), LightIntensity(.5), LightIntensity(.3), 16);
+    auto matCyjan = std::make_shared<DiffuseMaterial>(LightIntensity(.2, .7, 1), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.8), 32);
+	auto matPurple = std::make_shared<DiffuseMaterial>(LightIntensity(1, .5, 1), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.2), 16);
+	auto matRed = std::make_shared<DiffuseMaterial>(LightIntensity(.5, 0, 0), LightIntensity(0.5), LightIntensity(1), LightIntensity(.2), 1);
+	auto matBlue = std::make_shared<DiffuseMaterial>(LightIntensity(0, 0, .5), LightIntensity(0.5), LightIntensity(1), LightIntensity(.1), 8);
+	auto matGrey = std::make_shared<DiffuseMaterial>(LightIntensity(.4, .4, .4), LightIntensity(0.5), LightIntensity(.5), LightIntensity(.4), 2);
+	auto matGrey1 = std::make_shared<DiffuseMaterial>(LightIntensity(.2, .2, .2), LightIntensity(1), LightIntensity(.5), LightIntensity(.2), 1);
+	auto matDark = std::make_shared<DiffuseMaterial>(LightIntensity(.1, .1, .1), LightIntensity(0.1), LightIntensity(.5), LightIntensity(.1), 1);
 
-    Material matReflective = Material(LightIntensity(.7, .7, .7), reflective);
-    Material matRefractive = Material(LightIntensity(.7, .7, .7), 1.8, refractive);
+    ReflectiveMaterial matReflective = ReflectiveMaterial();
+	RefractiveMaterial matRefractive = RefractiveMaterial(1.8);
 
 
     //LIGHTS
-    PointLight light1 = PointLight(Vector3(0, 1, 0), LightIntensity(.5));
-    //lights.push_back(&light1);
-    PointLight light2 = PointLight(Vector3(0, 3.9, 8), LightIntensity(1));
+    PointLight light1 = PointLight(Vector3(-3, -3, 10), LightIntensity(1), .5);
+    lights.push_back(&light1);
+    PointLight light2 = PointLight(Vector3(0, 3.9, 8), LightIntensity(1, 1, 0), 2);
     lights.push_back(&light2);
+    PointLight light5 = PointLight(Vector3(3.9, 0, 8), LightIntensity(1, 1, 0), 1);
+    lights.push_back(&light5);
     SpotLight light3 = SpotLight(Vector3(0, 1, -2), Vector3(0, -.2, 1), LightIntensity(1, .2, .75), 15, 0);
     //lights.push_back(&light3);
     DirectionalLight light4 = DirectionalLight(Vector3(0, .7, 1), LightIntensity(.5, .5, .5));
@@ -64,10 +70,10 @@ int main()
     Sphere sfera2 = Sphere(Vector3(3, -2, 12), 1, matPurple); //centralna
     objects.push_back(&sfera2);
 
-    Sphere sfera4 = Sphere(Vector3(-1, -3, 11.5), 1, matReflective); //lewa najbardziej z tylu
+    Sphere sfera4 = Sphere(Vector3(-1, -3, 11.5), 1, matRed); //lewa najbardziej z tylu
     objects.push_back(&sfera4);
 
-    Sphere sfera6 = Sphere(Vector3(.5, -3, 8.5), 1, matRefractive); //lewa najbardziej z tylu
+    Sphere sfera6 = Sphere(Vector3(.5, -3, 8.5), 1, matCyjan); //lewa najbardziej z tylu
     objects.push_back(&sfera6);
 
     Sphere sfera1 = Sphere(Vector3(2, 0, 4), 3, matCyjan); //lewa najbardziej z tylu
@@ -95,40 +101,57 @@ int main()
     objects.push_back(&plane5);
 
 
-    float backZ = 10;
-    float backZ2 = 10;
+    float backZ = 16;
 
-    float frontZ = -2;
-    float upY = 10;
-    float downY = -3;
-    float leftX = -10;
-    float rightX = 10;
+    float frontZ = -16;
+    float upY = 4;
+    float downY = -4;
+    float leftX = -4;
+    float rightX = 4;
 
-    Triangle triangle1 = Triangle(Vector3(leftX, downY, frontZ), Vector3(leftX, downY, backZ2), Vector3(rightX, downY, frontZ), matPurple); //na dole / podloga
-    //objects.push_back(&triangle1);
+    //Triangle triangle1 = Triangle(Vector3(leftX, downY, frontZ), Vector3(leftX, downY, backZ), Vector3(rightX, downY, frontZ), matPurple); //na dole / podloga
+    ////objects.push_back(&triangle1);
 
-    Triangle triangle4 = Triangle(Vector3(leftX, downY, backZ2), Vector3(rightX, downY, backZ2), Vector3(rightX, downY, frontZ), matPurple); //na dole / podloga
-    //objects.push_back(&triangle4);
+    //Triangle triangle4 = Triangle(Vector3(leftX, downY, backZ), Vector3(rightX, downY, backZ), Vector3(rightX, downY, frontZ), matPurple); //na dole / podloga
+    ////objects.push_back(&triangle4);
 
-    Triangle triangle5 = Triangle(Vector3(leftX, downY, backZ), Vector3(leftX, upY, backZ), Vector3(rightX, downY, backZ), matPurple); //sciana
-    //objects.push_back(&triangle5);
+    //Triangle triangle5 = Triangle(Vector3(leftX, downY, backZ), Vector3(leftX, upY, backZ), Vector3(rightX, downY, backZ), matPurple); //sciana
+    ////objects.push_back(&triangle5);
 
-    Triangle triangle6 = Triangle(Vector3(leftX, upY, backZ), Vector3(rightX, upY, backZ), Vector3(rightX, downY, backZ), matPurple); //sciana
-    //objects.push_back(&triangle6);
+    //Triangle triangle6 = Triangle(Vector3(leftX, upY, backZ), Vector3(rightX, upY, backZ), Vector3(rightX, downY, backZ), matPurple); //sciana
+    ////objects.push_back(&triangle6);
 
-    Triangle triangle3 = Triangle(Vector3(0, -2, 1), Vector3(5, 1, 1), Vector3(0, 1, 1), matPurple); //na dole / podloga
-    //objects.push_back(&triangle3);
+    //Triangle triangle9 = Triangle(Vector3(leftX, downY, frontZ), Vector3(leftX, upY, frontZ), Vector3(leftX, downY, backZ), matPurple); //sciana
+    ////objects.push_back(&triangle9);
 
-    Triangle triangle2 = Triangle(Vector3(-15, -7, 5), Vector3(0, 10, 5), Vector3(15, -7, 5), matPurple); //z tylu
-    //objects.push_back(&triangle2);
+    //Triangle triangle8 = Triangle(Vector3(leftX, upY, frontZ), Vector3(leftX, upY, backZ), Vector3(leftX, downY, backZ), matPurple); //sciana
+    ////objects.push_back(&triangle8);
 
-    Triangle triangle7 = Triangle(Vector3(-4, -3, 14), Vector3(0, 4,10), Vector3(4, -2, 14), matRefractive); //z tylu
-    //objects.push_back(&triangle7);
+    //Triangle triangle10 = Triangle(Vector3(rightX, downY, frontZ), Vector3(rightX, downY, backZ), Vector3(rightX, upY, backZ), matPurple); //sciana
+    ////objects.push_back(&triangle10);
+
+    //Triangle triangle11 = Triangle(Vector3(rightX, upY, backZ), Vector3(rightX, upY, frontZ), Vector3(rightX, downY, frontZ), matPurple); //sciana
+    ////objects.push_back(&triangle11);
+
+    //Triangle triangle12 = Triangle(Vector3(leftX, upY, frontZ), Vector3(rightX, downY, backZ), Vector3(rightX, upY, backZ), matPurple); //sciana
+    ////objects.push_back(&triangle12);
+
+    //Triangle triangle13 = Triangle(Vector3(rightX, upY, backZ), Vector3(rightX, upY, frontZ), Vector3(rightX, downY, frontZ), matPurple); //sciana
+    ////objects.push_back(&triangle13);
+
+    //Triangle triangle3 = Triangle(Vector3(0, -2, 1), Vector3(5, 1, 1), Vector3(0, 1, 1), matPurple); //na dole / podloga
+    ////objects.push_back(&triangle3);
+
+    //Triangle triangle2 = Triangle(Vector3(-15, -7, 5), Vector3(0, 10, 5), Vector3(15, -7, 5), matPurple); //z tylu
+    ////objects.push_back(&triangle2);
+
+    //Triangle triangle7 = Triangle(Vector3(-4, -3, 14), Vector3(0, 4,10), Vector3(4, -2, 14), matRefractive); //z tylu
+    ////objects.push_back(&triangle7);
 
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
-    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, -1, -1), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 2, 0.05, objects, lights);
-    cam1.RenderImage(2);
+    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -1), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
+    cam1.RenderImage(3);
 
 
     sf::RenderWindow window(sf::VideoMode(sizeX, sizeY), "SFML works!");

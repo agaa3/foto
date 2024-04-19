@@ -1,7 +1,10 @@
 #include "Camera.h"
 #include "Spotlight.h"
+#include "DiffuseMaterial.h"
+
 
 static LightIntensity colorBckg = LightIntensity(0, 1, 0);
+static int numberOfRays = 5;
 
 
 Camera::Camera() {
@@ -50,6 +53,7 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
 
     //sprawdzenie który obiekt jest z przodu
     LightIntensity colorOfPixel = LightIntensity(0);
+
     for (auto object : this->objects) {
 
         intersects = object->hit(ray, intPoint, normal, t);
@@ -62,67 +66,75 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
             normalIntersection = normal;
         }
     }
+
+    for (auto light : this->lights) {
+        float tOfLight = 0;
+        intersects = light->hit(ray,tOfLight);
+        if (intersects && tOfLight < tempT) {
+            LightIntensity temp = light->color;
+            colorOfPixel = colorOfPixel + temp;
+            return colorOfPixel;
+        }
+        
+        //colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
+
+    }
+
+    
+    
     if (closestObject != nullptr) {
-        if (closestObject->material.matType == reflective && depth >= 0) {
-            Vector3 I = ray.direction.normalize();
-            Vector3 N = normalIntersection.normalize();
-            Vector3 reflectedRay = I -N * (N.dotProduct(I) * 2); // -I;
+        if (depth >= 0) {
             depth = depth - 1;
-            LightIntensity colTemp = shootingRay(Ray(intersectionPoint, reflectedRay), depth);
-            colorOfPixel = colorOfPixel + colTemp;
-        }
-        else if (closestObject->material.matType == refractive && depth >= 0) {
-        
-            Vector3 I = ray.direction.normalize();
-            Vector3 N = normalIntersection.normalize();
-        
-            float nOld = nOfMedium;
-            float nNew = closestObject->material.nRefraction;
-            if (nOfMedium == closestObject->material.nRefraction) { //czy z kulki na zewn¹trz
-                nNew = 1;
-                N = N * (-1);
-            }
-            float n = nOld / nNew;
-
-            float anglePadania = acos(N.dotProduct(I));
-            float angleCritical = asin(nNew / nOld);
-
-            depth = depth - 1;
-
-            // Sprawdzenie, czy wystêpuje ca³kowite wewnêtrzne odbicie
-            if (anglePadania >= angleCritical) {
-                // Ca³kowite wewnêtrzne odbicie, wiêc promieñ odbija siê od powierzchni
-                Vector3 reflectedRay = I - N * (N.dotProduct(I) * 2); // -I;
-            
-                LightIntensity colTemp = shootingRay(Ray(intersectionPoint, reflectedRay), nOld, depth);
-                colorOfPixel = colorOfPixel + colTemp;
-            } else {
-                float angleOdbity = asin((nOfMedium / closestObject->material.nRefraction) * sin(anglePadania));
-                Vector3 osObrotu = I.cross(N);
-
-                Vector3 refractedDir = N * (-1);
-                refractedDir = refractedDir.rotateVectorAboutAngleAndAxis(angleOdbity, osObrotu);
-
-                LightIntensity colTemp = shootingRay(Ray(intersectionPoint, refractedDir), nNew, depth);
+            colorOfPixel = closestObject->material->diffuseColor * closestObject->material->kAmbient * (0.1*depth);
+            for (int i = 0; i < numberOfRays; i++) {
+                Vector3 newDirection = closestObject->material->calculateNewRayDirection(ray, normalIntersection, nOfMedium);
+                LightIntensity colTemp = shootingRay(Ray(intersectionPoint, newDirection), closestObject->material->nOut, depth);
+                colTemp = colTemp * (0.1 * depth);
                 colorOfPixel = colorOfPixel + colTemp;
             }
-        }
-        else if (closestObject->material.matType == diffuse) {
-
-            //przejscie po wszystkich swiatlach z punktu przeciecia
-            for (auto light : this->lights) {
-                colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
             
-            }
         }
         else {
-            colorOfPixel = LightIntensity(1);
+            //LightIntensity temp = LightIntensity(.5);
+            //colorOfPixel = colorOfPixel + temp;
+            return LightIntensity(0);
         }
     } else {
-        colorOfPixel = colorBckg;
+        colorOfPixel = LightIntensity(0);
     }
 
     return colorOfPixel;
+            //colorOfPixel = colorOfPixel + closestObject->material.diffuseColor;
+        
+   //     if (DiffuseMaterial* difMat = dynamic_cast<DiffuseMaterial*>(&closestObject->material)) {
+   //         
+   //         
+   //         
+   //         //wektor odbicia losowy: Vector3(x, y, z);
+
+			////przejscie po wszystkich swiatlach z punktu przeciecia
+			//for (auto light : this->lights) {
+
+			//	colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
+
+			//}
+   //         
+   //     }
+   //     else {
+   //         if (depth >= 0) {
+   //             depth = depth - 1;
+   //             Vector3 newDirection = closestObject->material.calculateNewRayDirection(ray, normalIntersection, nOfMedium);
+   //             LightIntensity colTemp = shootingRay(Ray(intersectionPoint, newDirection), closestObject->material.nOut, depth);
+   //             colorOfPixel = colorOfPixel + colTemp;
+   //         }
+   //         else {
+   //             LightIntensity temp = LightIntensity(.5);
+   //             colorOfPixel = colorOfPixel + temp;
+   //         }
+   //         
+   //     }
+   // }
+    
 }
 
 

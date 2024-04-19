@@ -30,8 +30,10 @@ void PerspectiveCamera::RenderImage(int depth) {
 
     for (int i = 0; i < img.col; i++) // lewo prawo
     {
+        //std::cout << i << std::endl;
         for (int j = 0; j < img.rows; j++) //góra dó³
         {
+            
             currentPixel = firstPixelCenter - dirToTop * pixelHeight * j;
             currentPixel = currentPixel - dirToLeft * pixelWidth * i;
 
