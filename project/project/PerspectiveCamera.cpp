@@ -4,7 +4,7 @@
 
 static float pixelSize = 1.f;
 
-PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights) : Camera(position, direction, up, img, sampler, spatialContrast, objects, lights) {
+PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights, const int& depth, const int& number) : Camera(position, direction, up, img, sampler, spatialContrast, objects, lights, depth, number) {
     this->dirToLeft = (this->direction.cross(this->up)).normalize();
     this->dirToTop = this->up.normalize();
 }
@@ -30,7 +30,6 @@ void PerspectiveCamera::RenderImage(int depth) {
 
     for (int i = 0; i < img.col; i++) // lewo prawo
     {
-        //std::cout << i << std::endl;
         for (int j = 0; j < img.rows; j++) //góra dó³
         {
             

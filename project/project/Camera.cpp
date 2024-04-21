@@ -4,7 +4,7 @@
 
 
 static LightIntensity colorBckg = LightIntensity(0, 1, 0);
-static int numberOfRays = 5;
+//static int numberOfRays = 8;
 
 
 Camera::Camera() {
@@ -19,7 +19,7 @@ Camera::Camera() {
 }
 
 
-Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights) : position(position), direction(direction), up(up), img(img), sampler(sampler), spatialContrast(spatialContrast), objects(objects), lights(lights) {
+Camera::Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights, const int& depth, const int& number) : position(position), direction(direction), up(up), img(img), sampler(sampler), spatialContrast(spatialContrast), objects(objects), lights(lights), depthOfPathtracing(depth), numberOfRays(number) {
     this->radius = sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
     this->nearPlane = 1;
     this->farPlane = 1000;
@@ -75,9 +75,6 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
             colorOfPixel = colorOfPixel + temp;
             return colorOfPixel;
         }
-        
-        //colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
-
     }
 
     
@@ -85,18 +82,16 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
     if (closestObject != nullptr) {
         if (depth >= 0) {
             depth = depth - 1;
-            colorOfPixel = closestObject->material->diffuseColor * closestObject->material->kAmbient * (0.1*depth);
+            colorOfPixel = closestObject->material->diffuseColor;
             for (int i = 0; i < numberOfRays; i++) {
                 Vector3 newDirection = closestObject->material->calculateNewRayDirection(ray, normalIntersection, nOfMedium);
                 LightIntensity colTemp = shootingRay(Ray(intersectionPoint, newDirection), closestObject->material->nOut, depth);
-                colTemp = colTemp * (0.1 * depth);
                 colorOfPixel = colorOfPixel + colTemp;
             }
-            
+            colorOfPixel = colorOfPixel / numberOfRays;
+
         }
         else {
-            //LightIntensity temp = LightIntensity(.5);
-            //colorOfPixel = colorOfPixel + temp;
             return LightIntensity(0);
         }
     } else {
@@ -104,37 +99,6 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
     }
 
     return colorOfPixel;
-            //colorOfPixel = colorOfPixel + closestObject->material.diffuseColor;
-        
-   //     if (DiffuseMaterial* difMat = dynamic_cast<DiffuseMaterial*>(&closestObject->material)) {
-   //         
-   //         
-   //         
-   //         //wektor odbicia losowy: Vector3(x, y, z);
-
-			////przejscie po wszystkich swiatlach z punktu przeciecia
-			//for (auto light : this->lights) {
-
-			//	colorOfPixel += light->calculateColor(this->objects, intersectionPoint, normalIntersection, closestObject, ray.origin - intersectionPoint);
-
-			//}
-   //         
-   //     }
-   //     else {
-   //         if (depth >= 0) {
-   //             depth = depth - 1;
-   //             Vector3 newDirection = closestObject->material.calculateNewRayDirection(ray, normalIntersection, nOfMedium);
-   //             LightIntensity colTemp = shootingRay(Ray(intersectionPoint, newDirection), closestObject->material.nOut, depth);
-   //             colorOfPixel = colorOfPixel + colTemp;
-   //         }
-   //         else {
-   //             LightIntensity temp = LightIntensity(.5);
-   //             colorOfPixel = colorOfPixel + temp;
-   //         }
-   //         
-   //     }
-   // }
-    
 }
 
 

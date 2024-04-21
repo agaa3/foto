@@ -10,7 +10,7 @@ public:
 
     OrthogonalCamera() : Camera() {};
     
-    OrthogonalCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1, const vector<ObjectOnScene*>& objects = {}, const vector<Light*>& lights = {}) : Camera(position, direction, up, img, sampler, spatialContrast, objects, lights) {};
+    OrthogonalCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1, const vector<ObjectOnScene*>& objects = {}, const vector<Light*>& lights = {}, const int& depth = 2, const int& number = 2) : Camera(position, direction, up, img, sampler, spatialContrast, objects, lights, depth, number) {};
     ~OrthogonalCamera() =default;
 
     void RenderImage(int depth = 0) override;

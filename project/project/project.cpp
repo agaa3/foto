@@ -31,8 +31,12 @@ const int SIZE = 60;
 
 int main()
 {
-    int sizeX = 400;
-    int sizeY = 400;
+    int sizeX = 200;
+    int sizeY = 200;
+
+    int depth = 4;
+    int number = 4;
+
     Image img = Image(sizeX, sizeY);
     std::vector<ObjectOnScene*> objects;
     std::vector<Light*> lights;
@@ -47,40 +51,52 @@ int main()
 	auto matGrey1 = std::make_shared<DiffuseMaterial>(LightIntensity(.2, .2, .2), LightIntensity(1), LightIntensity(.5), LightIntensity(.2), 1);
 	auto matDark = std::make_shared<DiffuseMaterial>(LightIntensity(.1, .1, .1), LightIntensity(0.1), LightIntensity(.5), LightIntensity(.1), 1);
 
-    ReflectiveMaterial matReflective = ReflectiveMaterial();
-	RefractiveMaterial matRefractive = RefractiveMaterial(1.8);
+    auto matReflective = std::make_shared<ReflectiveMaterial>(0.2);
+	auto matRefractive = std::make_shared<RefractiveMaterial>(1.8);
 
 
     //LIGHTS
     PointLight light1 = PointLight(Vector3(-3, -3, 10), LightIntensity(1), .5);
-    lights.push_back(&light1);
-    PointLight light2 = PointLight(Vector3(0, 3.9, 8), LightIntensity(1, 1, 0), 2);
+    //lights.push_back(&light1);
+    PointLight light2 = PointLight(Vector3(0, -3.9, -2), LightIntensity(1, 1, 0), 2);
     lights.push_back(&light2);
-    PointLight light5 = PointLight(Vector3(3.9, 0, 8), LightIntensity(1, 1, 0), 1);
+    PointLight light5 = PointLight(Vector3(3.9, 0, 10), LightIntensity(0, 1, 1), 1);
     lights.push_back(&light5);
     SpotLight light3 = SpotLight(Vector3(0, 1, -2), Vector3(0, -.2, 1), LightIntensity(1, .2, .75), 15, 0);
     //lights.push_back(&light3);
     DirectionalLight light4 = DirectionalLight(Vector3(0, .7, 1), LightIntensity(.5, .5, .5));
     //lights.push_back(&light4);
 
-    
-    Sphere sfera3 = Sphere(Vector3(-2, -1, 10), .5, matYellow); //centralna
-    objects.push_back(&sfera3);
 
     Sphere sfera2 = Sphere(Vector3(3, -2, 12), 1, matPurple); //centralna
     objects.push_back(&sfera2);
 
-    Sphere sfera4 = Sphere(Vector3(-1, -3, 11.5), 1, matRed); //lewa najbardziej z tylu
+    Sphere sfera4 = Sphere(Vector3(-1, -1, 12.5), 3, matReflective); //lewa najbardziej z tylu
     objects.push_back(&sfera4);
 
-    Sphere sfera6 = Sphere(Vector3(.5, -3, 8.5), 1, matCyjan); //lewa najbardziej z tylu
+    Sphere sfera6 = Sphere(Vector3(.5, -3, 8.5), 1, matRefractive); //lewa najbardziej z tylu
     objects.push_back(&sfera6);
 
-    Sphere sfera1 = Sphere(Vector3(2, 0, 4), 3, matCyjan); //lewa najbardziej z tylu
+    Sphere sfera3 = Sphere(Vector3(-2, -1, 8), .5, matReflective); //centralna
+    //objects.push_back(&sfera3);
+
+    //Sphere sfera2 = Sphere(Vector3(3, -2, 12), 1, matPurple); //centralna
+    //objects.push_back(&sfera2);
+
+    //Sphere sfera4 = Sphere(Vector3(-1, -3, 11.5), 1, matRed); //lewa najbardziej z tylu
+    //objects.push_back(&sfera4);
+
+    //Sphere sfera6 = Sphere(Vector3(.5, -3, 8.5), 1, matRefractive); //lewa najbardziej z tylu
+    //objects.push_back(&sfera6);
+
+    Sphere sfera1 = Sphere(Vector3(0, 0, 4), 1, matReflective); //lewa najbardziej z tylu
     //objects.push_back(&sfera1);
 
-    Sphere sfera5 = Sphere(Vector3(1, .5, 3), 1, matMagenta); //prawa za centralna
+    Sphere sfera5 = Sphere(Vector3(2, .5, 1), 1, matMagenta); //prawa za centralna
     //objects.push_back(&sfera5);
+    
+    Sphere sfera7 = Sphere(Vector3(-2, .5, -3), 2, matBlue); //prawa za centralna
+    //objects.push_back(&sfera7);
 
     Plane plane = Plane(Vector3(0, 0, 16), Vector3(0, 0, -1), matGrey); //przodu
     objects.push_back(&plane);
@@ -150,8 +166,8 @@ int main()
 
 
     //OrthogonalCamera cam1 = OrthogonalCamera(Vector3(0, 0, -2), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
-    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -1), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights);
-    cam1.RenderImage(3);
+    PerspectiveCamera cam1 = PerspectiveCamera(Vector3(0, 0, -1), Vector3(0, 0, 1), Vector3(0, 1, 0), img, 0, 0.05, objects, lights, depth, number);
+    cam1.RenderImage(depth);
 
 
     sf::RenderWindow window(sf::VideoMode(sizeX, sizeY), "SFML works!");

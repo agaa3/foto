@@ -25,12 +25,13 @@ public:
     float pixelWidth = 1;
     vector<ObjectOnScene*> objects;
     vector<Light*> lights;
-
+    int depthOfPathtracing = 2;
+    int numberOfRays = 2;
     Image img;
 
     Camera(float radius, Image& img);
 
-    Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1, const vector<ObjectOnScene*>& objects = {}, const vector<Light*>& lights = {});
+    Camera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1, const vector<ObjectOnScene*>& objects = {}, const vector<Light*>& lights = {}, const int& depth = 2, const int& number = 2);
     Camera();
 
     virtual ~Camera() {};
