@@ -3,7 +3,7 @@
 
 static float pixelSize = 10.0f;
 
-void OrthogonalCamera::RenderImage(int depth) {
+void OrthogonalCamera::RenderImage() {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
     float centerX;
@@ -17,11 +17,11 @@ void OrthogonalCamera::RenderImage(int depth) {
             centerY = (pixelSize / 2) - (j + 0.5f) * pixelHeight;
             LightIntensity colorOfPixel = LightIntensity(0,0,0);
             if (sampler > 0) {
-                colorOfPixel = sampling(Vector3(centerX, centerY, 0), LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 1, depth,  0);
+                colorOfPixel = sampling(Vector3(centerX, centerY, 0), LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 1, this->depthOfPathtracing,  0);
             }
             else {
                 Ray ray = Ray(Vector3(centerX, centerY, 0), this->direction);
-                colorOfPixel = Camera::shootingRay(ray, 1, depth);
+                colorOfPixel = Camera::shootingRay(ray, 1, this->depthOfPathtracing);
             }
 
             this->img.setPixel(i, j, colorOfPixel);

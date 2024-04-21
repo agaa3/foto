@@ -25,8 +25,8 @@ public:
     float pixelWidth = 1;
     vector<ObjectOnScene*> objects;
     vector<Light*> lights;
-    int depthOfPathtracing = 2;
-    int numberOfRays = 2;
+    int depthOfPathtracing = 0;
+    int numberOfRays = 1;
     Image img;
 
     Camera(float radius, Image& img);
@@ -35,7 +35,7 @@ public:
     Camera();
 
     virtual ~Camera() {};
-    virtual void RenderImage(int depth = 0) = 0;
+    virtual void RenderImage() = 0;
 
     //LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor);
 

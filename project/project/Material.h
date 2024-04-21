@@ -13,9 +13,9 @@ class Material
 {
 public:
 	//wspó³czynniki
-	LightIntensity kAmbient = LightIntensity(0.5, 0.5, 0.5);
-	LightIntensity kDiffuse = LightIntensity(0.5, 0.5, 0.5);
-	LightIntensity kSpecular = LightIntensity(0.2, 0.2, 0.2);
+	LightIntensity kAmbient = LightIntensity(0, 0, 0);
+	LightIntensity kDiffuse = LightIntensity(0, 0, 0);
+	LightIntensity kSpecular = LightIntensity(0, 0, 0);
 	float alpha = 0;
 	LightIntensity diffuseColor = LightIntensity(0, 0, 0);
 	float shininess = 16;

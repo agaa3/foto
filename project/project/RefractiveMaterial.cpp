@@ -1,36 +1,49 @@
 #include "RefractiveMaterial.h"
+#include <iostream>
 
 Vector3 RefractiveMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal, float n){
     Vector3 I = oldRay.direction.normalize();
     Vector3 N = normal.normalize();
 
-    this->nIn = n;
-    float nNew = this->nOfThisMaterial;
-    if (n == this->nOfThisMaterial) { //czy z kulki na zewn¹trz
-        nNew = 1;
-        N = N * (-1);
-    }
-    float nTemp = nIn / nNew;
-
-    float anglePadania = acos(N.dotProduct(I));
-    float angleCritical = asin(nNew / nIn);
     Vector3 refractedDir = Vector3();
-    // Sprawdzenie, czy wystêpuje ca³kowite wewnêtrzne odbicie
-    if (anglePadania >= angleCritical) {
-        // Ca³kowite wewnêtrzne odbicie, wiêc promieñ odbija siê od powierzchni
-        refractedDir = I - N * (N.dotProduct(I) * 2); // -I;
-        this->nOut = this->nIn;
-    }
-    else {
-        float angleOdbity = asin((nTemp / this->nOfThisMaterial) * sin(anglePadania));
-        Vector3 osObrotu = I.cross(N);
+        float refractionRatio;
+        if (normal.dotProduct(oldRay.direction) < 0) { //na zewnatrz
+            refractionRatio = 1 / this->nOfThisMaterial;
+        }
+        else { //wewnatrz
+            refractionRatio = this->nOfThisMaterial;
+        }
 
-        refractedDir = N * (-1);
-        refractedDir = refractedDir.rotateVectorAboutAngleAndAxis(angleOdbity, osObrotu);
-        this->nOut = this->nOfThisMaterial;
-    }
 
-    return refractedDir;
+        float cosTheta = normal.dotProduct(oldRay.direction*(-1));
+        float sinTheta = sqrt(1.0f - cosTheta * cosTheta);
+
+        bool cannotRefract = refractionRatio * sinTheta > 1.0f;
+
+        if (cannotRefract || fresnel_function(cosTheta, refractionRatio) >= 1)  // >= rand()
+        {
+            refractedDir = I *(-1) - N * (N.dotProduct(I) * 2.f);
+        }
+        else {
+            refractedDir = refract(oldRay.direction, normal, refractionRatio);
+        }
+
+        return refractedDir;
+}
+
+Vector3 RefractiveMaterial::refract(const Vector3& uv, const Vector3& n, float etaiOverEtat)
+{
+    const double cosTheta = std::min(n.dotProduct(uv*(-1)), 1.f);
+    const Vector3 rOutPerp =  (uv + n*cosTheta) * etaiOverEtat;
+    const Vector3 rOutParallel =n * -sqrt(abs(1.0 - rOutPerp.dotProduct(rOutPerp)));
+    return rOutPerp + rOutParallel;
 }
 
 
+float RefractiveMaterial::fresnel_function(float vDotH, float refractionRatio)
+{ // Calculate probability of reflect or refract light
+    // Use Schlick's approximation for reflectance.
+    float r0 = (1.0f - refractionRatio) / (1.0f + refractionRatio);
+    r0 = r0 * r0;
+    return r0 + (1.0f - r0) * pow((1.0f - vDotH), 5.0f);
+}

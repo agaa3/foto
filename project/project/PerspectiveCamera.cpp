@@ -10,7 +10,7 @@ PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& dir
 }
 
 
-void PerspectiveCamera::RenderImage(int depth) {
+void PerspectiveCamera::RenderImage() {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
 
@@ -38,12 +38,12 @@ void PerspectiveCamera::RenderImage(int depth) {
 
             LightIntensity colorOfPixel = LightIntensity(0);
             if (sampler > 0) {
-                colorOfPixel = sampling(currentPixel, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 1, depth, 0);
+                colorOfPixel = sampling(currentPixel, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 1, this->depthOfPathtracing, 0);
             }
             else {
                 Ray ray = Ray(this->position, currentPixel, false);
 
-                colorOfPixel = Camera::shootingRay(ray, 1, depth);
+                colorOfPixel = Camera::shootingRay(ray, 1, this->depthOfPathtracing);
             }
 
             this->img.setPixel(i, j, colorOfPixel);

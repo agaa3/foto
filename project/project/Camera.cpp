@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include "Spotlight.h"
-#include "DiffuseMaterial.h"
+#include "RefractiveMaterial.h"
 
 
 static LightIntensity colorBckg = LightIntensity(0, 1, 0);
@@ -38,58 +38,66 @@ Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
 }
 
 LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) { //direction = destination
-    float t = FLT_MAX;
-    float tempT = FLT_MAX;
-    float tForShadows = FLT_MAX;
-
-    Vector3 intPoint;
-    Vector3 intPoint2;
-    Vector3 normal;
-    ObjectOnScene* closestObject = nullptr;
-    Vector3 intersectionPoint;
-    Vector3 normalIntersection;
-    bool intersects = false;
-
-
-    //sprawdzenie który obiekt jest z przodu
     LightIntensity colorOfPixel = LightIntensity(0);
 
-    for (auto object : this->objects) {
+    if (depth >= 0) {
+        float t = FLT_MAX;
+        float tempT = FLT_MAX;
+        float tForShadows = FLT_MAX;
 
-        intersects = object->hit(ray, intPoint, normal, t);
+        Vector3 intPoint;
+        Vector3 intPoint2;
+        Vector3 normal;
+        ObjectOnScene* closestObject = nullptr;
+        Vector3 intersectionPoint;
+        Vector3 normalIntersection;
+        bool intersects = false;
 
-        if (intersects && (t < tempT) && t > 0.1)
-        {
-            tempT = t;
-            intersectionPoint = intPoint + normal * 0.001;
-            closestObject = object;
-            normalIntersection = normal;
+
+        //sprawdzenie który obiekt jest z przodu
+
+        for (auto object : this->objects) {
+
+            intersects = object->hit(ray, intPoint, normal, t);
+
+            if (intersects && (t < tempT) && t > 0.1)
+            {
+                tempT = t;
+                intersectionPoint = intPoint + normal * 0.001;
+                closestObject = object;
+                normalIntersection = normal;
+            }
         }
-    }
 
-    for (auto light : this->lights) {
-        float tOfLight = 0;
-        intersects = light->hit(ray,tOfLight);
-        if (intersects && tOfLight < tempT) {
-            LightIntensity temp = light->color;
-            colorOfPixel = colorOfPixel + temp;
-            return colorOfPixel;
+        float tOfLight = FLT_MAX;
+        float tOfLightTemp = FLT_MAX;
+        Light* closestLight = nullptr;
+
+        for (auto light : this->lights) {
+            intersects = light->hit(ray, tOfLight);
+       
+            if (intersects && tOfLight < tOfLightTemp) {
+                tOfLightTemp = tOfLight;
+                closestLight = light;
+            }
         }
-    }
 
+        if (tOfLightTemp < tempT) {
+            return closestLight->color;
+        }
     
-    
-    if (closestObject != nullptr) {
-        if (depth >= 0) {
+        if (closestObject != nullptr) {
+        
             depth = depth - 1;
-            colorOfPixel = closestObject->material->diffuseColor;
+            colorOfPixel = closestObject->material->diffuseColor; // *closestObject->material->kAmbient* (0.1 * depth);
+            auto matTypeWhich = std::dynamic_pointer_cast<RefractiveMaterial>(closestObject->material);
+
             for (int i = 0; i < numberOfRays; i++) {
                 Vector3 newDirection = closestObject->material->calculateNewRayDirection(ray, normalIntersection, nOfMedium);
                 LightIntensity colTemp = shootingRay(Ray(intersectionPoint, newDirection), closestObject->material->nOut, depth);
                 colorOfPixel = colorOfPixel + colTemp;
             }
             colorOfPixel = colorOfPixel / numberOfRays;
-
         }
         else {
             return LightIntensity(0);
