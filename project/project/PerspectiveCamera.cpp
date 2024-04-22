@@ -1,7 +1,6 @@
 #include "PerspectiveCamera.h"
 #include "PointLight.h"
 #include "Light.h"
-#include <iostream>
 #include <thread>
 
 
@@ -18,8 +17,8 @@ void PerspectiveCamera::RenderImage() {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
 
-    std::vector<std::thread> threads;
-    threads.reserve(img.col * img.rows);
+    std::vector<std::thread> threads; 
+    threads.reserve(img.col); //zajmuje pamiec dla watkow ale nie wypelnia
 
     float s = 1; // s - odleg³oœæ siatki od kamery
     Vector3 e = this->position + this->direction * s;  // e - srodek siatki
@@ -42,7 +41,7 @@ void PerspectiveCamera::RenderImage() {
     int samples = sampler;
     for (int i = 0; i < img.col; i++) // lewo prawo
     {
-        threads.emplace_back([=]
+        threads.emplace_back([=] // to samo co pushback [] - lambda / = - kopie zmiennych / niejawnie this 
             {
                 for (int j = 0; j < rows; j++) //góra dó³
                 {
@@ -65,9 +64,9 @@ void PerspectiveCamera::RenderImage() {
                 }
             });
     }
-    for (std::thread& t : threads)
+    for (std::thread& t : threads)  // oczekiwanie na zakonczenie wszystkich watkow
     {
-        t.join();
+        t.join(); 
     }
 }
 

@@ -12,7 +12,7 @@ public:
 
 	Image() = default;
 	Image(int sizeX, int sizeY) : col(sizeX), rows(sizeY) {
-		pixels.resize(col * rows);
+		pixels.resize(col * rows); //wypelnia domyslnymi wartosciami i alokuje tyle ile trzeba 
 	};
 
 	~Image() = default;

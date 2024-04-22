@@ -31,11 +31,11 @@ const int SIZE = 60;
 
 int main()
 {
-    int sizeX = 200;
-    int sizeY = 200;
+    int sizeX = 800;
+    int sizeY = 800;
 
-    int depth = 3;
-    int number = 32;
+    int depth = 4;
+    int number = 4;
 
     Image img = Image(sizeX, sizeY);
     std::vector<ObjectOnScene*> objects;
@@ -181,10 +181,13 @@ int main()
         }
 
         window.clear();
-        for (int i = 0; i < (cam1.img).pixels.size(); i++) {
+        /*for (int i = 0; i < (cam1.img).pixels.size(); i++) {
             window.draw(&(cam1.img).pixels[i], 1, sf::Points, sf::RenderStates::Default);
 
-        }
+        }*/
+
+        window.draw(cam1.img.pixels.data(), cam1.img.pixels.size(), sf::Points, sf::RenderStates::Default);
+
         //window.draw(&vertices[i], 1, sf::Points);
         //window.draw(shape);
         window.display();
