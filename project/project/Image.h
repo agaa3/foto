@@ -11,7 +11,9 @@ public:
 	std::vector<sf::Vertex> pixels;
 
 	Image() = default;
-	Image(int sizeX, int sizeY) : col(sizeX), rows(sizeY) {};
+	Image(int sizeX, int sizeY) : col(sizeX), rows(sizeY) {
+		pixels.resize(col * rows);
+	};
 
 	~Image() = default;
 

@@ -1,18 +1,25 @@
 #include "PerspectiveCamera.h"
 #include "PointLight.h"
 #include "Light.h"
+#include <iostream>
+#include <thread>
+
 
 static float pixelSize = 1.f;
 
 PerspectiveCamera::PerspectiveCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler, const float& spatialContrast, const vector<ObjectOnScene*>& objects, const vector<Light*>& lights, const int& depth, const int& number) : Camera(position, direction, up, img, sampler, spatialContrast, objects, lights, depth, number) {
     this->dirToLeft = (this->direction.cross(this->up)).normalize();
     this->dirToTop = this->up.normalize();
+
 }
 
 
 void PerspectiveCamera::RenderImage() {
     pixelHeight = pixelSize / img.col;
     pixelWidth = pixelSize / img.rows;
+
+    std::vector<std::thread> threads;
+    threads.reserve(img.col * img.rows);
 
     float s = 1; // s - odleg³oœæ siatki od kamery
     Vector3 e = this->position + this->direction * s;  // e - srodek siatki
@@ -28,26 +35,39 @@ void PerspectiveCamera::RenderImage() {
 
     Vector3 currentPixel = firstPixelCenter; //polozenie obecnego piksela na plaszczyznie
 
+    Vector3 offsetUp = dirToTop * pixelHeight;
+    Vector3 offsetLeft = dirToLeft * pixelWidth;
+    Vector3 pos = position;
+    int rows = img.rows;
+    int samples = sampler;
     for (int i = 0; i < img.col; i++) // lewo prawo
     {
-        for (int j = 0; j < img.rows; j++) //góra dó³
-        {
-            
-            currentPixel = firstPixelCenter - dirToTop * pixelHeight * j;
-            currentPixel = currentPixel - dirToLeft * pixelWidth * i;
+        threads.emplace_back([=]
+            {
+                for (int j = 0; j < rows; j++) //góra dó³
+                {
 
-            LightIntensity colorOfPixel = LightIntensity(0);
-            if (sampler > 0) {
-                colorOfPixel = sampling(currentPixel, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 1, this->depthOfPathtracing, 0);
-            }
-            else {
-                Ray ray = Ray(this->position, currentPixel, false);
+                    Vector3 pixel = firstPixelCenter - offsetUp * float(j) - offsetLeft * float(i);
+                    if (samples > 0)
+                    {
+                        LightIntensity colorOfPixel = LightIntensity(0);
+                        colorOfPixel = sampling(pixel, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, LightIntensity::undefined, 1, depthOfPathtracing, 0);
+                        this->img.setPixel(i, j, colorOfPixel);
 
-                colorOfPixel = Camera::shootingRay(ray, 1, this->depthOfPathtracing);
-            }
+                    }
+                    else {
+                        LightIntensity colorOfPixel = LightIntensity(0);
+                        Ray ray = Ray(pos, pixel, false);
 
-            this->img.setPixel(i, j, colorOfPixel);
-        }
+                        colorOfPixel = Camera::shootingRay(ray, 1, depthOfPathtracing);
+                        this->img.setPixel(i, j, colorOfPixel);
+                    }
+                }
+            });
+    }
+    for (std::thread& t : threads)
+    {
+        t.join();
     }
 }
 

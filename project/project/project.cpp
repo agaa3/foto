@@ -35,7 +35,7 @@ int main()
     int sizeY = 200;
 
     int depth = 3;
-    int number = 5;
+    int number = 32;
 
     Image img = Image(sizeX, sizeY);
     std::vector<ObjectOnScene*> objects;
