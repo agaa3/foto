@@ -44,9 +44,9 @@ float Vector3::length() const {
 
 Vector3 Vector3::normalize() const {
 	float n = this->length();
-	if (n == 0)
-		throw std::invalid_argument("Dzielenie przez 0");
-	return this->operator/(n);
+	//if (n == 0)
+		//throw std::invalid_argument("Dzielenie przez 0");
+	return this->operator/(n+0.001);
 }
 
 Vector3 Vector3::dot(const Vector3 v) const {

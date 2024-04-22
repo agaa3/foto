@@ -31,8 +31,8 @@ const int SIZE = 60;
 
 int main()
 {
-    int sizeX = 800;
-    int sizeY = 800;
+    int sizeX = 400;
+    int sizeY = 400;
 
     int depth = 4;
     int number = 4;

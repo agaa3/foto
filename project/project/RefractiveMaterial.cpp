@@ -1,5 +1,14 @@
 #include "RefractiveMaterial.h"
 #include <iostream>
+//#include <random>
+
+//static std::mt19937 generator(std::random_device{}());
+//
+//float random_float()
+//{
+//    std::uniform_real_distribution<float> distribution(0.8, 1.0);
+//    return distribution(generator);
+//}
 
 Vector3 RefractiveMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal, float n){
     Vector3 I = oldRay.direction.normalize();
@@ -20,7 +29,7 @@ Vector3 RefractiveMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal,
 
         bool cannotRefract = refractionRatio * sinTheta > 1.0f;
 
-        if (cannotRefract || fresnel_function(cosTheta, refractionRatio) >= 1)  // >= rand()
+        if (cannotRefract || fresnel_function(cosTheta, refractionRatio) >= 1)
         {
             refractedDir = I *(-1) - N * (N.dotProduct(I) * 2.f);
         }
@@ -47,3 +56,5 @@ float RefractiveMaterial::fresnel_function(float vDotH, float refractionRatio)
     r0 = r0 * r0;
     return r0 + (1.0f - r0) * pow((1.0f - vDotH), 5.0f);
 }
+
+
