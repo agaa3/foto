@@ -39,9 +39,9 @@ public:
 
     //LightIntensity phongReflection(const Vector3& lightDir, const Vector3& normal, const Vector3& viewDir, Material objMaterial, LightIntensity lightColor);
 
-    virtual LightIntensity shootingRay(const Ray& ray, float nOfMedium = 1, int depth = 0) = 0;
+    virtual LightIntensity shootingRay(const Ray& ray, int depth = 0) = 0;
 
-    virtual LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, float nOfMedium, int depthOfReflections, int iter) = 0;
+    virtual LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, int depthOfReflections, int iter) = 0;
 
 
     Vector3 right = Vector3(0, 0, 0);

@@ -12,7 +12,7 @@ public:
 	DiffuseMaterial(const LightIntensity& diffuse, const LightIntensity& kAmbient, const LightIntensity& kDiffuse, const LightIntensity& kSpecular, const float& shininess)
 		: Material(diffuse, kAmbient,kDiffuse, kSpecular, shininess) {};
 
-	Vector3 calculateNewRayDirection(Ray oldRay, Vector3 normal, float n = 0) override;
+	Vector3 calculateNewRayDirection(Ray oldRay, Vector3 normal) override;
 
 };
 

@@ -14,10 +14,10 @@ public:
     ~OrthogonalCamera() =default;
 
     void RenderImage() override;
-    LightIntensity shootingRay(const Ray& ray, float nOfMedium = 1, int depth = 0) override {
-        return Camera::shootingRay(ray, nOfMedium, depth);
+    LightIntensity shootingRay(const Ray& ray, int depth = 0) override {
+        return Camera::shootingRay(ray, depth);
     };
 
-	LightIntensity sampling(Vector3 center, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, float nOfMedium, int depthOfReflections, int iter) override;
+	LightIntensity sampling(Vector3 center, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, int depthOfReflections, int iter) override;
 };
 

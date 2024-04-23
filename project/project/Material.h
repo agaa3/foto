@@ -13,12 +13,13 @@ class Material
 {
 public:
 	//wspó³czynniki
-	LightIntensity kAmbient = LightIntensity(0, 0, 0);
+	LightIntensity kAmbient = LightIntensity(1, 1, 1);
 	LightIntensity kDiffuse = LightIntensity(0, 0, 0);
 	LightIntensity kSpecular = LightIntensity(0, 0, 0);
 	float alpha = 0;
 	LightIntensity diffuseColor = LightIntensity(0, 0, 0);
 	float shininess = 16;
+	bool scatter = true;
 	
 	//materialType matType;
 	//float nRefraction;
@@ -34,7 +35,7 @@ public:
 			: diffuseColor(diffuse), kAmbient(kAmbient), kDiffuse(kDiffuse), kSpecular(kSpecular), shininess(shininess) {};
 	~Material() = default;
 
-	virtual Vector3 calculateNewRayDirection(Ray oldRay, Vector3 normal, float n = 1) {
+	virtual Vector3 calculateNewRayDirection(Ray oldRay, Vector3 normal) {
 		return normal;
 	}
 	

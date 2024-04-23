@@ -2,7 +2,7 @@
 #include <cstdlib> 
 
 
-Vector3 DiffuseMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal, float n)  {
+Vector3 DiffuseMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal)  {
 
     float randomX = (float)(rand()) / (float)(RAND_MAX);
     float randomY = (float)(rand()) / (float)(RAND_MAX);

@@ -16,10 +16,10 @@ public:
 	PerspectiveCamera(const Vector3& position, const Vector3& direction, const Vector3& up, Image& img, const int& sampler = 0, const float& spatialContrast = 1, const vector<ObjectOnScene*>& objects = {}, const vector<Light*>& lights = {}, const int& depth = 2, const int& number = 2);
 
 	void RenderImage() override;
-	LightIntensity shootingRay(const Ray& ray, float nOfMedium = 1, int depth = 0) override { return Camera::shootingRay(ray, nOfMedium, depth); };
+	LightIntensity shootingRay(const Ray& ray, int depth = 0) override { return Camera::shootingRay(ray, depth); };
 	
 
-    LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, float nOfMedium, int depthOfReflections, int iter) override;
+    LightIntensity sampling(Vector3 centerPosition, LightIntensity LU, LightIntensity RU, LightIntensity RD, LightIntensity LD, int depthOfReflections, int iter) override;
 };
 
 

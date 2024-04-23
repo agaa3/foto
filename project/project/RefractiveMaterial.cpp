@@ -10,7 +10,7 @@
 //    return distribution(generator);
 //}
 
-Vector3 RefractiveMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal, float n){
+Vector3 RefractiveMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal){
     Vector3 I = oldRay.direction.normalize();
     Vector3 N = normal.normalize();
 
@@ -44,7 +44,7 @@ Vector3 RefractiveMaterial::refract(const Vector3& uv, const Vector3& n, float e
 {
     const double cosTheta = std::min(n.dotProduct(uv*(-1)), 1.f);
     const Vector3 rOutPerp =  (uv + n*cosTheta) * etaiOverEtat;
-    const Vector3 rOutParallel =n * -sqrt(abs(1.0 - rOutPerp.dotProduct(rOutPerp)));
+    const Vector3 rOutParallel =n*10 * -sqrt(abs(1.0 - rOutPerp.dotProduct(rOutPerp)));
     return rOutPerp + rOutParallel;
 }
 

@@ -25,6 +25,11 @@ bool Sphere::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, f
 		float temp1 = (-b - std::sqrtf(discriminant)) / (2 * a);
 		float temp2 = (-b + std::sqrtf(discriminant)) / (2 * a);
 		float temp = std::min(temp1, temp2);
+		if (temp1 > 0 || temp2 > 0) {
+			if (temp < 0) {
+				temp = std::max(temp1, temp2);
+			}
+		}
 		if (temp < t_max && temp > t_min) { // traktujemy t_max i t_min jako stricte współczynniki odpowiedzialne za punk ta promieniu (sama odleglość)
 			// nie patrzymy w jakim miejscu w przestrzeni jest to przecięcie tylko w którym miejscu na Ray'u dochodzi do przecięcia
 			intPoint = ray.direction * temp + ray.origin;
@@ -34,8 +39,9 @@ bool Sphere::hit(const Ray& ray, Vector3& intPoint, Vector3& normal, float& t, f
 		}
 
 		//(┬┬﹏┬┬)
+		temp = std::max(temp1, temp2);
 
-		temp = (-b + std::sqrtf(discriminant)) / (2 * a);
+		//temp = (-b + std::sqrtf(discriminant)) / (2 * a);
 
 		if (temp < t_max && temp > FLT_EPSILON) {
 			intPoint = ray.direction * temp + ray.origin;

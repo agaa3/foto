@@ -37,7 +37,7 @@ Camera::Camera(float radius, Image& img) : radius(radius), img(img) {
 
 }
 
-LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) { //direction = destination
+LightIntensity Camera::shootingRay(const Ray& ray, int depth) { //direction = destination
     LightIntensity colorOfPixel = LightIntensity(0);
 
     if (depth >= 0) {
@@ -60,7 +60,7 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
 
             intersects = object->hit(ray, intPoint, normal, t);
 
-            if (intersects && (t < tempT) && t > 0.1)
+            if (intersects && (t < tempT) && t > 0.01)
             {
                 tempT = t;
                 intersectionPoint = intPoint + normal * 0.001;
@@ -82,19 +82,25 @@ LightIntensity Camera::shootingRay(const Ray& ray, float nOfMedium, int depth) {
             }
         }
 
-        if (tOfLightTemp < tempT) {
-            return closestLight->color;
+        if (tOfLightTemp < tempT ) {
+            if (!closestLight->isInShadow(objects, intersectionPoint, closestObject)) {
+                return closestLight->color;
+
+            }
         }
     
         if (closestObject != nullptr) {
-        
+            
             depth = depth - 1;
-            colorOfPixel = closestObject->material->diffuseColor; // *closestObject->material->kAmbient* (0.1 * depth);
-            auto matTypeWhich = std::dynamic_pointer_cast<RefractiveMaterial>(closestObject->material);
-
+            colorOfPixel = closestObject->material->diffuseColor;
+            //LightIntensity mat = closestObject->material->diffuseColor * closestObject->material->kAmbient;
             for (int i = 0; i < numberOfRays; i++) {
-                Vector3 newDirection = closestObject->material->calculateNewRayDirection(ray, normalIntersection, nOfMedium);
-                LightIntensity colTemp = shootingRay(Ray(intersectionPoint, newDirection), closestObject->material->nOut, depth);
+                Vector3 newDirection = closestObject->material->calculateNewRayDirection(ray, normalIntersection);
+                LightIntensity colTemp = shootingRay(Ray(intersectionPoint, newDirection), depth);
+                if (closestObject->material->scatter) {
+
+                    colTemp = colTemp * closestObject->material->diffuseColor;
+                }
                 colorOfPixel = colorOfPixel + colTemp;
             }
             colorOfPixel = colorOfPixel / numberOfRays;

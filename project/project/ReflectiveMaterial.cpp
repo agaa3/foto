@@ -1,9 +1,7 @@
 #include "ReflectiveMaterial.h"
 #include <cstdlib> 
 
-Vector3 ReflectiveMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal, float n) {
-
-
+Vector3 ReflectiveMaterial::calculateNewRayDirection(Ray oldRay, Vector3 normal) {
 	Vector3 I = oldRay.direction.normalize();
 	Vector3 N = normal.normalize();
 	Vector3 reflectedRay = I*(-1) - N * (N.dotProduct(I) * 2);

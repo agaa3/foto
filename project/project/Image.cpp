@@ -8,8 +8,6 @@ void Image::setPixel(int x, int y, LightIntensity pixel) {
 	if (green > 255) green = 255;
 	if (blue > 255) blue = 255;
 	this->pixels[x * col + y] = sf::Vertex(sf::Vector2f(x, y), sf::Color(red, green, blue));
-	//this->pixels[x + y * col] = sf::Vector2f(x, y), sf::Color(red, green, blue);
-	//this->pixels.push_back(sf::Vertex(sf::Vector2f(x, y), sf::Color(red, green, blue)));
 
 }
 
